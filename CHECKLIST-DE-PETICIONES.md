@@ -687,3 +687,16 @@
   *Trío:* **lógica** = el historial local ya es la fuente · **técnica** = `git remote add
   <nombre> <url>` + `git push` · **gobernanza** = el push solo se declara cuando la salida
   del comando lo confirma.
+
+## A20 · Petición del 2026-10-26 05:55 (repositorio público)
+
+- [x] **Generar el repositorio público con los commits** → se adoptó la misma forma que
+  su ecosistema de siempre: **el nombre llano es lo público, el sufijo «-privado» es el
+  respaldo** (igual que `Maternidad` / `Maternidad-privado`). Resultado, verificado con
+  salida de comando:
+  - **`github.com/mbmx2/Maternidad-frontend` (PÚBLICO)** — el taller completo con su
+    historial; es el remoto principal (`origin`) de esta máquina.
+  - **`github.com/mbmx2/Maternidad-frontend-privado` (PRIVADO)** — el respaldo que ya
+    tenía la rama; remoto secundario (`privado`), para subir con `git push privado master`.
+  *Se verifica:* `gh repo view` devuelve `PUBLIC` y `PRIVATE` respectivamente, y
+  `git ls-remote` de los dos remotos devuelven el mismo último commit que el local.
