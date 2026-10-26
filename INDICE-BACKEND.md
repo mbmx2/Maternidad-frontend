@@ -99,14 +99,16 @@ que se construya el enchufe real, ninguna pantalla se entere.*
 > Para que el día que exista el backend real, cada conexión esté **decidida** y no
 > improvisada. Estado por pareja: **cubierto** (el motor ya hace el trabajo, aunque con
 > otro nombre) · **parcial** (existe la mitad) · **falta** (no hay función) · **en otra
-> carpeta** (vive en el sistema de mensajes, pendiente de tu decisión D-2).
+> carpeta** (hoy sin uso: la copia canónica del módulo de mensajes ya vive en las dos
+> carpetas con guardia de deriva — se ejecutó la propuesta por defecto de D-2).
 > Las pantallas indicadas son las de la versión V4.
 
 **Identidad:**
 - `buscar` → `porNombre` / `porAparecidas` → pantalla `llegada` → **cubierto** (otro nombre).
 - `registrar_llegada` → eventos `llego` y `visita_completa` → `llegada` → **cubierto** por eventos.
-- `registro_rapido` → **falta**: no hay función de crear paciente en el motor; la pantalla
-  empuja el arreglo directamente — deuda conocida y anotada en la cola de revisión.
+- `registro_rapido` → `crearPaciente` (con su evento `creado` y validación de nombre) →
+  pantalla `llegada` → **cubierto**: la función llegó con la V4; la pantalla ya no empuja
+  arreglos (cero mutación directa en las 18).
 - `elegir_paciente` → `leerContexto` + `irA` → todas las pantallas con paciente →
   **cubierto** con otro modelo (contexto recordado en vez de elección repetida).
 
@@ -143,7 +145,10 @@ que se construya el enchufe real, ninguna pantalla se entere.*
   «copiar» dentro de la estación.
 
 **Agenda:**
-- `listar_llamadas` → **en otra carpeta** (el motor de mensajes, con tus 92 plantillas).
+- `listar_llamadas` → `AgendaMsg.plantillas` + `Jornada.recordatorios` → pantalla `agenda` →
+  **cubierto**: la copia canónica del motor de mensajes vive en
+  `12-FRONT-SINTESIS/mensajes.js` (guardia de deriva en `autoauditoria.sh`) — se ejecutó
+  la propuesta por defecto de tu decisión D-2, hoy revertible.
 - `reagendar` → `reagendar` → `llegada` → **cubierto**.
 
 **Laboratorio:**
@@ -153,11 +158,18 @@ que se construya el enchufe real, ninguna pantalla se entere.*
 - `obtener_traspaso` → `traspasoHTML` + `registrarTraspasoImpreso` → `cierre` → **cubierto**.
 
 **Documentos:**
-- `listar_plantillas` → **en otra carpeta** (las 92 plantillas; pendiente D-2).
+- `listar_plantillas` → `AgendaMsg.plantillas` (+ `crearPropia`/`crearBlanca` para las del
+  equipo) → pantalla `agenda` → **cubierto**: mismo módulo integrado en la pestaña
+  «Plantillas (92)» de la agenda.
 - `generar_documento` → **falta**: la pantalla dibuja el papel, pero no hay función que
   genere el documento — deuda de construcción.
 
-**Balance (medido): 18 de 25 cubiertas · 3 parciales · 2 faltantes · 2 en otra carpeta.**
+**Balance (medido, 2026-10-26): 21 de 25 cubiertas · 3 parciales · 1 falta · 0 en otra
+carpeta.** (Se movieron hoy tres parejas: `registro_rapido` con `crearPaciente`, y las dos
+de mensajes al integrar la copia canónica en la agenda. *Conciliado 2026-10-26 04:40: el
+renglón decía «2 faltantes» — 21+3+2+0 = 26, imposible para 25 operaciones; recuento por
+estado de la sección 4 = 21 cubiertas + 3 parciales + 1 falta (`generar_documento`) = 25.
+Hallazgo y corrección vía `CADENA-DE-VERDAD.md` §4, primera instancia de conciliación.*)
 La lectura para la gestión: **el enchufe está casi todo cableado del lado de las pantallas**;
-los huecos son concretos y pocos — crear paciente, generar documentos, completar las dos
-parciales, y resolver el hogar de los mensajes.
+los huecos son concretos y pocos — completar el cálculo de las calculadoras y generar
+documentos.

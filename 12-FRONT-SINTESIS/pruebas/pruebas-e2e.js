@@ -1,8 +1,7 @@
 /* E2E con jsdom: cada página del frontend sintetizado debe ejecutar sin errores
    y con su contenido clave renderizado; más tres flujos de comportamiento. */
 let JSDOM, VirtualConsole;
-try { ({ JSDOM, VirtualConsole } = require("jsdom")); }
-catch (e) { ({ JSDOM, VirtualConsole } = require("/tmp/kilo/domtest/node_modules/jsdom")); } /* jsdom de apoyo; o `npm i jsdom` y NODE_PATH */
+({ JSDOM, VirtualConsole } = require("jsdom")); /* jsdom de apoyo; o `npm i jsdom` y NODE_PATH */
 const path = require("path");
 const DIR = require("path").join(__dirname, "..");
 const fs = require("fs");
@@ -103,6 +102,38 @@ async function cargar(file, url) {
       check("agenda: sale de por recuperar tras 1 clic", J.porRecuperar().length < antes, "despues=" + J.porRecuperar().length);
     }
     check("agenda: recordatorio vencido muestra ESCALADO", doc.getElementById("recordatorios").innerHTML.includes("ESCALADO"));
+    /* reconstrucción desde cero — DoD v2 (calendario + módulo de mensajes integrado) */
+    check("agenda: 6 pestañas", doc.querySelectorAll(".pestanas button").length === 6,
+      "pestañas=" + doc.querySelectorAll(".pestanas button").length);
+    check("agenda: celdas del calendario (≥28 días)", doc.querySelectorAll(".celda-dia:not(.vacia)").length >= 28,
+      "celdas=" + doc.querySelectorAll(".celda-dia:not(.vacia)").length);
+    check("agenda: citas de hoy en el calendario (jornada + mensajes)", doc.getElementById("citas-dia").textContent.trim().length > 10,
+      doc.getElementById("citas-dia").textContent.slice(0, 60));
+    check("agenda: plantillas listadas (≥90 con el filtro apagado)",
+      (function () {
+        const chk = doc.getElementById("chk-rec");
+        chk.checked = false;
+        chk.dispatchEvent(new win.Event("change"));
+        const n = doc.getElementById("lista-plantillas").querySelectorAll(".item-lista").length;
+        chk.checked = true;
+        chk.dispatchEvent(new win.Event("change"));
+        return n >= 90;
+      })(),
+      "lista=" + doc.getElementById("lista-plantillas").querySelectorAll(".item-lista").length);
+    check("agenda: huecos del día juntan jornada y mensajes",
+      (function () {
+        const hoy = win.Jornada.hoyISO();
+        const lista = win.huecosDelDia(hoy);
+        return lista.some(x => x.ocupada && x.fuente === "jornada") && lista.some(x => !x.ocupada || x.fuente === "mensajes");
+      })());
+    check("agenda: agendar desde la agenda de mensajes se ve en el calendario",
+      (function () {
+        const antes = doc.getElementById("citas-dia").textContent;
+        const r = win.AgendaMsg.agendar("p1", win.Jornada.hoyISO(), "11:30", "prueba e2e");
+        win.pintaTodo();
+        const despues = doc.getElementById("citas-dia").textContent;
+        return r.ok && despues !== antes && despues.includes("11:30");
+      })());
     check("agenda: sin errores", errores.length === 0, errores.join(" | "));
     dom.window.close();
   }

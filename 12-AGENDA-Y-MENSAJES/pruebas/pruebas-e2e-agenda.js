@@ -1,6 +1,5 @@
 let JSDOM, VirtualConsole;
-try { ({ JSDOM, VirtualConsole } = require("jsdom")); }
-catch (e) { ({ JSDOM, VirtualConsole } = require("/tmp/kilo/domtest/node_modules/jsdom")); } /* o `npm i jsdom` + NODE_PATH */
+({ JSDOM, VirtualConsole } = require("jsdom")); /* o `npm i jsdom` + NODE_PATH */
 /* Requiere el servidor: python3 -m http.server 8124 en esta carpeta. */
 let fallos = 0;
 const ok = (n, c, x) => { console.log((c ? "PASS " : "FAIL ") + n + (c ? "" : " — " + (x || ""))); if (!c) fallos++; };

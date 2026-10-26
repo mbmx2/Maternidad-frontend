@@ -51,7 +51,8 @@
 </div>
 <div id="veredicto-host"></div>
 </div></div>
-<script src="config.js"></script><script src="motor.js"></script>
+<script src="config.js"></script><script src="catalogos.js"></script>
+<script src="motor.js"></script>
 <script>
 Jornada.nav("Calculadoras");
 var S = Jornada.estado();
@@ -127,10 +128,8 @@ document.getElementById("homa-calcular").onclick = function () {
   if (!pid || isNaN(g) || isNaN(i)) { Jornada.toast("Faltan glucosa e insulina — no se calcula con huecos (falta de dato ≠ valor normal)."); return; }
   var h = Jornada.homa(g, i);
   var origen = gEl.readOnly ? "capturado (prefill del expediente)" : "calculado (entradas a mano)";
-  S.calculos.push({ pid: pid, homa: h.valor, nivel: h.nivel, texto: h.texto, origen: origen, min: Jornada.ahoraMin(), fecha: Jornada.hoyISO() });
-  if (h.nivel === "alerta" || h.nivel === "critica")
-    Jornada.nacerAlerta(pid, 3, "HOMA-IR " + h.valor + " — " + h.texto, "integrar en la nota y comparar con el próximo control", "la médica");
-  Jornada.guardar();
+  var rc = Jornada.guardarCalculo(pid, { homa: h.valor, nivel: h.nivel, texto: h.texto, origen: origen, min: Jornada.ahoraMin(), fecha: Jornada.hoyISO() });
+  if (!rc.ok) { Jornada.toast(rc.mensaje); return; }
   document.getElementById("homa-aviso").innerHTML = "<div class='aviso " + (h.nivel === "normal" ? "verde" : h.nivel === "critica" ? "rojo" : "ambar") + "'>" +
     "<b>" + h.valor + "</b> — " + Jornada.esc(h.texto) + "<span class='accion'>Acción: " + (h.nivel === "normal" ? "ninguna, todo en rango" : "anotar en la nota y comparar con el próximo control") + "</span>" +
     "<span class='duenio'>Guardado con origen «" + (gEl.readOnly ? "capturado" : "calculado") + "» — el panel lo grafica como un resultado más.</span></div>";
@@ -144,8 +143,8 @@ document.getElementById("imc-calcular").onclick = function () {
   if (isNaN(peso) || isNaN(talla) || !talla) { Jornada.toast("Faltan peso o talla — no se inventa el número."); return; }
   var imc = peso / (talla * talla);
   var nivel = imc >= 30 ? "alerta" : "normal";
-  S.calculos.push({ pid: pid, imc: Math.round(imc * 10) / 10, nivel: nivel, texto: imc >= 30 ? "sobre peso — valorarlo con la paciente" : "en rango", origen: "calculado (IMC pregestacional)", min: Jornada.ahoraMin(), fecha: Jornada.hoyISO() });
-  Jornada.guardar();
+  var rci = Jornada.guardarCalculo(pid, { imc: Math.round(imc * 10) / 10, nivel: nivel, texto: imc >= 30 ? "sobre peso — valorarlo con la paciente" : "en rango", origen: "calculado (IMC pregestacional)", min: Jornada.ahoraMin(), fecha: Jornada.hoyISO() });
+  if (!rci.ok) { Jornada.toast(rci.mensaje); return; }
   document.getElementById("imc-r").value = imc.toFixed(1);
   document.getElementById("imc-aviso").innerHTML = "<div class='aviso " + (nivel === "normal" ? "verde" : "ambar") + "'><b>IMC " + imc.toFixed(1) + "</b> — " + (nivel === "normal" ? "en rango" : "sobre peso — valorarlo con la paciente") + "</div>";
 };

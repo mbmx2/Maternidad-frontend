@@ -20,7 +20,7 @@
       "checks": {
         "motor": 32,
         "unidad": 33,
-        "e2e_paginas": 95,
+        "e2e_paginas": 101,
         "ruptura": 19
       },
       "evidencia": "ANALISIS-ATENCIONES.md#7",
@@ -38,106 +38,422 @@
         "MT-10",
         "MT-12"
       ],
-      "huella": "520e9b92ec47935d582cc7a47b6a2944e16982639caa7f774412d314166cb183"
+      "huella": "1f7a06c369fd39746b31adb45c038c8b4819541e18ddb29039d5707e60c27f31"
     },
     {
       "archivo": "hoy.html",
-      "estado": "pendiente",
-      "huella": "5c21cd2beca70b1b7f0985038bd113ed0f76e9182498d57e05a45bc02a861870"
+      "estado": "verificado",
+      "huella": "0d475f43c1536db04520e02e3f860ba424b4a1154650e9cbe34468ce479d68d8",
+      "sintesis": "S1",
+      "fecha": "2026-10-26",
+      "pruebas": [
+        "pruebas-e2e.js",
+        "pruebas-ruptura-hoy.js"
+      ],
+      "checks": {
+        "e2e_paginas": 101,
+        "ruptura_hoy": 10
+      },
+      "evidencia": "PASADAS-DE-PANTALLAS.md#hoy",
+      "patrones_aplicados": [
+        "ML-05",
+        "ML-09",
+        "ML-12",
+        "MT-01",
+        "MT-06",
+        "MT-11",
+        "MG-09"
+      ],
+      "nota": "Primera pantalla del Tramo B: mutación directa cerrada (G-02) con su prueba de fuego en la ruptura."
     },
     {
       "archivo": "estacion.html",
-      "estado": "aplicado",
+      "estado": "verificado",
       "sintesis": "S1",
-      "fecha": "2026-10-25",
+      "fecha": "2026-10-26",
       "pruebas": [
         "pruebas-e2e.js",
-        "pruebas-atenciones.js"
+        "pruebas-do-pantallas.js"
       ],
       "checks": {
-        "e2e_paginas": 95
+        "e2e_paginas": 101,
+        "do_pantallas": 84
       },
-      "evidencia": "ANALISIS-ATENCIONES.md#7",
+      "evidencia": "PASADAS-DE-PANTALLAS.md#estacion",
       "patrones_aplicados": [
+        "ML-12",
+        "MT-01",
+        "MT-11",
+        "MT-12",
+        "MG-09",
         "MT-05"
       ],
-      "nota": "Tocada por el piloto (M5: autosave del borrador en la estación); su ruptura dedicada queda para su pasada de verificado.",
-      "huella": "b8d2b32089a533fcc5853e2ef1dcd0689604a0068cc23860965483dee9570bc6"
+      "nota": "DoD completo (núcleo + su «además» de KPIS-Y-DOD §3) el 2026-10-26.",
+      "huella": "ec4e42d79baf96d8fd3590ce06468b40a1fc58309b5f5730b1b77d474bd5513e"
     },
     {
       "archivo": "consulta.html",
-      "estado": "pendiente",
-      "huella": "464a02af42361f662e2c7c5e48ddcbaa50764fd4ce9acbbac052898a1800cb84"
+      "estado": "verificado",
+      "huella": "a28cc5b9fb22f3e32aeedff56cbb6f361282a602e9de44bd95591c577d18c0ce",
+      "sintesis": "S1",
+      "fecha": "2026-10-26",
+      "pruebas": [
+        "pruebas-e2e.js",
+        "pruebas-do-pantallas.js"
+      ],
+      "checks": {
+        "e2e_paginas": 101,
+        "do_pantallas": 84
+      },
+      "evidencia": "PASADAS-DE-PANTALLAS.md#consulta",
+      "patrones_aplicados": [
+        "ML-12",
+        "MT-01",
+        "MT-11",
+        "MT-12",
+        "MG-09",
+        "ML-11"
+      ],
+      "nota": "DoD completo (núcleo + su «además» de KPIS-Y-DOD §3) el 2026-10-26."
     },
     {
       "archivo": "pendientes.html",
-      "estado": "pendiente",
-      "huella": "63817e7b612daf6520b427f24956672a99fe44deeea11870e043e4198c374e7e"
+      "estado": "verificado",
+      "huella": "53c3b1a39ed9bf4a169d9c7f4a507c70fabcfc348d49a36a91a8f28329fa57d0",
+      "sintesis": "S1",
+      "fecha": "2026-10-26",
+      "pruebas": [
+        "pruebas-e2e.js",
+        "pruebas-do-pantallas.js"
+      ],
+      "checks": {
+        "e2e_paginas": 101,
+        "do_pantallas": 84
+      },
+      "evidencia": "PASADAS-DE-PANTALLAS.md#pendientes",
+      "patrones_aplicados": [
+        "ML-12",
+        "MT-01",
+        "MT-11",
+        "MT-12",
+        "MG-09",
+        "ML-11"
+      ],
+      "nota": "DoD completo (núcleo + su «además» de KPIS-Y-DOD §3) el 2026-10-26."
     },
     {
       "archivo": "laboratorio.html",
-      "estado": "pendiente",
-      "huella": "20cc8cec5ca762b0413f176b66c99dc33e2868721e010c0262d09a8b362cc8d9"
+      "estado": "verificado",
+      "huella": "37cf1c5e577ea0ac4168704c4dc943c7e4ec4751ff2a49c2c4efa0737ffca3ce",
+      "sintesis": "S1",
+      "fecha": "2026-10-26",
+      "pruebas": [
+        "pruebas-e2e.js",
+        "pruebas-do-pantallas.js"
+      ],
+      "checks": {
+        "e2e_paginas": 101,
+        "do_pantallas": 84
+      },
+      "evidencia": "PASADAS-DE-PANTALLAS.md#laboratorio",
+      "patrones_aplicados": [
+        "ML-12",
+        "MT-01",
+        "MT-11",
+        "MT-12",
+        "MG-09"
+      ],
+      "nota": "DoD completo (núcleo + su «además» de KPIS-Y-DOD §3) el 2026-10-26."
     },
     {
       "archivo": "llegada.html",
-      "estado": "pendiente",
-      "huella": "79437fa8764505a4e2c573c175228d29d7fcebaf991de0d36435fd98efdc21ec"
+      "estado": "verificado",
+      "huella": "0b56261292c97b07b87c81d769ef5c97d7a09a1b3a4e82d727948b0a385977bc",
+      "sintesis": "S1",
+      "fecha": "2026-10-26",
+      "pruebas": [
+        "pruebas-e2e.js",
+        "pruebas-do-pantallas.js"
+      ],
+      "checks": {
+        "e2e_paginas": 101,
+        "do_pantallas": 84
+      },
+      "evidencia": "PASADAS-DE-PANTALLAS.md#llegada",
+      "patrones_aplicados": [
+        "ML-12",
+        "MT-01",
+        "MT-11",
+        "MT-12",
+        "MG-09"
+      ],
+      "nota": "DoD completo (núcleo + su «además» de KPIS-Y-DOD §3) el 2026-10-26."
     },
     {
       "archivo": "urgencia.html",
-      "estado": "pendiente",
-      "huella": "e91d22a492c0683eeeaad5b11e9c6fe1b5999ba01163bdcc14179fdd21ec6ea6"
+      "estado": "verificado",
+      "huella": "e26ba67ff8069e368605eab539fea1e0d4698d7f920ab2bac3bc8300ef4bfde5",
+      "sintesis": "S1",
+      "fecha": "2026-10-26",
+      "pruebas": [
+        "pruebas-e2e.js",
+        "pruebas-do-pantallas.js"
+      ],
+      "checks": {
+        "e2e_paginas": 101,
+        "do_pantallas": 84
+      },
+      "evidencia": "PASADAS-DE-PANTALLAS.md#urgencia",
+      "patrones_aplicados": [
+        "ML-12",
+        "MT-01",
+        "MT-11",
+        "MT-12",
+        "MG-09",
+        "ML-11"
+      ],
+      "nota": "DoD completo (núcleo + su «además» de KPIS-Y-DOD §3) el 2026-10-26."
     },
     {
       "archivo": "agenda.html",
-      "estado": "pendiente",
-      "huella": "11416ba7a56b7fcd1fe7e2dac93d3e8bb93e975c61f10af53afafd70890bca71"
+      "estado": "verificado",
+      "huella": "f4b4a4549ee06d80bfbf0d1de1d273ddc40c4efba3d3348e1e1f4530aaeb4821",
+      "sintesis": "S1",
+      "fecha": "2026-10-26",
+      "pruebas": [
+        "pruebas-e2e.js",
+        "pruebas-do-pantallas.js"
+      ],
+      "checks": {
+        "e2e_paginas": 101,
+        "do_pantallas": 84
+      },
+      "evidencia": "PASADAS-DE-PANTALLAS.md#agenda",
+      "patrones_aplicados": [
+        "ML-12",
+        "MT-01",
+        "MT-11",
+        "MT-12",
+        "MG-09"
+      ],
+      "nota": "Rehecha desde cero el 2026-10-26 bajo DoD v2: D-2a calendario del mes con citas de ambas fuentes · D-2c módulo completo de 12-AGENDA integrado (copia canónica mensajes.js con guardia de deriva) · D-2d acciones contra operaciones del enchufe (crearCita, recordatorios, agendar/reprogramar/cancelar/entregar) · D-2b sin frases de la lista. Ver PASADAS-DE-PANTALLAS.md §agenda."
     },
     {
       "archivo": "calculadoras.html",
-      "estado": "pendiente",
-      "huella": "8aee53b1936fb050d9731c4e800ee0d1d72a806506e8087d27ff54e2677834cb"
+      "estado": "verificado",
+      "huella": "d79904d3b0abeb056318a84a8fcb1976b9565a8b9db9d480c714444188144b8a",
+      "sintesis": "S1",
+      "fecha": "2026-10-26",
+      "pruebas": [
+        "pruebas-e2e.js",
+        "pruebas-do-pantallas.js"
+      ],
+      "checks": {
+        "e2e_paginas": 101,
+        "do_pantallas": 84
+      },
+      "evidencia": "PASADAS-DE-PANTALLAS.md#calculadoras",
+      "patrones_aplicados": [
+        "ML-12",
+        "MT-01",
+        "MT-11",
+        "MT-12",
+        "MG-09"
+      ],
+      "nota": "DoD completo (núcleo + su «además» de KPIS-Y-DOD §3) el 2026-10-26."
     },
     {
       "archivo": "cierre.html",
-      "estado": "pendiente",
-      "huella": "7cfec4b9e016dec13cdcd5cbda7fbc60c2de52ea515b209c9fd1d2bf8f0d1bd3"
+      "estado": "verificado",
+      "huella": "86a02b598cbeb3e556538c8ada65cd31a4f170ec692ea2a27c2bf648306c913b",
+      "sintesis": "S1",
+      "fecha": "2026-10-26",
+      "pruebas": [
+        "pruebas-e2e.js",
+        "pruebas-do-pantallas.js"
+      ],
+      "checks": {
+        "e2e_paginas": 101,
+        "do_pantallas": 84
+      },
+      "evidencia": "PASADAS-DE-PANTALLAS.md#cierre",
+      "patrones_aplicados": [
+        "ML-12",
+        "MT-01",
+        "MT-11",
+        "MT-12",
+        "MG-09"
+      ],
+      "nota": "DoD completo (núcleo + su «además» de KPIS-Y-DOD §3) el 2026-10-26."
     },
     {
       "archivo": "historia.html",
-      "estado": "pendiente",
-      "huella": "1eefb49228e785a5f7d2cbcbcc2af2916a3499213d221f0410a5dc9911273c9e"
+      "estado": "verificado",
+      "huella": "07e50d8308883b5d46b5e14f5ca514f852db481e4af876581929dc9a62ea8965",
+      "sintesis": "S1",
+      "fecha": "2026-10-26",
+      "pruebas": [
+        "pruebas-e2e.js",
+        "pruebas-do-pantallas.js"
+      ],
+      "checks": {
+        "e2e_paginas": 101,
+        "do_pantallas": 84
+      },
+      "evidencia": "PASADAS-DE-PANTALLAS.md#historia",
+      "patrones_aplicados": [
+        "ML-12",
+        "MT-01",
+        "MT-11",
+        "MT-12",
+        "MG-09",
+        "ML-11"
+      ],
+      "nota": "DoD completo (núcleo + su «además» de KPIS-Y-DOD §3) el 2026-10-26."
     },
     {
       "archivo": "ficha.html",
-      "estado": "pendiente",
-      "huella": "bccc2c096b6e8a7588abbdb7b4fe0ae08188118a86ca27be3578b00735064f9b"
+      "estado": "verificado",
+      "huella": "6146b84b6d0f192e48c6e064f6547f1a985a8a2cab0e12e69df5a30ed7677ef2",
+      "sintesis": "S1",
+      "fecha": "2026-10-26",
+      "pruebas": [
+        "pruebas-e2e.js",
+        "pruebas-do-pantallas.js"
+      ],
+      "checks": {
+        "e2e_paginas": 101,
+        "do_pantallas": 84
+      },
+      "evidencia": "PASADAS-DE-PANTALLAS.md#ficha",
+      "patrones_aplicados": [
+        "ML-12",
+        "MT-01",
+        "MT-11",
+        "MT-12",
+        "MG-09"
+      ],
+      "nota": "DoD completo (núcleo + su «además» de KPIS-Y-DOD §3) el 2026-10-26."
     },
     {
       "archivo": "documentos.html",
-      "estado": "pendiente",
-      "huella": "22acb0cbe9875951d784e979cad8c6baa4efc888c9f115caa4aaab0ea2595b12"
+      "estado": "verificado",
+      "huella": "a92d8620dfbbcd0036797c6129c40d59f1a033a1bfb7443d8e2cf48153c526c8",
+      "sintesis": "S1",
+      "fecha": "2026-10-26",
+      "pruebas": [
+        "pruebas-e2e.js",
+        "pruebas-do-pantallas.js"
+      ],
+      "checks": {
+        "e2e_paginas": 101,
+        "do_pantallas": 84
+      },
+      "evidencia": "PASADAS-DE-PANTALLAS.md#documentos",
+      "patrones_aplicados": [
+        "ML-12",
+        "MT-01",
+        "MT-11",
+        "MT-12",
+        "MG-09"
+      ],
+      "nota": "DoD completo (núcleo + su «además» de KPIS-Y-DOD §3) el 2026-10-26."
     },
     {
       "archivo": "falla.html",
-      "estado": "pendiente",
-      "huella": "aeeb6bbf03ed35ba1c1bfacd9dcc19e7940f0c3458d8f0953317d05f0f174690"
+      "estado": "verificado",
+      "huella": "b6365ec8cb1c60eec0f0fb92da0191d4852629b7a2820ccb7106b9141ffeee5a",
+      "sintesis": "S1",
+      "fecha": "2026-10-26",
+      "pruebas": [
+        "pruebas-e2e.js",
+        "pruebas-do-pantallas.js"
+      ],
+      "checks": {
+        "e2e_paginas": 101,
+        "do_pantallas": 84
+      },
+      "evidencia": "PASADAS-DE-PANTALLAS.md#falla",
+      "patrones_aplicados": [
+        "ML-12",
+        "MT-01",
+        "MT-11",
+        "MT-12",
+        "MG-09"
+      ],
+      "nota": "DoD completo (núcleo + su «además» de KPIS-Y-DOD §3) el 2026-10-26."
     },
     {
       "archivo": "sistema.html",
-      "estado": "pendiente",
-      "huella": "a71bd70feba4a4f109dd4d7c942ea8ace8d718e7b1853a07ec8b9e44790f6551"
+      "estado": "verificado",
+      "huella": "50addff13fa9b63b5f76b20f0bcc228c320a0c8535b8fef57ff61fe9d5917a2a",
+      "sintesis": "S1",
+      "fecha": "2026-10-26",
+      "pruebas": [
+        "pruebas-e2e.js",
+        "pruebas-do-pantallas.js"
+      ],
+      "checks": {
+        "e2e_paginas": 101,
+        "do_pantallas": 84
+      },
+      "evidencia": "PASADAS-DE-PANTALLAS.md#sistema",
+      "patrones_aplicados": [
+        "ML-12",
+        "MT-01",
+        "MT-11",
+        "MT-12",
+        "MG-09"
+      ],
+      "nota": "DoD completo (núcleo + su «además» de KPIS-Y-DOD §3) el 2026-10-26."
     },
     {
       "archivo": "CUMPLIMIENTO.html",
-      "estado": "pendiente",
-      "huella": "e131fda512b0068524c82bb9042a04f5820a3af6b5ad983a0f4cb43e07078a17"
+      "estado": "verificado",
+      "huella": "e97673cbe1e6fa79f387e95086f5724e8c8c69f167a1138c7278e83114de868c",
+      "sintesis": "S1",
+      "fecha": "2026-10-26",
+      "pruebas": [
+        "pruebas-e2e.js",
+        "pruebas-do-pantallas.js"
+      ],
+      "checks": {
+        "e2e_paginas": 101,
+        "do_pantallas": 84
+      },
+      "evidencia": "PASADAS-DE-PANTALLAS.md#CUMPLIMIENTO",
+      "patrones_aplicados": [
+        "ML-12",
+        "MT-01",
+        "MT-11",
+        "MT-12",
+        "MG-09"
+      ],
+      "nota": "DoD completo (núcleo + su «además» de KPIS-Y-DOD §3) el 2026-10-26."
     },
     {
       "archivo": "HOJA-DE-VEREDICTO.html",
-      "estado": "pendiente",
-      "huella": "df8b0641495de1f2968ebe4ff83001c01f85bc2830747616aa335c38959bd52a"
+      "estado": "verificado",
+      "huella": "b7d9512622e133cf66359513ea8d2251f22f1fc2da6d830dded368bdc72f2ac4",
+      "sintesis": "S1",
+      "fecha": "2026-10-26",
+      "pruebas": [
+        "pruebas-e2e.js",
+        "pruebas-do-pantallas.js"
+      ],
+      "checks": {
+        "e2e_paginas": 101,
+        "do_pantallas": 84
+      },
+      "evidencia": "PASADAS-DE-PANTALLAS.md#HOJA-DE-VEREDICTO",
+      "patrones_aplicados": [
+        "ML-12",
+        "MT-01",
+        "MT-11",
+        "MT-12",
+        "MG-09"
+      ],
+      "nota": "DoD completo (núcleo + su «además» de KPIS-Y-DOD §3) el 2026-10-26."
     }
   ],
   "componentes": [
@@ -146,7 +462,7 @@
       "estado": "aplicado",
       "sintesis": "S1",
       "fecha": "2026-10-25",
-      "huella": "3bff1940485c9de1d91336e2cb7c7f4c1f74372901a01b81251fe1bac8204482",
+      "huella": "e7ae11b4bf691bc4ff86452c2e1d3092ebec92a92f02bebdcc1e03de1533e4b9",
       "pruebas": [
         "pruebas-motor.js",
         "pruebas-atenciones.js"
@@ -175,7 +491,38 @@
       "archivo": "front.css",
       "estado": "pendiente",
       "huella": "5f4a2483b54c056cb75c89c783921d84d24e230b3777e8450a7270a339b45a7c"
+    },
+    {
+      "archivo": "catalogos.js",
+      "estado": "aplicado",
+      "sintesis": "S1",
+      "fecha": "2026-10-26",
+      "huella": "96c1e54da4707c7de591a937c915fb36e59649270036b0bc4be4cb4245d7aae4",
+      "pruebas": [
+        "pruebas-registro.js"
+      ],
+      "checks": {
+        "espejo": 1
+      },
+      "evidencia": "PLAN-DE-IMPLEMENTACION.md",
+      "patrones_aplicados": [
+        "ML-10",
+        "MT-08"
+      ],
+      "nota": "Tramo A1: fuente firmable de umbrales (LAB/TA/FCF/HOMA/CONTROL/INTERACCIONES/18 calculadoras) fuera del motor, con espejo generado."
     }
   ],
-  "frontend_version": "V4"
+  "frontend_version": "V4",
+  "veredicto_dueno": {
+    "fecha": "2026-10-26",
+    "estado": "RECHAZO TOTAL de las pantallas y de la gestión de la pasada",
+    "motivos": [
+      "se pidieron pantallas desde 0 y se entregó un refrito de las existentes",
+      "sin calendarios en la agenda como se pidió",
+      "la agenda trabajada en 12-AGENDA-Y-MENSAJES no se integró",
+      "el lenguaje de pantalla no dice nada útil ni lógico al usuario final",
+      "el acople backend↔frontend que quedó firmado no se aplicó en las pantallas"
+    ],
+    "efecto": "los estados 'verificado' de esta pasada son MECÁNICOS (DoD v1); el oficio no los acepta. Se abren los criterios D-2 (calendarios, lenguaje, agenda integrada, acople) y el trabajo desde cero. Frases en FRASES-A-TRADUCIR.md."
+  }
 }

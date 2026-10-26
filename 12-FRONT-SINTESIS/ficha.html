@@ -39,7 +39,8 @@
 <div id="ficha-aviso"></div>
 <div id="veredicto-host"></div>
 </div></div>
-<script src="config.js"></script><script src="motor.js"></script>
+<script src="config.js"></script><script src="catalogos.js"></script>
+<script src="motor.js"></script>
 <script>
 Jornada.nav("Ficha");
 var S = Jornada.estado();
@@ -69,17 +70,17 @@ function pintar() {
 }
 document.getElementById("btn-guardar").onclick = function () {
   if (!pid) { Jornada.toast("Primero elija a la paciente desde Hoy."); return; }
-  var p = Jornada.paciente(pid);
   var alergia = document.getElementById("f-alergia").value.trim();
-  p.alergias = alergia && alergia.toLowerCase().indexOf("sin alergias") < 0 ? alergia.split(",").map(function (s) { return s.trim(); }).filter(Boolean) : [];
-  p.sangre = document.getElementById("f-rh").value.trim() || "sin dato";
-  p.medicacion = document.getElementById("f-medicacion").value.trim() || "sin dato";
-  p.cronica = document.getElementById("f-cronica").value.trim() || "sin dato";
-  p.tel = document.getElementById("f-tel").value.trim();
-  p.ciudad = document.getElementById("f-ciudad").value.trim();
-  p.curp = document.getElementById("f-curp").value.trim();
-  Jornada.agregarEvento("ficha_guardada", pid, {});
-  Jornada.guardar();
+  var rf = Jornada.guardarFicha(pid, {
+    alergias: alergia && alergia.toLowerCase().indexOf("sin alergias") < 0 ? alergia.split(",").map(function (s) { return s.trim(); }).filter(Boolean) : [],
+    sangre: document.getElementById("f-rh").value.trim(),
+    medicacion: document.getElementById("f-medicacion").value.trim(),
+    cronica: document.getElementById("f-cronica").value.trim(),
+    tel: document.getElementById("f-tel").value.trim(),
+    ciudad: document.getElementById("f-ciudad").value.trim(),
+    curp: document.getElementById("f-curp").value.trim()
+  });
+  if (!rf.ok) { Jornada.toast(rf.mensaje); return; }
   document.getElementById("ficha-aviso").innerHTML = "<div class='aviso verde'><b>Ficha guardada</b> — los fundamentales viajan en la cinta de todas las pantallas.</div>";
   Jornada.toast("Ficha guardada.");
   pintar(); Jornada.pintarContexto();

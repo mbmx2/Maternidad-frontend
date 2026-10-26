@@ -48,31 +48,9 @@ var Jornada = (function () {
   /* Catálogos clínicos — BORRADOR FIRMABLE (ley P6: el umbral vive en catálogo, no en código;
      aquí van sembrados «como si firmados» para la sesión; el médico los firma y el producto
      los leerá desde CATALOGOS/LAB_RANGOS.json y hermanas). */
-  var CATALOGO = {
-    LAB_RANGOS: {
-      hemoglobina: { nombre: "Hemoglobina", unidad: "g/dL", bandas: [{ max: 9.9, nivel: "critica", texto: "por debajo del mínimo" }, { max: 10.9, nivel: "alerta", texto: "por debajo del rango del trimestre" }], normalTexto: "en rango del trimestre" },
-      hematocrito: { nombre: "Hematocrito", unidad: "%", bandas: [{ max: 32, nivel: "critica", texto: "por debajo del mínimo" }, { max: 35.9, nivel: "alerta", texto: "por debajo del rango del trimestre" }], normalTexto: "en rango del trimestre" },
-      glucosa: { nombre: "Glucosa en ayuno", unidad: "mg/dL", bandas: [{ max: 91, nivel: "normal", invertido: true }, { max: 125, nivel: "alerta", texto: "por arriba del rango en ayuno" }], fuera: "critica", fueraTexto: "muy por arriba del rango — evaluar hoy", normalTexto: "en rango en ayuno" },
-      insulina: { nombre: "Insulina en ayuno", unidad: "µU/mL", bandas: [{ max: 24, nivel: "normal", invertido: true }, { max: 35, nivel: "alerta", texto: "por arriba del rango en ayuno" }], fuera: "alerta", fueraTexto: "por arriba del rango en ayuno", normalTexto: "en rango en ayuno" },
-      plaquetas: { nombre: "Plaquetas", unidad: "mil/µL", bandas: [{ max: 149999, nivel: "critica", texto: "por debajo del mínimo" }, { max: 169999, nivel: "alerta", texto: "por debajo del rango" }], normalTexto: "en rango" },
-      ldh: { nombre: "LDH", unidad: "U/L", bandas: [{ max: 250, nivel: "normal", invertido: true }, { max: 450, nivel: "alerta", texto: "por arriba del rango" }], fuera: "alerta", fueraTexto: "por arriba del rango", normalTexto: "en rango" },
-      bilirrubina: { nombre: "Bilirrubina total", unidad: "mg/dL", bandas: [{ max: 1.1, nivel: "normal", invertido: true }, { max: 1.9, nivel: "alerta", texto: "por arriba del rango" }], fuera: "critica", fueraTexto: "muy por arriba del rango", normalTexto: "en rango" },
-      acido_urico: { nombre: "Ácido úrico", unidad: "mg/dL", bandas: [{ max: 5.9, nivel: "normal", invertido: true }, { max: 6.9, nivel: "alerta", texto: "por arriba del rango" }], fuera: "alerta", fueraTexto: "por arriba del rango", normalTexto: "en rango" },
-      creatinina: { nombre: "Creatinina", unidad: "mg/dL", bandas: [{ max: 0.9, nivel: "normal", invertido: true }, { max: 1.1, nivel: "alerta", texto: "por arriba del rango" }], fuera: "critica", fueraTexto: "muy por arriba del rango — evaluar hoy", normalTexto: "en rango" }
-    },
-    TA: { critica: { pas: 160, pad: 110, texto: "tensión muy por arriba — evaluar hoy" }, alerta: { pas: 140, pad: 90, texto: "tensión por arriba del rango" }, baja: { texto: "tensión por debajo del rango" } },
-    FCF: { min: 110, max: 160 },
-    HOMA: { bandas: [{ max: 2.5, nivel: "normal", invertido: true }, { max: 4.0, nivel: "alerta", texto: "índice por arriba del rango — sugiere resistencia a la insulina" }], fuera: "critica", fueraTexto: "índice muy por arriba del rango", normalTexto: "índice en rango" },
-    /* Próximo control por situación (R-41: si es derivable, nunca se captura). */
-    CONTROL: { base: 28, infeccion: 14, puerperio: 14, fertilidad: 7, egTardia: 7, egTardiaDesde: 36 },
-    INTERACCIONES: [
-      { droga: "amoxicilina", chocaCon: ["alergia:penicilina"], aviso: "choca con alergia registrada: penicilina" },
-      { droga: "ampicilina", chocaCon: ["alergia:penicilina"], aviso: "choca con alergia registrada: penicilina" },
-      { droga: "ibuprofeno", chocaCon: ["alergia:ibuprofeno", "med:warfarina"], aviso: "choca con su medicación actual: warfarina" },
-      { droga: "sulfametoxazol", chocaCon: ["alergia:sulfa"], aviso: "choca con alergia registrada: sulfa" }
-    ],
-    CALCULADORAS_18: ["Peso fetal estimado (Hadlock)", "Talla fetal estimada", "Percentil de peso fetal", "Media ponderal al nacer", "Ballard de madurez", "IMC pregestacional", "Ganancia de peso (IOM)", "Superficie corporal (du Bois)", "Riesgo tromboembólico (Caprini)", "PHQ-9", "qSOFA", "NEWS2 obstétrico", "Hemoglobina por trimestre", "Criterios OGTT 75 g", "EG por biometría fetal", "Screening de preeclampsia", "Apgar", "Resistencia a la insulina (HOMA-IR)"]
-  };
+  /* Los catálogos clínicos viven en catalogos.js (fuente firmable, P6):
+     este archivo ya no contiene umbrales. Se carga antes que motor.js. */
+
   var LAB_RANGOS = CATALOGO.LAB_RANGOS;
 
   /* Catálogo de tipos de atención (P6): la pantalla no decide tipos a mano.
@@ -514,6 +492,105 @@ var Jornada = (function () {
     return true;
   }
 
+  /* —— Frontera DEC-32: el motor que produce recordatorios vigila su propia
+     frontera (portada probada de la carpeta de mensajes). —— */
+  var PROHIBIDO = [
+    /mg\/dL/i, /g\/dL/i, /µU\/mL/i, /mmHg/i, /mmol/i, /µg\/(dl|l|mL)/i,
+    /HOMA/i,
+    /(hemoglobina|glucosa|plaquetas|insulina|bilirrubina|creatinina|colesterol|triglic[ée]ridos|[áa]cido [úu]rico|ldh|hematocrito)\s*(del|de|en|:)?\s*\d/i,
+    /\d+[.,]\d+/,
+    /\b\d+\s*(mg|mcg|µg|g|ml|cm|mm|kg|lpm|lat)\b/i,
+    /preeclampsia/i, /vph/i, /diabetes/i, /anemia/i, /colpitis/i, /hipertensi[óo]n/i,
+    /tiroides/i, /neoplasia/i, /c[áa]ncer/i, /tumoraci[óo]n/i, /duelo/i,
+    /infecci[óo]n/i, /sepsis/i, /eclampsia/i, /depresi[óo]n/i, /diagn[óo]stico\s*:/i,
+    /\{\{interno/
+  ];
+  function examenInocuidad(texto) {
+    var malos = [];
+    PROHIBIDO.forEach(function (re) { if (re.test(String(texto))) malos.push(String(re)); });
+    return malos;
+  }
+
+  /* ——— Puertas de las pantallas (DoD: la pantalla jamás inserta ni muta por su cuenta) ——— */
+  function crearPaciente(datos) {
+    if (!datos || !datos.nombre || String(datos.nombre).trim() === "") return { ok: false, mensaje: "Faltan el nombre: no se crea una paciente a medias." };
+    if (!datos.nacimiento) return { ok: false, mensaje: "Falta la fecha de nacimiento: sin ella no hay ficha." };
+    if (!datos.id) datos.id = uid();
+    if (!datos.caso) datos.caso = "Primera visita — sin motivo declarado";
+    S.pacientes.push(datos);
+    agregarEvento("creado", datos.id);
+    guardar();
+    return { ok: true, paciente: datos };
+  }
+  function completaVisita(pid, visita, yaLlego, esExistente) {
+    var p = paciente(pid);
+    if (!p) return { ok: false, mensaje: "No aparece esa paciente." };
+    if (!visita) return { ok: false, mensaje: "La visita necesita los datos de hoy." };
+    if (!yaLlego) agregarEvento("llego", pid, {});
+    p.visita = visita;
+    if (esExistente && !p.cita) p.sinCita = false;
+    agregarEvento("visita_completa", pid, {});
+    guardar();
+    return { ok: true };
+  }
+  function completarFicha(pid, campos) {
+    var p = paciente(pid);
+    if (!p) return { ok: false, mensaje: "No aparece esa paciente." };
+    if (campos) {
+      if (campos.curp) p.curp = campos.curp;
+      if (campos.tel) p.tel = campos.tel;
+      if (campos.ciudad) p.ciudad = campos.ciudad;
+    }
+    agregarEvento("ficha_completa", pid, {});
+    guardar();
+    return { ok: true };
+  }
+  function guardarFicha(pid, datos) {
+    var p = paciente(pid);
+    if (!p) return { ok: false, mensaje: "No aparece esa paciente." };
+    if (!datos) return { ok: false, mensaje: "Nada que guardar." };
+    if (datos.alergias !== undefined) p.alergias = datos.alergias;
+    if (datos.sangre !== undefined) p.sangre = datos.sangre || "sin dato";
+    if (datos.medicacion !== undefined) p.medicacion = datos.medicacion || "sin dato";
+    if (datos.cronica !== undefined) p.cronica = datos.cronica || "sin dato";
+    if (datos.tel !== undefined) p.tel = datos.tel;
+    if (datos.ciudad !== undefined) p.ciudad = datos.ciudad;
+    if (datos.curp !== undefined) p.curp = datos.curp;
+    agregarEvento("ficha_guardada", pid, {});
+    guardar();
+    return { ok: true, paciente: p };
+  }
+  function firmarNota(pid, datos) {
+    if (!paciente(pid)) return { ok: false, mensaje: "No aparece esa paciente." };
+    if (!datos || !datos.texto || !String(datos.texto).trim()) return { ok: false, mensaje: "La nota está vacía: nada que firmar." };
+    if (!datos.autor || !String(datos.autor).trim() || !datos.cedula || !String(datos.cedula).trim())
+      return { ok: false, mensaje: "Falta la firma: nombre y cédula. Sin firma no se señala." };
+    var nota = {
+      id: uid(), pid: pid, tipo: datos.tipo || "Evolución",
+      texto: String(datos.texto).trim(), autor: String(datos.autor).trim(),
+      cedula: String(datos.cedula).trim(), fecha: hoyISO(), hora: hm(ahoraMin())
+    };
+    S.notas.unshift(nota);
+    if (nota.tipo === "Interconsulta")
+      nacerAlerta(pid, 2, "interconsulta pendiente de respuesta", "dar seguimiento a la respuesta en 7 días", "la médica");
+    agregarEvento("nota_firmada", pid, { tipo: nota.tipo, notaId: nota.id });
+    guardar();
+    return { ok: true, nota: nota };
+  }
+  function guardarCalculo(pid, calc) {
+    if (!paciente(pid)) return { ok: false, mensaje: "No aparece esa paciente." };
+    if (!calc || calc.homa == null && calc.imc == null) return { ok: false, mensaje: "Sin número no hay cálculo." };
+    calc.pid = pid;
+    if (calc.fecha == null) calc.fecha = hoyISO();
+    if (calc.min == null) calc.min = ahoraMin();
+    S.calculos.push(calc);
+    agregarEvento("calculo_guardado", pid, { origen: calc.origen || "calculado" });
+    if (calc.homa != null && (calc.nivel === "alerta" || calc.nivel === "critica"))
+      nacerAlerta(pid, 3, "HOMA-IR " + calc.homa + " — " + calc.texto, "integrar en la nota y comparar con el próximo control", "la médica");
+    guardar();
+    return { ok: true };
+  }
+
   function alternarEquipo() {
     S.equipoFuera = !S.equipoFuera;
     agregarEvento("equipo_estado", null, { fuera: S.equipoFuera });
@@ -803,7 +880,8 @@ var Jornada = (function () {
     });
     S.pacientes.forEach(function (p) {
       if (estadoDe(p.id).estado !== "atendida") return;
-      if (!p.eg && p.caso.toLowerCase().indexOf("embarazo") < 0 && p.caso.toLowerCase().indexOf("fertilidad") < 0 && p.caso.toLowerCase().indexOf("infección") < 0 && p.caso.toLowerCase().indexOf("puerperio") < 0) return;
+      var cs = (p.caso || "").toLowerCase();
+    if (!p.eg && cs.indexOf("embarazo") < 0 && cs.indexOf("fertilidad") < 0 && cs.indexOf("infección") < 0 && cs.indexOf("puerperio") < 0) return;
       var f = proximaFechaControl(p);
       var rid = "c:" + p.id;
       out.push({
@@ -1086,6 +1164,7 @@ var Jornada = (function () {
     toast: toast, modal: modal, nombrePac: nombrePac, pintarRelojBarra: pintarRelojBarra, nav: nav,
     leerContexto: leerContexto, exigirContexto: exigirContexto, pintarContexto: pintarContexto, irA: irA,
     bandaVeredicto: bandaVeredicto, tarjetaHTML: tarjetaHTML, avisoHTML: avisoHTML, cintaHTML: cintaHTML,
+    crearPaciente: crearPaciente, completaVisita: completaVisita, completarFicha: completarFicha, guardarFicha: guardarFicha, firmarNota: firmarNota, guardarCalculo: guardarCalculo, examenInocuidad: examenInocuidad,
     reiniciar: reiniciar, guardar: guardar, clave: function () { return KEY; }
   };
 })();

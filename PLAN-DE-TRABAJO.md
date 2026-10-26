@@ -34,7 +34,9 @@ Mientras falte cualquiera de los tres, no se declara listo — aunque todo lo de
 - A2 · Fecha estimada y diagnóstico estructurado en la ficha; próxima fecha por cálculo
   (hoy se adivina del texto del caso).
 - A3 · Integrar el sistema de mensajes (con tu decisión D-2 y su default) con su
-  chequeo de desincronización entre las dos copias.
+  chequeo de desincronización entre las dos copias. **HECHO 2026-10-26**: copia canónica
+  en `12-FRONT-SINTESIS/mensajes.js`, guardia de deriva en `autoauditoria.sh` probada con
+  fuego, y el módulo completo dentro de la pantalla de agenda (checklist A11).
 - A4 · Ampliar la suite de presentación (los cuatro chequeos actuales por pantalla
   crecen a: barra completa con reloj real, banda persistente, color siempre con palabra,
   sin `prompt`/`alert`, sello de versión) — para que **todas** las pantallas siguientes

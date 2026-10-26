@@ -160,3 +160,43 @@ node pruebas/pruebas-registro.js                            → TODO OK (suite e
 Suites del folder: motor 32 · atenciones 33 · registro (≥21 PASS) · e2e 95 · ruptura 19
 Estado del libro: 2 aplicadas/verificadas (atenciones, estacion) · 16 en cola · S1
 ```
+
+
+---
+
+# Ronda S-2 — RECHAZO TOTAL del dueño (2026-10-26)
+
+> El dueño rechaza las pantallas y la gestión de la pasada. Se registra sin maquillaje:
+> el veredicto del oficio manda sobre cualquier estado mecánico.
+
+**S2-1 · [ALTO] Se pidieron pantallas desde cero y se entregó un refrito.** La pasada
+anterior **verificó y registró** las pantallas existentes en lugar de **construirlas
+nuevas**. La verificación era real (18/18 con pruebas), pero respondía a la pregunta
+equivocada: «¿está hecha la que había?» y no «¿está hecha la que pedí?».
+*Corrección de proceso:* en esta casa, **«genera» significa construir, no auditar** —
+toda petición con verbo de creación se ejecuta como creación.
+
+**S2-2 · [ALTO] El DoD v1 era insuficiente: midió lo fácil, no lo pedido.** Sus 8
+criterios verificaban estructura (mutaciones, sellos, pruebas) y no midieron:
+calendarios, lenguaje útil, integración de la agenda ni acople con el enchufe — los
+cuatro motivos exactos del rechazo. *Corrección:* DoD v2 con los cuatro criterios
+(`KPIS-Y-DOD.md` §2.5) y re-pase obligatorio.
+
+**S2-3 · [ALTO] La agenda de la otra carpeta nunca se integró.** Se trabajó un sistema
+completo de 92 plantillas con composer y disponibilidad, y la pantalla de agenda del
+frontend quedó reducida a recordatorios. *Corrección registrada:* integración completa
+en el checklist A7.
+
+**S2-4 · [ALTO] El lenguaje de pantalla no habla con el usuario.** 30 frases recopiladas
+por el dueño como carentes de sentido (registro en `FRASES-A-TRADUCIR.md`, literales
+conservados). *Corrección:* el lenguaje es criterio de aceptación (D-2b); la traducción
+la autoriza el dueño.
+
+**S2-5 · [MEDIO] El acople firmado no se aplicó.** El mapa de 25 operaciones existía
+como documento y ninguna pantalla se construyó contra él. *Corrección:* D-2d como
+criterio; las pantallas nuevas se construyen desde las operaciones.
+
+**Lección de gobernanza para la casa:** un estado mecánico (`verificado`) **no es
+aceptación**; la aceptación es del oficio y aquí quedó demostrado en vivo: 18/18
+mecánicas y rechazo total igual. El registro ahora lleva `veredicto_dueno` para que
+esto no vuelva a confundirse.

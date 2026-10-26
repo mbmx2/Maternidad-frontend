@@ -126,21 +126,35 @@ trap matar_propios EXIT
 echo "══ AUTOAUDITORÍA $( [ "$COMPLETO" -eq 1 ] && echo 'TIER 2 · transición' || echo 'TIER 1 · iteración' ) · $(date '+%F %T') ══"
 
 echo "— sintaxis —"
-sintaxis "$SIN" motor.js config.js
+sintaxis "$SIN" motor.js config.js mensajes.js
 sintaxis "$AG" mensajes.js generar-maestro.js
 
 echo "— suites de nodo (T1) —"
 correr "sintesis · motor"      "$SIN/pruebas" node pruebas-motor.js
 correr "sintesis · atenciones" "$SIN/pruebas" node pruebas-atenciones.js
+correr "sintesis · do-pantallas" "$SIN/pruebas" node pruebas-do-pantallas.js
 correr "sintesis · libro (huella+conteos)" "$SIN/pruebas" env TIER1=1 node pruebas-registro.js
 correr "agenda · mensajes"     "$AG/pruebas"  node pruebas-mensajes.js
 correr "agenda · documental"   "$AG/pruebas"  node pruebas-reauditoria.js
+
+echo "— lenguaje del usuario (informe; la puerta --exigir se enciende cuando el dueño fije sustitutos · A17) —"
+if _lang=$(node "$RAIZ/buscar-lenguaje.js" --resumen 2>&1); then
+  echo "ok    lenguaje  $_lang"
+else
+  echo "FAIL  lenguaje  $_lang"
+  fallos=$((fallos + 1))
+fi
 
 echo "— deriva de duplicados (ME-13a) —"
 if cmp -s "$RAIZ/10-PRUEBA-ENFERMERIA/motor.js" "$RAIZ/11-PRUEBA-MEDICA/motor.js"; then
   echo "ok    10=11 · motor sin deriva (copias idénticas)"
 else
   echo "FAIL  10=11 · motor DIVERGIDO (una sola fuente rota)"; fallos=$((fallos + 1))
+fi
+if cmp -s "$RAIZ/12-AGENDA-Y-MENSAJES/mensajes.js" "$RAIZ/12-FRONT-SINTESIS/mensajes.js"; then
+  echo "ok    mensajes · copia canónica sin deriva (12-AGENDA = FRONT-SINTESIS)"
+else
+  echo "FAIL  mensajes · copias DIVERGIDAS (la canónica y la del frontend no coinciden)"; fallos=$((fallos + 1))
 fi
 
 echo "— enlaces —"

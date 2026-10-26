@@ -1,107 +1,1113 @@
 <!DOCTYPE html><html lang="es"><head><meta charset="utf-8">
 <meta name="sintesis" content="S1">
 <meta name="viewport" content="width=1024">
-<title>Agenda y recordatorios</title>
+<title>Agenda y mensajes — maternidad</title>
 <link rel="icon" href="data:,">
-<link rel="stylesheet" href="front.css"></head><body>
+<link rel="stylesheet" href="front.css">
+<style>
+.pestanas { display:flex; gap:4px; margin:12px 0 0; border-bottom:2px solid #d7dee5; flex-wrap:wrap; }
+.pestanas button { background:#eef2f5; border:1px solid #d7dee5; border-bottom:none; padding:9px 16px; font-size:13.5px; cursor:pointer; border-radius:6px 6px 0 0; color:#334; }
+.pestanas button.activa { background:#fff; font-weight:bold; color:#0f4c5c; border-top:3px solid #1b6ca8; }
+.contenido { display:none; padding-top:14px; }
+.contenido.visible { display:block; }
+.rotulo-fam { display:inline-block; font-size:11px; font-weight:bold; padding:2px 9px; border-radius:9px; margin:2px 4px 2px 0; }
+.fam-logistica { background:#e3eef8; color:#14507d; }
+.fam-laboratorio { background:#fdf0dc; color:#92500a; }
+.fam-semana { background:#e4f5e9; color:#1d6b36; }
+.fam-diagnostico { background:#eee8f8; color:#5a3f91; }
+.fam-cuidado { background:#e7f3f4; color:#0f5c6b; }
+.fam-alarma { background:#fbe4e1; color:#922b21; }
+.fam-propia { background:#fbe4e1; color:#922b21; }
+.item-lista { border:1px solid #d7dee5; border-radius:5px; padding:8px 12px; margin-bottom:6px; cursor:pointer; }
+.item-lista:hover { background:#eef4f8; }
+.item-lista.sel { border-left:5px solid #1b6ca8; background:#ddeef5; }
+.item-lista .meta { color:#667; font-size:12px; }
+.marca-borrador { font-size:10px; font-weight:bold; color:#922b21; border:1px solid #f0c4bd; background:#fbe4e1; padding:1px 7px; border-radius:8px; }
+.marca-fija { font-size:10px; font-weight:bold; color:#92500a; border:1px solid #efd3a8; background:#fdf0dc; padding:1px 7px; border-radius:8px; }
+.vista-texto { background:#f7f9fa; border:1px solid #d7dee5; border-left:5px solid #2e9e4f; border-radius:5px; padding:12px 14px; font-size:14px; line-height:1.55; white-space:pre-wrap; }
+.vista-texto.bloqueado { border-left-color:#c0392b; }
+textarea.vta { width:100%; min-height:110px; border:1px solid #c5d0da; border-radius:6px; padding:10px; font:inherit; font-size:14px; line-height:1.5; background:#fff; }
+textarea.vta[readonly] { background:#eef4f8; }
+.falta-msg { color:#922b21; font-size:12px; font-weight:bold; margin-top:6px; }
+.ok-msg { color:#1d6b36; font-size:12px; font-weight:bold; margin-top:6px; }
+.chips-fila .chip.filtro { cursor:pointer; }
+.chip.filtro.activo { outline:2px solid #1b6ca8; }
+.grilla-semanas { display:grid; grid-template-columns:repeat(10,1fr); gap:6px; margin-top:10px; }
+.celda-sem { border:1px solid #d7dee5; border-radius:6px; padding:8px 4px; text-align:center; cursor:pointer; background:#fff; font-size:12px; }
+.celda-sem b { display:block; font-size:14px; color:#0f4c5c; }
+.celda-sem.tiene { background:#e4f5e9; border-color:#9fd3ad; }
+.celda-sem.equipo { background:#fdf0dc; border-color:#e8c88d; }
+.celda-sem.sel { outline:3px solid #1b6ca8; }
+.hueco { display:inline-block; border:1px dashed #9fb3c0; border-radius:6px; padding:2px 8px; font-size:11.5px; margin:2px; color:#456; background:#f7fbfd; }
+.hueco.libre { border-style:solid; border-color:#2e9e4f; color:#1d6b36; background:#eef8f0; }
+.hueco.jornada { border-style:solid; border-color:#1b6ca8; color:#14507d; background:#e8f1f8; }
+.modo-toggle button.activo { background:#1b6ca8; color:#fff; border-color:#1b6ca8; }
+.cal-mes { display:flex; gap:8px; align-items:center; margin-bottom:8px; }
+.cal-mes b { font-size:16px; color:#0f4c5c; min-width:170px; text-align:center; }
+.cal-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:4px; }
+.cal-dow { font-size:11px; text-align:center; color:#667; font-weight:bold; padding:3px 0; }
+.celda-dia { border:1px solid #d7dee5; border-radius:6px; min-height:56px; padding:4px 5px; background:#fff; cursor:pointer; font-size:12px; position:relative; }
+.celda-dia.vacia { background:#f7f9fa; opacity:.6; cursor:default; }
+.celda-dia.hoy { border:2px solid #1b6ca8; font-weight:bold; }
+.celda-dia.sel { outline:3px solid #0f4c5c; background:#ddeef5; }
+.celda-dia .n-citas { display:inline-block; margin-top:3px; font-size:10.5px; font-weight:bold; background:#d6e6f3; color:#14507d; border-radius:8px; padding:1px 7px; }
+.celda-dia .hora-dia { display:block; font-size:15px; font-weight:bold; color:#0f4c5c; }
+@media print { .barra,.lateral,.pestanas,.no-imprimir,.banda { display:none !important; } .contenido { display:block !important; } }
+</style></head><body>
 <div class="barra"><span class="marca">Maternidad</span>
-<span class="pantalla">Agenda y recordatorios de continuidad</span>
+<span class="pantalla">Agenda y mensajes</span>
 <span id="contexto-gatillo" class="vacio"></span>
 <span class="propuesta">V4 · S1 · PAPEL CON MOTOR</span>
 <span class="reloj-dia"></span></div>
 <div class="cuerpo"><div class="lateral"></div>
 <div class="zona">
-<h1>Agenda y recordatorios</h1>
-<p class="subtitulo">La próxima cita se <b>deriva</b> del protocolo (nunca se captura a mano). El recordatorio sale con nombre y fecha — <b>nunca con cifras ni diagnósticos</b> — y lo entrega una persona: el software lo prepara, usted lo empuja. Sin entrega al cerrar la ventana ⇒ <b>ESCALADO</b> en el cierre.</p>
-<div class="panel sombra">
-<h3>Citas de hoy y próximas</h3>
-<div id="agenda-hoy"></div>
+<h1>Agenda y mensajes</h1>
+<p class="subtitulo">Su agenda con <b>calendario</b>: cada día con sus citas, sin adivinar.
+Los mensajes a las pacientes salen <b>listos para copiar</b> — con nombre y fecha, nunca con
+cifras clínicas ni nombres de enfermedad — y quien entrega es una persona. El sistema
+<b>sugiere</b> fechas desde el patrón de la semana o el diagnóstico; <b>usted decide y
+cambia</b>. Nada se manda solo.</p>
+
+<div class="pestanas">
+  <button id="tab-calendario" class="activa" onclick="muestra('calendario')">Calendario</button>
+  <button id="tab-citas" onclick="muestra('citas')">Citas y disponibilidad</button>
+  <button id="tab-plantillas" onclick="muestra('plantillas')">Plantillas (92)</button>
+  <button id="tab-semanas" onclick="muestra('semanas')">Semanas 1–40</button>
+  <button id="tab-propias" onclick="muestra('propias')">Mis plantillas</button>
+  <button id="tab-entregas" onclick="muestra('entregas')">Entregas</button>
 </div>
-<div class="panel sombra">
-<h3>Recordatorios preparados — listos para copiar</h3>
-<div class='linea nota'>Si nadie lo entrega y llega la fecha, aparece como <b>escalar</b> en el cierre del día. «Anular entrega» lo devuelve a disponible — el estado se deduce, no se captura.</div>
-<div id="recordatorios"></div>
+
+<!-- ————— CALENDARIO ————— -->
+<div id="contenido-calendario" class="contenido visible">
+  <div class="panel sombra">
+    <h3>Calendario del mes — un clic en un día ve sus citas</h3>
+    <div class="cal-mes no-imprimir">
+      <button class="btn sec chico" id="btn-mes-ant" onclick="mesAnterior()">‹ Mes anterior</button>
+      <b id="cal-titulo"></b>
+      <button class="btn sec chico" id="btn-mes-sig" onclick="mesSiguiente()">Mes siguiente ›</button>
+      <span class="chip azul">hoy con borde azul</span>
+      <span class="chip morado">día elegido con contorno</span>
+    </div>
+    <div class="cal-grid" id="cal-grid"></div>
+  </div>
+  <div class="panel sombra">
+    <h3 id="tit-citas-dia">Citas del día elegido</h3>
+    <div id="citas-dia"></div>
+  </div>
+  <div class="panel sombra">
+    <h3>Mensajes de continuidad — listos para entregar</h3>
+    <div class="linea nota">Cada mensaje ya viene con el nombre y la fecha de la paciente.
+    Si nadie lo entrega y la fecha llega, el cierre del día lo muestra como asunto pendiente
+    de resolver antes de irse. El sistema lo prepara; la entrega siempre es humana.</div>
+    <div id="recordatorios"></div>
+  </div>
+  <div class="panel sombra">
+    <h3>Controles derivados sin cita — la agenda los recupera</h3>
+    <div id="recuperar"></div>
+  </div>
 </div>
-<div class="panel sombra">
-<h3>«Por recuperar» — control derivado sin cita</h3>
-<div id="recuperar"></div>
+
+<!-- ————— CITAS Y DISPONIBILIDAD ————— -->
+<div id="contenido-citas" class="contenido">
+  <div class="linea nota">La agenda de mensajes trabaja con sus propias pacientes de
+  demostración (la de esta pestaña); las citas y recordatorios de la jornada de hoy viven
+  en el <b>Calendario</b>. Las dos comparten el mismo calendario: lo que se agende aquí se
+  ve allá.</div>
+  <div class="grilla2">
+    <div class="panel sombra">
+      <h3>Paciente</h3>
+      <div class="campo"><select id="sel-pac" onchange="cambiaPaciente()"></select></div>
+      <div id="ficha-pac"></div>
+    </div>
+    <div class="panel sombra">
+      <h3>La sugerencia — usted la acepta o la cambia</h3>
+      <div id="sugerencia"></div>
+    </div>
+  </div>
+  <div class="panel sombra">
+    <h3>Disponibilidad del día — huecos reales del consultorio</h3>
+    <div class="campo" style="max-width:240px"><label>Ver día</label><input type="date" id="fecha-disp" onchange="pintaDisponibilidad()"></div>
+    <div id="disp-huecos"></div>
+    <div class="linea" style="color:#667;margin-top:6px">Horario de catálogo: <b id="lbl-horario"></b> · Los huecos juntan las citas de la jornada y las de la agenda de mensajes: no se agenda encima de nadie. El software no llena huecos solo: ofrece y usted decide.</div>
+  </div>
+  <div class="panel sombra">
+    <h3>Preguntar a la paciente — disponibilidad pedida</h3>
+    <div class="linea" style="color:#667">Registre la pregunta (plantilla L03) y después su respuesta: la cita queda en el hueco libre que ella elija.</div>
+    <div class="acciones"><button class="btn sec" onclick="pedirDisp()">Pedir disponibilidad (L03)</button></div>
+    <div id="lista-pedidos"></div>
+  </div>
+  <div class="panel sombra">
+    <h3>Citas de la agenda de mensajes</h3>
+    <div id="lista-citas"></div>
+  </div>
+  <div class="panel sombra">
+    <h3>Cancelar o reprogramar CON mensaje — vinculado a la cita elegida</h3>
+    <div class="linea" id="cancel-contexto"><i>Elija «Mover o cancelar con mensaje» en una cita de la lista.</i></div>
+    <div class="campo"><label>Motivo (general — nunca detalle clínico)</label><input type="text" id="motivo-cancel" placeholder="Ej. imprevisto del consultorio / falta de personal"></div>
+    <div class="fila-form">
+      <div class="campo"><label>Opción 1 — fecha</label><input type="date" id="op1-fecha"></div>
+      <div class="campo"><label>Opción 1 — hora</label><input type="text" id="op1-hora" placeholder="09:00"></div>
+      <div class="campo"><label>Opción 2 — fecha</label><input type="date" id="op2-fecha"></div>
+      <div class="campo"><label>Opción 2 — hora</label><input type="text" id="op2-hora" placeholder="11:00"></div>
+    </div>
+    <div class="acciones no-imprimir">
+      <button class="btn" onclick="compone('cancelar')">Componer cancelación (L05)</button>
+      <button class="btn sec" onclick="compone('mover')">Componer reprogramación (L04)</button>
+      <label style="font-size:12px"><input type="radio" name="modo-ejec" value="mover" checked> al ejecutar: mover la cita · <input type="radio" name="modo-ejec" value="cancelar"> cancelarla</label>
+    </div>
+    <div id="vista-cancel"></div>
+  </div>
 </div>
+
+<!-- ————— PLANTILLAS ————— -->
+<div id="contenido-plantillas" class="contenido">
+  <div class="panel sombra">
+    <h3>Batería completa — busque, filtre o deje que le recomendemos</h3>
+    <div class="fila-form">
+      <div class="campo" style="max-width:320px"><label>Buscar por nombre, disparo o texto</label><input type="text" id="buscar" placeholder="Ej. hemoglobina, cancelación, agua…" oninput="pintaPlantillas()"></div>
+      <div class="campo" style="max-width:220px"><label>Subfamilia</label><select id="sel-sub" onchange="pintaPlantillas()"></select></div>
+    </div>
+    <div class="chips-fila no-imprimir" id="fam-chips"></div>
+    <div class="linea no-imprimir">
+      <label><input type="checkbox" id="chk-rec" checked onchange="pintaPlantillas()"> <b>Solo las recomendadas para la paciente seleccionada</b> (no navegue 92 a ciegas)</label>
+      <span class="chip azul" id="conteo-lista"></span>
+    </div>
+    <div id="lista-plantillas" style="margin-top:10px"></div>
+  </div>
+  <div class="panel sombra">
+    <h3>Vista previa y editor — <span style="font-weight:normal">edite como quiera antes de copiar</span></h3>
+    <div id="vista-info"></div>
+    <div class="fila-form no-imprimir" style="margin:8px 0">
+      <div class="campo" style="max-width:220px"><label>Fecha de contexto ({{fecha_cita}})</label><input type="date" id="ctx-fecha" onchange="pintaVista()"></div>
+      <div class="campo" style="max-width:140px"><label>Hora ({{hora_cita}})</label><input type="text" id="ctx-hora" value="09:00" onchange="pintaVista()" oninput="pintaVista()"></div>
+      <div class="campo" style="max-width:200px"><label>Documento ({{documento}})</label><input type="text" id="ctx-doc" placeholder="Ej. INE" oninput="pintaVista()"></div>
+      <div class="campo" style="max-width:210px"><label>Fecha original ({{fecha_original}})</label><input type="date" id="ctx-forig" onchange="pintaVista()" oninput="pintaVista()"></div>
+      <div class="campo" style="max-width:210px"><label>Fecha de cierre ({{fecha_cierre}})</label><input type="date" id="ctx-fcierre" onchange="pintaVista()" oninput="pintaVista()"></div>
+      <div class="campo" style="max-width:300px"><label>Opciones ({{opciones_reprogramacion}})</label><input type="text" id="ctx-ops" placeholder="Ej. lunes 27 a las 9, o miércoles 29 a las 11" oninput="pintaVista()"></div>
+      <div class="campo modo-toggle" style="max-width:260px"><label>Modo de edición</label>
+        <div class="chips-fila"><button class="btn sec chico activo" id="modo-msg" onclick="ponModo('mensaje')">Mensaje listo (resuelto)</button><button class="btn sec chico" id="modo-tpl" onclick="ponModo('plantilla')">Plantilla (con marcadores)</button></div>
+      </div>
+    </div>
+    <textarea class="vta" id="vta-texto" oninput="alEscribir()"></textarea>
+    <div id="vista-estado"></div>
+    <div class="acciones no-imprimir">
+      <button class="btn pri2" id="btn-copiar" onclick="copiaPreview()">Copiar mensaje</button>
+      <button class="btn" id="btn-entregar" onclick="entregaPreview()">Entregar (bitácora)</button>
+      <button class="btn sec" onclick="restauraPreview()">Restaurar del catálogo</button>
+      <span class="campo" style="max-width:200px"><input type="text" id="autor-tpl" placeholder="Su nombre (autor)" value="equipo"></span>
+      <button class="btn sec" id="btn-guardarmia" onclick="guardaMia()">Guardar como mía</button>
+      <button class="btn peligro" id="btn-nueva" onclick="abreBlanca()">+ Nueva plantilla desde cero</button>
+    </div>
+    <div id="panel-blancas" style="display:none;margin-top:10px">
+      <div class="fila-form">
+        <div class="campo" style="max-width:300px"><label>Nombre</label><input type="text" id="b-nombre" placeholder="Ej. Recordatorio de apoyo"></div>
+        <div class="campo" style="max-width:200px"><label>Familia</label><select id="b-fam"><option value="logistica">Logística</option><option value="laboratorio">Laboratorio</option><option value="semana">Semana</option><option value="diagnostico">Diagnóstico</option><option value="cuidado">Cuidado</option><option value="alarma">Alarma</option></select></div>
+        <div class="campo" style="max-width:300px"><label>Disparo (por qué le llega)</label><input type="text" id="b-disparo" placeholder="Ej. control programado de mañana"></div>
+      </div>
+      <div class="linea" style="font-size:12px;color:#667">Texto (use {{nombre}} y los demás marcadores; nada de cifras ni diagnósticos — el motor valida):</div>
+      <textarea class="vta" id="b-texto" placeholder="Hola {{nombre}}, …"></textarea>
+      <div id="b-estado"></div>
+      <div class="acciones"><button class="btn" onclick="guardaBlanca()">Crear plantilla</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- ————— SEMANAS ————— -->
+<div id="contenido-semanas" class="contenido">
+  <div class="panel sombra">
+    <h3>Las 40 semanas — contenido por semana (borrador científico; lo firma su médico)</h3>
+    <div class="linea" style="color:#667">Clic en una semana para ver su contenido o proponer una edición del equipo. Verde: contenido maestro. Naranja: versión editada por el equipo (borrador, pendiente de firma). La semana de la paciente seleccionada está con borde.</div>
+    <div class="grilla-semanas" id="grid-semanas"></div>
+  </div>
+  <div class="panel sombra" id="panel-sem"></div>
+  <div class="panel sombra">
+    <h3>Mensaje semanal con la paciente seleccionada</h3>
+    <div id="sem-preview"></div>
+  </div>
+</div>
+
+<!-- ————— MIS PLANTILLAS ————— -->
+<div id="contenido-propias" class="contenido">
+  <div class="panel sombra">
+    <h3>Mis plantillas personalizadas</h3>
+    <div class="linea" style="color:#667">Cree una desde cualquier maestra («Guardar como mía») o desde cero («+ Nueva plantilla»). Si la guarda en modo <b>plantilla</b>, conserva sus marcadores y sirve para cualquier paciente; si la guarda resuelta, queda como <b>texto fijo</b> (así se etiqueta).</div>
+    <div id="lista-propias"></div>
+  </div>
+</div>
+
+<!-- ————— ENTREGAS ————— -->
+<div id="contenido-entregas" class="contenido">
+  <div class="panel sombra">
+    <h3>Bitácora de entregas — quién entregó qué, cuándo, por dónde y con qué dedupe</h3>
+    <div id="lista-entregas"></div>
+    <div class="linea" style="color:#667;margin-top:8px">«Anular» devuelve el mensaje a disponible (el estado se deduce de la bitácora, nunca se captura).</div>
+  </div>
+  <div class="panel sombra">
+    <h3>La fatiga de mensajes, medida</h3>
+    <div id="metricas"></div>
+  </div>
+  <div class="panel sombra">
+    <h3>Examen de inocuidad — corrido en vivo sobre las 92 plantillas</h3>
+    <div id="examen"></div>
+  </div>
+  <div class="acciones no-imprimir"><button class="btn peligro chico" onclick="reiniciarJornada()">Reiniciar la jornada de mensajes</button></div>
+</div>
+
 <div id="veredicto-host"></div>
+<p class="pie-pag">Papel usable (DEC-19) · catálogo en BORRADOR hasta la firma del médico (P6) ·
+motor de mensajes v2 (copia canónica vigilada) · obra propia: FRONTEND/12-FRONT-SINTESIS.</p>
 </div></div>
-<script src="config.js"></script><script src="motor.js"></script>
+
+<script src="config.js"></script><script src="catalogos.js"></script>
+<script src="motor.js"></script><script src="mensajes.js"></script>
 <script>
 Jornada.nav("Agenda");
-var S = Jornada.estado();
-function pinta() {
-  var hoy = Jornada.hoyISO();
-  var citasHoy = S.citas.filter(function (a) { return a.fechaISO === hoy; }).sort(function (x, y) { return x.min - y.min; });
-  var futuras = S.citas.filter(function (a) { return a.fechaISO > hoy; }).sort(function (x, y) { return x.fechaISO < y.fechaISO ? -1 : 1; });
-  var host = document.getElementById("agenda-hoy");
+Jornada.pintarContexto();
+var S = AgendaMsg.estado();
+var pid = "p1";
+var famFiltro = "todas";
+var subFiltro = "todas";
+var plantillaSel = null;
+var modo = "mensaje";
+var citaSel = null;
+var _txtCancel = "";
+var preview = null;
+var semSel = null;
+var calFecha = new Date();
+var diaSel = Jornada.hoyISO();
+
+function esc(t) { return AgendaMsg.esc(t); }
+function bajaA(el) { if (el && typeof el.scrollIntoView === "function") el.scrollIntoView({ behavior: "smooth" }); }
+function toast(msg) {
+  var viejo = document.querySelector(".toast");
+  if (viejo) viejo.remove();
+  var t = document.createElement("div");
+  t.className = "toast"; t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(function () { if (t.parentNode) t.remove(); }, 3600);
+}
+function pregunta(titulo, html, acciones) {
+  var f = document.createElement("div");
+  f.className = "modal-fondo";
+  var m = document.createElement("div");
+  m.className = "modal";
+  m.innerHTML = "<h3></h3><div></div><div class='acciones'></div>";
+  m.querySelector("h3").textContent = titulo;
+  m.children[1].innerHTML = html;
+  acciones.forEach(function (a) {
+    var b = document.createElement("button");
+    b.className = "btn chico " + (a.cls || "sec");
+    b.textContent = a.txt;
+    b.onclick = function () { f.remove(); if (a.fn) a.fn(); };
+    m.querySelector(".acciones").appendChild(b);
+  });
+  f.appendChild(m);
+  document.body.appendChild(f);
+}
+var PESTANAS = ["calendario", "citas", "plantillas", "semanas", "propias", "entregas"];
+function muestra(tab) {
+  PESTANAS.forEach(function (t) {
+    document.getElementById("tab-" + t).className = t === tab ? "activa" : "";
+    document.getElementById("contenido-" + t).className = t === tab ? "contenido visible" : "contenido";
+  });
+  pintaTodo();
+}
+
+/* ——— Calendario: citas de la jornada y de la agenda de mensajes, juntas ——— */
+function fechaISO(d) {
+  return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+}
+function minAHHMM(min) {
+  var h = Math.floor(min / 60), m = ((min % 60) + 60) % 60;
+  if (h >= 24) h = h % 24;
+  return (h < 10 ? "0" : "") + h + ":" + (m < 10 ? "0" : "") + m;
+}
+function citasDelDia(fecha) {
+  var lista = [];
+  Jornada.estado().citas.forEach(function (c) {
+    if (c.fechaISO === fecha)
+      lista.push({ hora: minAHHMM(c.min), nombre: Jornada.nombrePac(c.pid), motivo: c.motivo, fuente: "jornada", estado: "" });
+  });
+  AgendaMsg.estado().citas.forEach(function (c) {
+    if (c.fecha === fecha && c.estado !== "cancelada") {
+      var p = AgendaMsg.paciente(c.pid);
+      lista.push({ hora: c.hora, nombre: p ? p.completo : c.pid, motivo: c.motivo, fuente: "mensajes",
+        estado: c.estado === "cancelada" ? "cancelada" : c.estado });
+    }
+  });
+  lista.sort(function (a, b) { return a.hora < b.hora ? -1 : 1; });
+  return lista;
+}
+function cuentaCitasFecha(fecha) { return citasDelDia(fecha).length; }
+function pintaCalendario() {
+  var hoy = new Date();
+  var anio = calFecha.getFullYear(), mes = calFecha.getMonth();
+  var MES = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
+  document.getElementById("cal-titulo").textContent = MES[mes] + " de " + anio;
+  var primero = new Date(anio, mes, 1);
+  var offset = (primero.getDay() + 6) % 7;
+  var dias = new Date(anio, mes + 1, 0).getDate();
+  var g = document.getElementById("cal-grid");
   var h = "";
-  h += citasHoy.length
-    ? citasHoy.map(function (a) {
-        return "<div class='linea'><span class='chip azul'>" + Jornada.hm(a.min) + "</span> <b>" + Jornada.esc(Jornada.nombrePac(a.pid)) + "</b> · " + Jornada.esc(a.motivo) + "</div>";
+  ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"].forEach(function (d) {
+    h += "<div class='cal-dow'>" + d + "</div>";
+  });
+  for (var i = 0; i < offset; i++) h += "<div class='celda-dia vacia'></div>";
+  for (var d = 1; d <= dias; d++) {
+    var iso = anio + "-" + String(mes + 1).padStart(2, "0") + "-" + String(d).padStart(2, "0");
+    var n = cuentaCitasFecha(iso);
+    var cls = "celda-dia" + (iso === diaSel ? " sel" : "") + (iso === fechaISO(hoy) ? " hoy" : "");
+    h += "<div class='" + cls + "' data-iso='" + iso + "'>" +
+      (iso === fechaISO(hoy) ? "<span class='hora-dia'>" + minAHHMM((new Date()).getHours() * 60 + (new Date()).getMinutes()) + "</span>" : "") +
+      "<b>" + d + "</b>" + (n ? "<span class='n-citas'>" + n + " cita" + (n > 1 ? "s" : "") + "</span>" : "") + "</div>";
+  }
+  g.innerHTML = h;
+  g.querySelectorAll("[data-iso]").forEach(function (el) {
+    el.onclick = function () { diaSel = el.getAttribute("data-iso"); pintaCalendario(); pintaCitasDia(); };
+  });
+}
+function mesAnterior() { calFecha = new Date(calFecha.getFullYear(), calFecha.getMonth() - 1, 1); pintaCalendario(); }
+function mesSiguiente() { calFecha = new Date(calFecha.getFullYear(), calFecha.getMonth() + 1, 1); pintaCalendario(); }
+function pintaCitasDia() {
+  var lista = citasDelDia(diaSel);
+  var nombres = { "jornada": "de la jornada", "mensajes": "agenda de mensajes" };
+  document.getElementById("tit-citas-dia").textContent = "Citas de " + Jornada.fechaLarga(diaSel);
+  document.getElementById("citas-dia").innerHTML = lista.length
+    ? lista.map(function (c) {
+        return "<div class='linea'><span class='chip azul'>" + c.hora + "</span> <b>" + Jornada.esc(c.nombre) + "</b> · " +
+          Jornada.esc(c.motivo) + " <span class='chip " + (c.fuente === "jornada" ? "azul" : "morado") + "'>" + nombres[c.fuente] + "</span>" +
+          (c.estado ? " <span class='chip verde'>" + c.estado + "</span>" : "") + "</div>";
       }).join("")
-    : "<div class='vacio'>Sin más citas hoy.</div>";
-  if (futuras.length) {
-    h += "<h3 style='margin-top:10px'>Próximas</h3>" + futuras.map(function (a) {
-      return "<div class='linea'><span class='chip gris'>" + Jornada.fechaLarga(a.fechaISO) + "</span> <b>" + Jornada.esc(Jornada.nombrePac(a.pid)) + "</b> · " + Jornada.esc(a.motivo) + "</div>";
-    }).join("");
-  }
-  host.innerHTML = h;
+    : "<div class='vacio'>Ese día no tiene citas: elija otro día del calendario o agende desde «Citas y disponibilidad».</div>";
+}
+function pintaRecordatorios() {
   var rec = Jornada.recordatorios();
-  var rhost = document.getElementById("recordatorios");
-  if (!rec.length) rhost.innerHTML = "<div class='vacio'>Sin recordatorios pendientes.</div>";
-  else {
-    rhost.innerHTML = rec.map(function (r) {
-      var venc = r.fecha < Jornada.hoyISO();
-      return "<div class='aviso " + (r.entregado ? "verde" : venc ? "rojo" : "ambar") + "'><b>" + Jornada.esc(Jornada.nombrePac(r.pid)) + "</b> — " + Jornada.esc(r.situacion) +
-        "<div class='linea' style='margin-top:4px'>«" + Jornada.esc(r.plantilla) + "»</div>" +
-        "<span class='duenio'>Fecha derivada del protocolo: " + Jornada.fechaLarga(r.fecha) + " · " +
-        (r.entregado ? "<b>entregado</b> — ya no está disponible para quien abra la lista" : venc ? "<b>ESCALADO</b> — la ventana pasó sin entrega" : "listo para copiar") + "</span>" +
-        (r.entregado
-          ? " <button class='btn sec chico' data-anular='" + r.rid + "'>Anular entrega</button>"
-          : " <button class='btn chico' data-copiar='" + r.rid + "'>Copiar para llamar</button> <button class='btn sec chico' data-entregar='" + r.rid + "'>Marcar entregado</button>") +
-        "</div>";
-    }).join("");
-    rhost.querySelectorAll("button[data-copiar]").forEach(function (b) {
-      b.onclick = function () {
-        var rid = b.getAttribute("data-copiar");
-        var txt = "";
-        rec.forEach(function (r) { if (r.rid === rid) txt = r.plantilla; });
-        if (navigator.clipboard) navigator.clipboard.writeText(txt);
-        Jornada.entregarRecordatorio(rid);
-        Jornada.toast("Recordatorio copiado y entrega registrada — la llamada es humana: el software solo prepara.");
-        pinta();
-      };
-    });
-    rhost.querySelectorAll("button[data-entregar]").forEach(function (b) {
-      b.onclick = function () { Jornada.entregarRecordatorio(b.getAttribute("data-entregar")); Jornada.toast("Entrega registrada — para cualquiera que abra la lista ya no está disponible."); pinta(); };
-    });
-    rhost.querySelectorAll("button[data-anular]").forEach(function (b) {
-      b.onclick = function () { Jornada.anularRecordatorio(b.getAttribute("data-anular")); Jornada.toast("Entrega anulada — vuelve a estar disponible."); pinta(); };
-    });
-  }
+  var host = document.getElementById("recordatorios");
+  if (!rec.length) { host.innerHTML = "<div class='vacio'>Sin mensajes pendientes de entregar.</div>"; return; }
+  host.innerHTML = rec.map(function (r) {
+    var venc = r.fecha < Jornada.hoyISO();
+    return "<div class='aviso " + (r.entregado ? "verde" : venc ? "rojo" : "ambar") + "'><b>" + Jornada.esc(Jornada.nombrePac(r.pid)) + "</b> — " + Jornada.esc(r.situacion) +
+      "<div class='linea' style='margin-top:4px'>«" + Jornada.esc(r.plantilla) + "»</div>" +
+      "<span class='duenio'>Fecha derivada del protocolo: " + Jornada.fechaLarga(r.fecha) + " · " +
+      (r.entregado ? "<b>ya entregado</b> — no vuelve a aparecerle a nadie más" :
+        venc ? "<b>ESCALADO — venía ayer y nadie lo entregó: resuélvalo hoy</b>" : "listo para copiar y entregar") + "</span>" +
+      (r.entregado
+        ? " <button class='btn sec chico' data-anular='" + r.rid + "'>Anular entrega</button>"
+        : " <button class='btn chico' data-copiar='" + r.rid + "'>Copiar mensaje</button> <button class='btn sec chico' data-entregar='" + r.rid + "'>Marcar entregado</button>") +
+      "</div>";
+  }).join("");
+  host.querySelectorAll("button[data-copiar]").forEach(function (b) {
+    b.onclick = function () {
+      var rid = b.getAttribute("data-copiar");
+      var txt = "";
+      rec.forEach(function (r) { if (r.rid === rid) txt = r.plantilla; });
+      if (navigator.clipboard) navigator.clipboard.writeText(txt);
+      Jornada.entregarRecordatorio(rid);
+      Jornada.toast("Mensaje copiado y entrega registrada — llamar es cosa suya; el software solo lo preparó.");
+      pintaRecordatorios(); pintaCalendario();
+    };
+  });
+  host.querySelectorAll("button[data-entregar]").forEach(function (b) {
+    b.onclick = function () { Jornada.entregarRecordatorio(b.getAttribute("data-entregar")); Jornada.toast("Entrega registrada — para quien abra la lista ya no está disponible."); pintaRecordatorios(); };
+  });
+  host.querySelectorAll("button[data-anular]").forEach(function (b) {
+    b.onclick = function () { Jornada.anularRecordatorio(b.getAttribute("data-anular")); Jornada.toast("Entrega anulada — vuelve a estar disponible."); pintaRecordatorios(); };
+  });
+}
+function pintaRecuperar() {
   var recup = Jornada.porRecuperar();
-  document.getElementById("recuperar").innerHTML = recup.length
+  var host = document.getElementById("recuperar");
+  host.innerHTML = recup.length
     ? recup.map(function (p) {
         var f = Jornada.proximaFechaControl(p);
         return "<div class='linea'><b>" + Jornada.esc(p.nombre) + "</b> — control derivado para el " + Jornada.fechaLarga(f.fecha) + " y <span class='chip ambar'>sin cita</span> " +
           "<button class='btn chico' data-agendar='" + p.id + "' data-fecha='" + f.fecha + "'>Crear cita con 1 clic</button></div>";
       }).join("")
     : "<div class='vacio'>Todos con control derivado ya tienen su cita.</div>";
-  document.getElementById("recuperar").querySelectorAll("button[data-agendar]").forEach(function (b) {
+  host.querySelectorAll("button[data-agendar]").forEach(function (b) {
     b.onclick = function () {
       var pidB = b.getAttribute("data-agendar");
       var fecha = b.getAttribute("data-fecha");
-      Jornada.crearCita(pidB, fecha, "control derivado — cita creada desde «por recuperar»");
-      Jornada.toast("Cita creada para el " + Jornada.fechaLarga(fecha) + " — ya no aparece en «por recuperar».");
-      pinta();
+      Jornada.crearCita(pidB, fecha, "control derivado — cita creada desde «controles sin cita»");
+      Jornada.toast("Cita creada para el " + Jornada.fechaLarga(fecha) + " — ya no aparece en esta lista.");
+      pintaCalendario(); pintaCitasDia(); pintaRecuperar();
     };
   });
 }
-pinta();
-Jornada.pintarContexto();
-Jornada.bandaVeredicto("agenda", "¿Cómo avisan hoy a sus pacientes? ¿El mensaje listo para copiar les sirve así (nombre y fecha, sin cifras)? ¿La fecha derivada del protocolo es la que ustedes usarían?");
+function huecosDelDia(fecha) {
+  var res = [];
+  var ini = parseInt(AgendaMsg.HORARIO.abre.split(":")[0], 10) * 60;
+  var fin = parseInt(AgendaMsg.HORARIO.cierra.split(":")[0], 10) * 60;
+  var paso = AgendaMsg.HORARIO.pasoMin;
+  var ocupMsg = {};
+  AgendaMsg.horasOcupadas(fecha).forEach(function (h) { ocupMsg[h] = true; });
+  var ocupJor = {};
+  Jornada.estado().citas.forEach(function (c) {
+    if (c.fechaISO === fecha) ocupJor[minAHHMM(c.min)] = Jornada.nombrePac(c.pid);
+  });
+  for (var m = ini; m + paso <= fin; m += paso) {
+    var hh = (Math.floor(m / 60) < 10 ? "0" : "") + Math.floor(m / 60) + ":" + (m % 60 === 0 ? "00" : "30");
+    res.push({ hora: hh, ocupada: !!(ocupMsg[hh] || ocupJor[hh]),
+      fuente: ocupJor[hh] ? "jornada" : (ocupMsg[hh] ? "mensajes" : ""), duenio: ocupJor[hh] || "" });
+  }
+  Object.keys(ocupJor).forEach(function (hh) {
+    var dentro = res.some(function (x) { return x.hora === hh; });
+    if (!dentro) res.push({ hora: hh, ocupada: true, fuente: "jornada", duenio: ocupJor[hh] });
+  });
+  res.sort(function (a, b) { return a.hora < b.hora ? -1 : 1; });
+  return res;
+}
+window.huecosDelDia = huecosDelDia;
+window.citasDelDia = citasDelDia;
+
+/* ——— Paciente y sugerencia ——— */
+function ctxPorDefecto() {
+  var p = AgendaMsg.paciente(pid);
+  var citas = AgendaMsg.estado().citas.filter(function (c) { return c.pid === pid && c.estado !== "cancelada"; })
+    .sort(function (a, b) { return a.fecha < b.fecha ? -1 : 1; });
+  var c0 = citas[0] || null;
+  return { fecha: c0 ? c0.fecha : AgendaMsg.fechaMas(7), hora: c0 ? c0.hora : "09:00" };
+}
+function cambiaPaciente() {
+  pid = document.getElementById("sel-pac").value;
+  var d = ctxPorDefecto();
+  document.getElementById("ctx-fecha").value = d.fecha;
+  document.getElementById("ctx-hora").value = d.hora;
+  pintaTodo();
+}
+function pintaPaciente() {
+  var sel = document.getElementById("sel-pac");
+  if (!sel.options.length) {
+    S.pacientes.forEach(function (p) {
+      var o = document.createElement("option");
+      o.value = p.id; o.textContent = p.completo + " — " + p.caso;
+      sel.appendChild(o);
+    });
+    sel.value = pid;
+    var d = ctxPorDefecto();
+    document.getElementById("ctx-fecha").value = d.fecha;
+    document.getElementById("ctx-hora").value = d.hora;
+  }
+  var p = AgendaMsg.paciente(pid);
+  var sem = AgendaMsg.semanaDerivada(p);
+  var dx = p.diagnostico && AgendaMsg.DIAGNOSTICOS[p.diagnostico];
+  document.getElementById("ficha-pac").innerHTML =
+    "<div class='linea'><b>" + esc(p.completo) + "</b> · " + esc(p.caso) + "</div>" +
+    "<div class='linea'>" +
+    (sem ? "<span class='chip verde'>semana " + sem + " derivada (" + AgendaMsg.trimestreDe(sem) + ")</span>" : "<span class='chip gris'>sin semana derivada</span>") +
+    (dx ? " <span class='chip azul'>" + esc(dx.nombre) + "</span>" : " <span class='chip ambar'>sin diagnóstico estructurado</span>") +
+    " <span class='chip " + (p.consentimiento && p.consentimiento.whatsapp ? "verde" : "rojo") + '">whatsapp: ' + (p.consentimiento && p.consentimiento.whatsapp ? "consentido" : "sin consentimiento") + "</span>" +
+    "</div>" +
+    "<div class='linea' style='color:#667'>Teléfono: " + esc(p.telefono) + " · " + esc(p.unidad) + "</div>";
+}
+function pintaSugerencia() {
+  var p = AgendaMsg.paciente(pid);
+  var s = AgendaMsg.sugerir(p);
+  var host = document.getElementById("sugerencia");
+  var hues = s.ocupadas.map(function (h) { return "<span class='hueco'>" + h + " ocupada</span>"; }).join("");
+  host.innerHTML =
+    "<div class='linea'><b>Fecha sugerida:</b> " + AgendaMsg.fechaLarga(s.fecha) + " · <b>hora:</b> " + s.hora +
+    (s.conflictoResuelto ? " <span class='chip ambar'>movida: esa hora estaba ocupada</span>" : "") + "</div>" +
+    "<div class='linea'><b>Por qué:</b> " + esc(s.motivo) + "</div>" +
+    "<div class='linea'><b>Fuente:</b> <span class='chip azul'>" + esc(s.fuente) + "</span></div>" +
+    "<div class='linea' style='color:#667'>El sistema propone; usted cambia fecha u hora antes de agendar.</div>" +
+    "<div class='fila-form'>" +
+    "<div class='campo'><label>Fecha</label><input type='date' id='sug-fecha' value='" + s.fecha + "'></div>" +
+    "<div class='campo'><label>Hora</label><input type='text' id='sug-hora' value='" + s.hora + "'></div>" +
+    "<div class='campo'><label>Motivo</label><input type='text' id='sug-motivo' value='" + esc(s.motivo) + "'></div>" +
+    "</div><div class='acciones'><button class='btn pri2' onclick='aceptaSugerencia()'>Agendar con estos datos</button></div>" +
+    (s.ocupadas.length ? "<div class='linea' style='margin-top:6px'><b>Ese día:</b> " + hues + "</div>" : "");
+}
+function aceptaSugerencia() {
+  var r = AgendaMsg.agendar(pid, document.getElementById("sug-fecha").value, document.getElementById("sug-hora").value, document.getElementById("sug-motivo").value);
+  if (!r.ok) { toast(r.mensaje); return; }
+  S = AgendaMsg.estado();
+  pintaTodo();
+  toast("Cita agendada. La plantilla L02 (confirmación) queda lista en Plantillas.");
+}
+function pintaDisponibilidad() {
+  var fecha = document.getElementById("fecha-disp").value || Jornada.hoyISO();
+  document.getElementById("fecha-disp").value = fecha;
+  var h = huecosDelDia(fecha).map(function (x) {
+    if (!x.ocupada) return "<span class='hueco libre'>" + x.hora + " libre</span>";
+    if (x.fuente === "jornada") return "<span class='hueco jornada'>" + x.hora + " ocupada (jornada: " + Jornada.esc(x.duenio) + ")</span>";
+    return "<span class='hueco'>" + x.hora + " ocupada</span>";
+  }).join("");
+  document.getElementById("disp-huecos").innerHTML = h || "<div class='vacio'>Sin horario ese día.</div>";
+}
+function pedirDisp() {
+  AgendaMsg.pedirDisponibilidad(pid, "equipo");
+  S = AgendaMsg.estado();
+  pintaPedidos();
+  toast("Pedido de disponibilidad registrado (L03). El mensaje para llamar está en Plantillas → L03.");
+}
+function pintaPedidos() {
+  var host = document.getElementById("lista-pedidos");
+  var pend = S.pedidos.filter(function (d) { return d.estado === "pendiente"; });
+  var resp = S.pedidos.filter(function (d) { return d.estado === "respondida"; });
+  if (!pend.length && !resp.length) { host.innerHTML = "<div class='vacio'>Sin pedidos de disponibilidad.</div>"; return; }
+  var h = pend.map(function (d) {
+    var p = AgendaMsg.paciente(d.pid);
+    return "<div class='linea' style='border-top:1px solid #e3e9ee;padding-top:6px'><b>" + esc(p ? p.completo : d.pid) + "</b> — pedido el " + AgendaMsg.fechaLarga(d.fecha) + " <span class='chip ambar'>pendiente de su respuesta</span>" +
+      " <span class='chip gris' style='font-size:10px'>dedupe: pend-" + d.id + "</span>" +
+      "<div class='fila-form' style='margin-top:6px'>" +
+      "<div class='campo'><label>Fecha que ella eligió</label><input type='date' data-f='" + d.id + "'></div>" +
+      "<div class='campo'><label>Hora</label><input type='text' data-h='" + d.id + "' value='09:00'></div>" +
+      "<div class='campo'><label>&nbsp;</label><button class='btn chico' data-resp='" + d.id + "'>Agendar con su respuesta</button></div>" +
+      "</div></div>";
+  }).join("");
+  h += resp.map(function (d) {
+    var p = AgendaMsg.paciente(d.pid);
+    return "<div class='linea'><b>" + esc(p ? p.completo : d.pid) + "</b> — respondió: <span class='chip verde'>" + (d.respuesta ? AgendaMsg.fechaLarga(d.respuesta.fecha) + " " + d.respuesta.hora : "") + "</span></div>";
+  }).join("");
+  host.innerHTML = h;
+  host.querySelectorAll("button[data-resp]").forEach(function (b) {
+    b.onclick = function () {
+      var id = b.getAttribute("data-resp");
+      var f = host.querySelector("input[data-f='" + id + "']").value;
+      var hh = host.querySelector("input[data-h='" + id + "']").value;
+      var r = AgendaMsg.responderDisponibilidad(id, f, hh);
+      if (!r.ok) { toast(r.mensaje); return; }
+      S = AgendaMsg.estado();
+      pintaTodo();
+      toast("Agendada con la respuesta de la paciente — en su hueco libre.");
+    };
+  });
+}
+
+/* ——— Citas de la agenda de mensajes ——— */
+function pintaCitas() {
+  var host = document.getElementById("lista-citas");
+  var activas = S.citas.filter(function (c) { return c.estado !== "cancelada"; });
+  if (!activas.length) { host.innerHTML = "<div class='vacio'>Sin citas en la agenda de mensajes. Use la sugerencia de arriba.</div>"; return; }
+  var clsMap = { agendada: "verde", confirmada: "verde", reprogramada: "ambar", cancelada: "rojo" };
+  host.innerHTML = activas.map(function (c) {
+    var p = AgendaMsg.paciente(c.pid);
+    var cls = clsMap[c.estado] || "gris";
+    return "<div class='panel' style='margin-bottom:8px;border-left:5px solid #" + (cls === "verde" ? "2e9e4f" : cls === "ambar" ? "d97706" : "c0392b") + "'>" +
+      "<div class='linea'><b>" + esc(p ? p.completo : c.pid) + "</b> · " + AgendaMsg.fechaLarga(c.fecha) + " " + c.hora + " · " + esc(c.motivo) +
+      " <span class='chip " + cls + "'>" + c.estado + "</span>" +
+      (c.fechaOriginal ? "<span class='chip ambar'>original: " + c.fechaOriginal + "</span>" : "") + "</div>" +
+      "<div class='acciones no-imprimir'>" +
+      "<button class='btn sec chico' data-conf='" + c.id + "'>✓ Marcar confirmada</button>" +
+      "<button class='btn chico' data-mover='" + c.id + "'>Mover o cancelar con mensaje →</button>" +
+      "</div></div>";
+  }).join("");
+  host.querySelectorAll("button[data-conf]").forEach(function (b) {
+    b.onclick = function () { AgendaMsg.confirmar(b.getAttribute("data-conf")); S = AgendaMsg.estado(); pintaCitas(); pintaCitasDia(); toast("Cita confirmada."); };
+  });
+  host.querySelectorAll("button[data-mover]").forEach(function (b) {
+    b.onclick = function () { seleccionaCita(b.getAttribute("data-mover")); };
+  });
+}
+function seleccionaCita(cid) {
+  citaSel = cid;
+  var c = null;
+  S.citas.forEach(function (x) { if (x.id === cid) c = x; });
+  if (!c) return;
+  var p = AgendaMsg.paciente(c.pid);
+  document.getElementById("cancel-contexto").innerHTML =
+    "<b>Cita elegida:</b> " + esc(p ? p.completo : c.pid) + " · " + AgendaMsg.fechaLarga(c.fecha) + " " + c.hora +
+    " <span class='chip azul'>vinculada — el mensaje saldrá con esta fecha original</span>";
+  var f1 = AgendaMsg.siguienteLibre(AgendaMsg.fechaMas(2), AgendaMsg.HORARIO.abre);
+  var f2 = AgendaMsg.siguienteLibre(AgendaMsg.fechaMas(4), AgendaMsg.HORARIO.abre);
+  document.getElementById("op1-fecha").value = AgendaMsg.fechaMas(2);
+  document.getElementById("op1-hora").value = f1 || "09:00";
+  document.getElementById("op2-fecha").value = AgendaMsg.fechaMas(4);
+  document.getElementById("op2-hora").value = f2 || "11:00";
+  document.getElementById("vista-cancel").innerHTML = "";
+  bajaA(document.getElementById("cancel-contexto"));
+  toast("Cita vinculada al compositor de mensajes.");
+}
+function opcionesTexto() {
+  var o1f = document.getElementById("op1-fecha").value || AgendaMsg.fechaMas(7);
+  var o1h = document.getElementById("op1-hora").value || "09:00";
+  var o2f = document.getElementById("op2-fecha").value || AgendaMsg.fechaMas(9);
+  var o2h = document.getElementById("op2-hora").value || "11:00";
+  return { txt: AgendaMsg.fechaLarga(o1f) + " a las " + o1h + ", o " + AgendaMsg.fechaLarga(o2f) + " a las " + o2h, f1: o1f, h1: o1h, f2: o2f, h2: o2h };
+}
+function etiquetaEjecutar() {
+  var r = document.querySelector("input[name=modo-ejec]:checked");
+  return r && r.value === "mover" ? "Ejecutar: mover la cita a la opción 1" : "Ejecutar: cancelar la cita";
+}
+function sincronizaLabelEjecutar() {
+  var b = document.getElementById("cc-ejecutar");
+  if (b) b.textContent = etiquetaEjecutar();
+}
+document.querySelectorAll("input[name=modo-ejec]").forEach(function (r) {
+  r.addEventListener("change", sincronizaLabelEjecutar);
+});
+function compone(tipo) {
+  if (!citaSel) { toast("Elija primero una cita con «Mover o cancelar con mensaje»."); return; }
+  var c = null;
+  S.citas.forEach(function (x) { if (x.id === citaSel) c = x; });
+  if (!c) { toast("La cita ya no existe."); return; }
+  var p = AgendaMsg.paciente(c.pid);
+  var motivo = document.getElementById("motivo-cancel").value.trim() || "causas imprevistas del consultorio";
+  var ops = opcionesTexto();
+  var base = AgendaMsg.plantilla(tipo === "cancelar" ? "L05" : "L04");
+  var ctx = tipo === "cancelar"
+    ? { fechaOriginal: c.fecha, motivo: motivo, opciones: ops.txt }
+    : { fechaOriginal: c.fecha, opciones: ops.txt };
+  var r = AgendaMsg.resolver(base.texto, p, ctx);
+  var malos = AgendaMsg.examenInocuidad(r.texto);
+  var okc = r.listo && !malos.length;
+  _txtCancel = okc ? r.texto : "";
+  document.getElementById("vista-cancel").innerHTML =
+    "<div class='linea' style='margin-top:8px'><b>" + base.id + " · " + esc(base.nombre) + "</b> — " + (okc ? "<span class='ok-msg' style='display:inline'>listo para copiar</span>" : "<span class='falta-msg' style='display:inline'>bloqueado</span>") + "</div>" +
+    "<textarea class='vta' id='vta-cancel'" + (okc ? "" : " readonly") + ">" + esc(r.texto || "") + "</textarea>" +
+    (r.faltantes.length ? "<div class='falta-msg'>Faltan: " + r.faltantes.join(", ") + "</div>" : "") +
+    (malos.length ? "<div class='falta-msg'>Examen de inocuidad: " + malos.length + " elemento(s) prohibido(s) — edite.</div>" : "") +
+    "<div class='acciones no-imprimir'>" +
+    "<button class='btn pri2' id='cc-copiar' " + (okc ? "" : "disabled") + ">Copiar mensaje</button>" +
+    "<button class='btn' id='cc-entregar' " + (okc ? "" : "disabled") + ">Entregar (bitácora)</button>" +
+    "<button class='btn peligro' id='cc-ejecutar' " + (okc ? "" : "disabled") + ">" + etiquetaEjecutar() + "</button>" +
+    "<span class='nota'>La acción es la de la opción marcada abajo; si cambia la opción, cambia este botón.</span>" +
+    "</div>";
+  var txa = document.getElementById("vta-cancel");
+  txa.oninput = function () {
+    _txtCancel = txa.value;
+    var m2 = AgendaMsg.examenInocuidad(_txtCancel);
+    var bad = m2.length || _txtCancel.indexOf("{{") >= 0 || !_txtCancel.trim();
+    document.getElementById("cc-copiar").disabled = bad;
+    document.getElementById("cc-entregar").disabled = bad;
+    document.getElementById("cc-ejecutar").disabled = bad;
+  };
+  document.getElementById("cc-copiar").onclick = function () { copia(_txtCancel); };
+  document.getElementById("cc-entregar").onclick = function () {
+    var r2 = AgendaMsg.entregar(base.id, c.pid, (p.consentimiento && p.consentimiento.whatsapp) ? "whatsapp" : "llamada", _txtCancel, null);
+    if (!r2.ok) { toast(r2.mensaje); return; }
+    S = AgendaMsg.estado(); pintaEntregas(); toast("Entrega registrada en la bitácora.");
+  };
+  document.getElementById("cc-ejecutar").onclick = function () {
+    var modoEjec = document.querySelector("input[name=modo-ejec]:checked").value;
+    if (modoEjec === "mover") {
+      var rr = AgendaMsg.reprogramar(c.id, ops.f1, ops.h1);
+      if (!rr.ok) { toast(rr.mensaje); return; }
+      toast("Cita movida a " + AgendaMsg.fechaLarga(ops.f1) + " " + ops.h1 + " — con rastro de su fecha original.");
+    } else {
+      AgendaMsg.cancelar(c.id);
+      toast("Cita cancelada — con el mensaje compuesto listo para entregar.");
+    }
+    S = AgendaMsg.estado();
+    pintaCitas(); pintaCalendario(); pintaCitasDia();
+  };
+}
+function copia(txt) {
+  if (navigator.clipboard) navigator.clipboard.writeText(txt || "");
+  toast("Mensaje copiado — péguelo en el canal que use su consultorio.");
+}
+
+/* ——— Plantillas: buscador + filtros + recomendadas ——— */
+var FAMS = [["todas", "Todas"], ["logistica", "Logística"], ["laboratorio", "Laboratorio"], ["semana", "Semana"], ["diagnostico", "Diagnósticos"], ["cuidado", "Cuidado"], ["alarma", "Alarmas"]];
+function pintaFamChips() {
+  document.getElementById("fam-chips").innerHTML = FAMS.map(function (f) {
+    return "<span class='chip filtro " + (famFiltro === f[0] ? "activo" : "azul") + "' data-fam='" + f[0] + "'>" + f[1] + "</span>";
+  }).join(" ");
+  document.getElementById("fam-chips").querySelectorAll("[data-fam]").forEach(function (el) {
+    el.onclick = function () { famFiltro = el.getAttribute("data-fam"); pintaPlantillas(); };
+  });
+}
+function cargaSub() {
+  var sel = document.getElementById("sel-sub");
+  if (sel.options.length) return;
+  sel.innerHTML = "<option value='todas'>Todas las subfamilias</option>";
+  var vistas = {};
+  AgendaMsg.CATALOGO.forEach(function (t) { vistas[t.subfamilia] = true; });
+  Object.keys(vistas).sort().forEach(function (sf) {
+    var o = document.createElement("option");
+    o.value = sf; o.textContent = sf;
+    sel.appendChild(o);
+  });
+}
+function listaFiltrada() {
+  var q = document.getElementById("buscar").value.trim().toLowerCase();
+  var soloRec = document.getElementById("chk-rec").checked;
+  var base = soloRec ? AgendaMsg.recomendadas(pid) : AgendaMsg.CATALOGO.slice();
+  var propiasRec = [];
+  if (soloRec) {
+    var et = (AgendaMsg.paciente(pid).etiquetas || []);
+    propiasRec = S.propias.filter(function (t) { return t.poblacion === "general" || et.indexOf(t.poblacion) >= 0 || t.familia === famFiltro; });
+  } else propiasRec = S.propias.slice();
+  return base.concat(propiasRec).filter(function (t) {
+    if (famFiltro !== "todas" && t.familia !== famFiltro) return false;
+    if (subFiltro !== "todas" && t.subfamilia !== subFiltro) return false;
+    if (!q) return true;
+    return (t.nombre + " " + t.id + " " + t.disparo + " " + t.texto).toLowerCase().indexOf(q) >= 0;
+  });
+}
+function pintaPlantillas() {
+  cargaSub();
+  pintaFamChips();
+  subFiltro = document.getElementById("sel-sub").value;
+  var lista = listaFiltrada();
+  document.getElementById("conteo-lista").textContent = lista.length + " de " + (AgendaMsg.CATALOGO.length + S.propias.length) + " unidades";
+  var host = document.getElementById("lista-plantillas");
+  host.innerHTML = lista.length ? lista.map(function (t) {
+    return "<div class='item-lista" + (plantillaSel === t.id ? " sel" : "") + "' data-t='" + t.id + "'>" +
+      "<span class='rotulo-fam fam-" + (t.propia ? "propia" : t.familia) + "'>" + t.familia + "</span> <b>" + t.id + " · " + esc(t.nombre) + "</b> " +
+      (t.borrador ? "<span class='marca-borrador'>BORRADOR</span>" : "<span class='chip verde'>FIRMA</span>") +
+      (t.fija ? "<span class='marca-fija'>TEXTO FIJO</span>" : "") +
+      "<div class='meta'>Disparo: " + esc(t.disparo) + " · población: " + esc(t.poblacion || "general") + " · canales: " + (t.canales || []).join(", ") + (t.autor ? " · por " + esc(t.autor) : "") + "</div></div>";
+  }).join("") : "<div class='vacio'>Nada coincide. Quite un filtro o desactive «solo recomendadas» para ver las 92.</div>";
+  host.querySelectorAll("[data-t]").forEach(function (el) {
+    el.onclick = function () {
+      var nuevo = el.getAttribute("data-t");
+      if (preview && preview.editado && nuevo !== plantillaSel) toast("Se cambia de plantilla: su edición de la anterior no se guardó — use «Guardar como mía» antes de cambiar.");
+      plantillaSel = nuevo; modo = "mensaje";
+      document.getElementById("modo-msg").className = "btn sec chico activo";
+      document.getElementById("modo-tpl").className = "btn sec chico";
+      pintaPlantillas(); pintaVista();
+    };
+  });
+}
+function val(id) { var e = document.getElementById(id); return e ? e.value : ""; }
+function ctxObjeto() {
+  return {
+    fechaCita: val("ctx-fecha"), horaCita: val("ctx-hora"),
+    documento: val("ctx-doc") || null,
+    fechaOriginal: val("ctx-forig") || null,
+    fechaCierre: val("ctx-fcierre") || null,
+    opciones: val("ctx-ops") || null
+  };
+}
+function ctxClave() { return [val("ctx-fecha"), val("ctx-hora"), val("ctx-doc"), val("ctx-forig"), val("ctx-fcierre"), val("ctx-ops")].join("|"); }
+function ponModo(m) {
+  if (preview && preview.editado && modo !== m) toast("Cambio de modo: su edición en el modo anterior no se guarda aquí — guárdela antes («Guardar como mía»).");
+  modo = m;
+  document.getElementById("modo-msg").className = "btn sec chico" + (m === "mensaje" ? " activo" : "");
+  document.getElementById("modo-tpl").className = "btn sec chico" + (m === "plantilla" ? " activo" : "");
+  pintaVista();
+}
+function construyePreview(t) {
+  if (modo === "plantilla") {
+    preview = { tid: t.id, pid: pid, ck: ctxClave(), modo: modo, texto: t.texto, faltantes: [], editado: false };
+  } else {
+    var r = AgendaMsg.resolver(t.texto, AgendaMsg.paciente(pid), ctxObjeto());
+    preview = { tid: t.id, pid: pid, ck: ctxClave(), modo: modo, texto: r.texto, faltantes: r.faltantes, editado: false };
+  }
+}
+function pintaVista() {
+  var info = document.getElementById("vista-info");
+  var est = document.getElementById("vista-estado");
+  var vta = document.getElementById("vta-texto");
+  var btns = [document.getElementById("btn-copiar"), document.getElementById("btn-entregar")];
+  if (!plantillaSel) {
+    preview = null;
+    info.innerHTML = "<div class='vacio'>Elija una plantilla de la lista.</div>";
+    vta.value = ""; est.innerHTML = "";
+    btns.forEach(function (b) { if (b) b.disabled = true; });
+    return;
+  }
+  var t = AgendaMsg.plantilla(plantillaSel);
+  if (!t) {
+    preview = null;
+    info.innerHTML = "<div class='vacio'>Esa plantilla ya no existe.</div>";
+    vta.value = ""; est.innerHTML = "";
+    btns.forEach(function (b) { if (b) b.disabled = true; });
+    return;
+  }
+  var p = AgendaMsg.paciente(pid);
+  var cambioBase = !preview || preview.tid !== t.id || preview.modo !== modo;
+  var cambioPaciente = preview && preview.pid !== pid;
+  var cambioCtx = preview && preview.ck !== ctxClave();
+  if (cambioBase || cambioPaciente) {
+    if (cambioPaciente && preview && preview.editado && preview.tid === t.id)
+      toast("Cambio de paciente: su edición anterior era de otra paciente — se rehizo desde la plantilla.");
+    construyePreview(t);
+  } else if (!preview.editado && cambioCtx) {
+    construyePreview(t);
+  }
+  info.innerHTML = "<div class='linea'><b>" + t.id + " · " + esc(t.nombre) + "</b> — para <b>" + esc(p.completo) + "</b>" +
+    (t.disparo ? " · <span style='color:#667'>disparo: " + esc(t.disparo) + "</span>" : "") +
+    (t.borrador ? " <span class='marca-borrador'>BORRADOR — pendiente de firma</span>" : "") +
+    (preview.editado ? " <span class='chip ambar'>edición suya en pantalla (no guardada)</span>" : "") + "</div>";
+  vta.value = preview.texto;
+  validacionEnVivo();
+}
+function alEscribir() {
+  if (preview) { preview.texto = document.getElementById("vta-texto").value; preview.editado = true; }
+  validacionEnVivo();
+}
+function restauraPreview() {
+  preview = null;
+  pintaVista();
+  toast("Restaurado del catálogo.");
+}
+function validacionEnVivo() {
+  var est = document.getElementById("vista-estado");
+  var vta = document.getElementById("vta-texto");
+  var txt = vta.value;
+  var malos = AgendaMsg.examenInocuidad(txt);
+  var err = [];
+  if (txt.indexOf("{{") >= 0) err.push("marcadores sin resolver (complete los datos de contexto o vuelva a modo plantilla)");
+  if (preview && !preview.editado && preview.faltantes && preview.faltantes.length)
+    err.push("faltan datos: " + preview.faltantes.join(", "));
+  if (malos.length) err.push("examen de inocuidad: " + malos.length + " elemento(s) prohibido(s) para el paciente");
+  if (!txt.trim()) err.push("texto vacío");
+  var bloqueado = err.length > 0;
+  document.getElementById("btn-copiar").disabled = bloqueado;
+  document.getElementById("btn-entregar").disabled = bloqueado;
+  est.innerHTML = bloqueado
+    ? "<div class='falta-msg'>No se puede copiar todavía: " + err.join(" · ") + "</div>"
+    : "<div class='ok-msg'>✓ Listo para copiar — " + (modo === "plantilla" ? "aún con marcadores: se resuelve por paciente" : "mensaje resuelto con los datos del expediente") + " · " + txt.length + " caracteres</div>";
+}
+function copiaPreview() { copia(document.getElementById("vta-texto").value); }
+function entregaPreview() {
+  if (!plantillaSel) return;
+  var t = AgendaMsg.plantilla(plantillaSel);
+  var txt = document.getElementById("vta-texto").value;
+  var p = AgendaMsg.paciente(pid);
+  var canal = (p.consentimiento && p.consentimiento.whatsapp) ? "whatsapp" : (p.telefono ? "llamada" : "impreso");
+  var clave = null;
+  if (t.familia === "semana" && t.id === "S00") {
+    var sem = AgendaMsg.semanaDerivada(p);
+    clave = sem ? "sem-" + sem : "sem-?";
+  }
+  var r = AgendaMsg.entregar(t.id, pid, canal, txt, clave);
+  if (!r.ok) { toast(r.mensaje); return; }
+  S = AgendaMsg.estado();
+  pintaEntregas();
+  toast("Entregada por " + canal + " — queda en la bitácora" + (clave ? " con clave " + clave : "") + ".");
+}
+function guardaMia() {
+  if (!plantillaSel) return;
+  var txt = document.getElementById("vta-texto").value;
+  var autor = document.getElementById("autor-tpl").value.trim() || "equipo";
+  if (!txt.trim()) { toast("Nada que guardar: el texto está vacío."); return; }
+  var malos = AgendaMsg.examenInocuidad(txt);
+  if (malos.length) { toast("No se guarda: el texto tiene elementos prohibidos para el paciente."); return; }
+  var base = AgendaMsg.plantilla(plantillaSel);
+  var t = AgendaMsg.crearPropia(base ? base.id : null, txt, autor);
+  if (txt.indexOf("{{") < 0) t.fija = true;
+  t.nombre = (base ? base.nombre : "Plantilla") + " (de " + autor + ")";
+  AgendaMsg.guardar();
+  S = AgendaMsg.estado();
+  pintaPropias();
+  toast(t.fija ? "Guardada como TEXTO FIJO (no se re-resuelve: solo esta paciente)." : "Guardada con sus marcadores: sirve para cualquier paciente.");
+}
+function abreBlanca() {
+  var el = document.getElementById("panel-blancas");
+  el.style.display = el.style.display === "none" ? "block" : "none";
+  if (el.style.display === "block") {
+    document.getElementById("b-texto").value = document.getElementById("vta-texto").value && modo === "plantilla" ? document.getElementById("vta-texto").value : "Hola {{nombre}}, ";
+    document.getElementById("b-texto").focus();
+  }
+}
+function guardaBlanca() {
+  var r = AgendaMsg.crearBlanca({
+    nombre: document.getElementById("b-nombre").value,
+    familia: document.getElementById("b-fam").value,
+    subfamilia: "propia",
+    disparo: document.getElementById("b-disparo").value,
+    texto: document.getElementById("b-texto").value
+  }, document.getElementById("autor-tpl").value.trim() || "equipo");
+  var est = document.getElementById("b-estado");
+  if (!r.ok) { est.innerHTML = "<div class='falta-msg'>" + esc(r.mensaje) + "</div>"; return; }
+  S = AgendaMsg.estado();
+  est.innerHTML = "<div class='ok-msg'>✓ Creada: " + r.plantilla.id + " · " + esc(r.plantilla.nombre) + "</div>";
+  document.getElementById("b-nombre").value = "";
+  document.getElementById("b-texto").value = "Hola {{nombre}}, ";
+  plantillaSel = r.plantilla.id;
+  pintaPlantillas();
+  ponModo("plantilla");
+  toast("Plantilla nueva creada — ya aparece en la lista.");
+}
+
+/* ——— Semanas 1–40 ——— */
+function pintaGrid() {
+  var p = AgendaMsg.paciente(pid);
+  var sem = AgendaMsg.semanaDerivada(p);
+  var g = document.getElementById("grid-semanas");
+  var h = "";
+  for (var n = 1; n <= 40; n++) {
+    var v = AgendaMsg.filaViva(n);
+    var editada = AgendaMsg.estado().semanasPropias.some(function (x) { return x.semana === n; });
+    var cls = "celda-sem " + (editada ? "equipo " : (v && v.desarrollo ? "tiene " : "")) + (sem === n ? "sel" : "");
+    h += "<div class='" + cls + "' data-s='" + n + "'><b>" + n + "</b>" + (editada ? "equipo" : v && v.desarrollo ? "lista" : "vacía") + "</div>";
+  }
+  g.innerHTML = h;
+  g.querySelectorAll("[data-s]").forEach(function (el) {
+    el.onclick = function () { semSel = parseInt(el.getAttribute("data-s"), 10); pintaGrid(); pintaPanelSem(); };
+  });
+}
+function pintaPanelSem() {
+  var host = document.getElementById("panel-sem");
+  if (!semSel) { host.innerHTML = "<div class='vacio'>Elija una semana del tablero.</div>"; return; }
+  var v = AgendaMsg.filaViva(semSel);
+  var editada = AgendaMsg.estado().semanasPropias.some(function (x) { return x.semana === semSel; });
+  host.innerHTML = "<h3>Semana " + semSel + " — " + (editada ? "versión del equipo (borrador, pendiente de firma)" : "contenido maestro (borrador científico)") + "</h3>" +
+    "<div class='linea' style='color:#667'>Fila maestra: " + (AgendaMsg.semanaFila(semSel) && AgendaMsg.semanaFila(semSel).fuente ? AgendaMsg.semanaFila(semSel).fuente : "sin fila") +
+    (v && v.autor ? " · edición del equipo por " + esc(v.autor) + " el " + v.editada : "") + "</div>" +
+    "<div class='campo' style='max-width:760px'><label>Desarrollo del bebé ({{desarrollo_bebe}})</label><textarea rows='2' id='sem-desarrollo'>" + esc(v ? v.desarrollo : "") + "</textarea></div>" +
+    "<div class='campo' style='max-width:760px'><label>Cuidado de la semana ({{cuidado_semana}})</label><textarea rows='2' id='sem-cuidado'>" + esc(v ? v.cuidado : "") + "</textarea></div>" +
+    "<div class='fila-form'><div class='campo' style='max-width:260px'><label>Autor de la edición</label><input type='text' id='sem-autor' value='equipo'></div></div>" +
+    "<div class='acciones no-imprimir'><button class='btn' onclick='guardaSemana()'>Proponer edición de esta semana</button></div>" +
+    "<div class='linea' style='color:#667;font-size:12px'>La edición queda como borrador del equipo: la vigencia la da la firma del médico (P6). El sistema prefiere bloquear el mensaje a mandar contenido no validado.</div>";
+}
+function guardaSemana() {
+  var d = document.getElementById("sem-desarrollo").value.trim();
+  var c = document.getElementById("sem-cuidado").value.trim();
+  var a = document.getElementById("sem-autor").value.trim() || "equipo";
+  if (!d || !c) { toast("La semana necesita desarrollo y cuidado: no se deja a medias."); return; }
+  AgendaMsg.editarSemana(semSel, d, c, a);
+  S = AgendaMsg.estado();
+  pintaGrid(); pintaPanelSem(); pintaSemPreview();
+  toast("Edición de la semana " + semSel + " guardada como borrador del equipo.");
+}
+function pintaSemPreview() {
+  var host = document.getElementById("sem-preview");
+  var p = AgendaMsg.paciente(pid);
+  var sem = AgendaMsg.semanaDerivada(p);
+  if (!sem) {
+    host.innerHTML = "<div class='aviso ambar'><b>Sin semana derivada para " + esc(p.nombre) + ".</b> Sin fecha estimada no hay mensaje semanal: el sistema pide derivar, nunca adivina (R-48).</div>";
+    return;
+  }
+  var t = AgendaMsg.plantilla("S00");
+  var r = AgendaMsg.resolver(t.texto, p, {});
+  var malos = AgendaMsg.examenInocuidad(r.texto);
+  var clave = "sem-" + sem;
+  var ya = AgendaMsg.yaEntregada("S00", pid, clave);
+  host.innerHTML =
+    "<div class='linea'><b>Semana " + sem + " (" + AgendaMsg.trimestreDe(sem) + ")</b> " +
+    (r.listo ? "<span class='chip verde'>resuelto</span>" : "<span class='chip rojo'>bloqueado: fila sin contenido firmado</span>") +
+    (ya ? "<span class='chip gris'>ya entregada esta semana (dedupe " + clave + ")</span>" : "") + "</div>" +
+    "<div class='vista-texto" + (r.listo && !malos.length ? "" : " bloqueado") + "'>" + (r.listo && !malos.length ? esc(r.texto) : (r.listo ? "contiene elementos prohibidos" : "⚠ bloqueado — faltan: " + r.faltantes.join(", "))) + "</div>" +
+    "<div class='acciones no-imprimir'>" +
+    "<button class='btn pri2' id='sem-copiar' " + (r.listo && !malos.length ? "" : "disabled") + ">Copiar mensaje semanal</button>" +
+    "<button class='btn' id='sem-entregar' " + (r.listo && !malos.length && !ya ? "" : "disabled") + ">Entregar (una vez por semana)</button></div>";
+  document.getElementById("sem-copiar").onclick = function () { copia(r.texto); };
+  document.getElementById("sem-entregar").onclick = function () {
+    var rr = AgendaMsg.entregar("S00", pid, (p.consentimiento && p.consentimiento.whatsapp) ? "whatsapp" : "impreso", r.texto, clave);
+    if (!rr.ok) { toast(rr.mensaje); return; }
+    S = AgendaMsg.estado(); pintaEntregas(); pintaSemPreview();
+    toast("Entregada con clave " + clave + " — no se repite esta semana.");
+  };
+}
+
+/* ——— Mis plantillas ——— */
+function pintaPropias() {
+  var host = document.getElementById("lista-propias");
+  if (!S.propias.length) { host.innerHTML = "<div class='vacio'>Aún no guarda plantillas propias. En Plantillas: elija una → edítela → «Guardar como mía», o cree una con «+ Nueva plantilla desde cero».</div>"; return; }
+  host.innerHTML = S.propias.map(function (t) {
+    var p = AgendaMsg.paciente(pid);
+    var r = AgendaMsg.resolver(t.texto, p, ctxObjeto());
+    var malos = AgendaMsg.examenInocuidad(r.texto);
+    var usable = r.listo && !malos.length;
+    return "<div class='panel sombra' style='border-left:5px solid #c0392b;margin-bottom:8px'>" +
+      "<div class='linea'><span class='rotulo-fam fam-propia'>personalizada</span> <b>" + esc(t.nombre) + "</b> · por " + esc(t.autor) + " · " + t.creada +
+      (t.fija ? " <span class='marca-fija'>TEXTO FIJO</span>" : " <span class='chip azul'>re-resoluble</span>") +
+      (t.baseId ? " · base: " + t.baseId : t.origen === "blanca" ? " · creada desde cero" : "") + "</div>" +
+      "<div class='vista-texto" + (usable ? "" : " bloqueado") + "'>" + (usable ? esc(r.texto) : "⚠ " + (r.faltantes.length ? "faltan: " + r.faltantes.join(", ") : "elementos prohibidos")) + "</div>" +
+      "<div class='acciones no-imprimir'>" +
+      "<button class='btn sec chico' data-cop='" + t.id + "' " + (usable ? "" : "disabled") + ">Copiar</button>" +
+      "<button class='btn sec chico' data-edi='" + t.id + "'>Editar en el panel</button>" +
+      "<button class='btn peligro chico' data-eli='" + t.id + "'>Eliminar</button></div></div>";
+  }).join("");
+  host.querySelectorAll("button[data-cop]").forEach(function (b) {
+    b.onclick = function () {
+      var t = AgendaMsg.plantilla(b.getAttribute("data-cop"));
+      var r = AgendaMsg.resolver(t.texto, AgendaMsg.paciente(pid), ctxObjeto());
+      copia(r.texto);
+    };
+  });
+  host.querySelectorAll("button[data-edi]").forEach(function (b) {
+    b.onclick = function () {
+      plantillaSel = b.getAttribute("data-edi");
+      modo = "mensaje";
+      muestra("plantillas");
+      ponModo("plantilla");
+      pintaVista();
+      bajaA(document.getElementById("vta-texto"));
+    };
+  });
+  host.querySelectorAll("button[data-eli]").forEach(function (b) {
+    b.onclick = function () {
+      var id = b.getAttribute("data-eli");
+      pregunta("Eliminar plantilla", "Se borra de «Mis plantillas». Las entregas en la bitácora no se tocan.", [
+        { txt: "Cancelar", cls: "sec" },
+        { txt: "Eliminar", cls: "peligro", fn: function () {
+          AgendaMsg.eliminarPropia(id); S = AgendaMsg.estado();
+          if (plantillaSel === id) { plantillaSel = null; preview = null; pintaVista(); }
+          pintaPropias(); pintaPlantillas(); toast("Eliminada.");
+        } }
+      ]);
+    };
+  });
+}
+
+/* ——— Entregas: bitácora, métrica, examen ——— */
+function pintaEntregas() {
+  var host = document.getElementById("lista-entregas");
+  if (!S.entregas.length) { host.innerHTML = "<div class='vacio'>Sin entregas registradas.</div>"; return; }
+  host.innerHTML = S.entregas.slice().reverse().map(function (e) {
+    var p = AgendaMsg.paciente(e.pid);
+    var t = AgendaMsg.plantilla(e.plantillaId);
+    return "<div class='panel' style='border-left:5px solid #2e9e4f;margin-bottom:6px'>" +
+      "<div class='linea'><b>" + esc(p ? p.completo : e.pid) + "</b> · " + (t ? esc(t.nombre) : e.plantillaId) +
+      " · canal: <span class='chip azul'>" + esc(e.canal) + "</span> · " + AgendaMsg.fechaLarga(e.fecha) + " " + (e.hora || "") +
+      (e.clave ? " <span class='chip gris'>clave: " + esc(e.clave) + "</span>" : "") + "</div>" +
+      "<div class='linea' style='color:#667;font-size:12px'>«" + esc((e.texto || "").slice(0, 140)) + ((e.texto || "").length > 140 ? "…" : "") + "»</div>" +
+      "<button class='btn sec chico' data-an='" + e.id + "'>Anular entrega</button></div>";
+  }).join("");
+  host.querySelectorAll("button[data-an]").forEach(function (b) {
+    b.onclick = function () { AgendaMsg.anularEntrega(b.getAttribute("data-an")); S = AgendaMsg.estado(); pintaEntregas(); pintaMetricas(); toast("Anulada — vuelve a estar disponible."); };
+  });
+}
+function pintaMetricas() {
+  var m = AgendaMsg.metricaMensajes();
+  document.getElementById("metricas").innerHTML =
+    "<div class='linea'><span class='chip " + (m.total > 12 ? "ambar" : "verde") + "'>" + m.total + " entregas</span> · " +
+    "whatsapp " + m.porCanal.whatsapp + " · llamada " + m.porCanal.llamada + " · impreso " + m.porCanal.impreso + "</div>" +
+    "<div class='linea'>Con clave de dedupe: <b>" + m.conClave + "</b> · duplicados evitados por dedupe: <b>" + m.enEsperaDedupe + "</b> · catálogo: <b>" + m.catalogo + "</b> plantillas + <b>" + m.semanas + "</b> semanas</div>" +
+    "<div class='linea' style='color:#667'>Se mide al sistema, nunca a las personas. El acompañamiento semanal es acuerdo con la paciente — se dedupe por semana, no por visita.</div>";
+}
+function pintaExamen() {
+  var host = document.getElementById("examen");
+  var malas = [], rotas = [];
+  var p1 = AgendaMsg.paciente("p1");
+  var ctx = { fechaCita: "2026-11-30", horaCita: "10:00", fechaOriginal: "2026-12-05", fechaCierre: "2027-01-10", opciones: "lunes 9 o miércoles 11", documento: "INE" };
+  AgendaMsg.CATALOGO.forEach(function (t) {
+    var r = AgendaMsg.resolver(t.texto, p1, ctx);
+    var i = AgendaMsg.examenInocuidad(r.texto);
+    if (i.length) malas.push(t.id + ": " + i.join(","));
+    if (!r.listo) rotas.push(t.id + "(" + r.faltantes.join(",") + ")");
+  });
+  host.innerHTML = (malas.length || rotas.length)
+    ? "<div class='aviso rojo'>" + (malas.length ? "⚠ " + malas.length + " plantilla(s) con elementos prohibidos: " + malas.join(" · ") + ". " : "") +
+      (rotas.length ? "⚠ " + rotas.length + " sin resolver con contexto completo: " + rotas.join(" · ") : "") + "</div>"
+    : "<div class='aviso verde'>✓ Las " + AgendaMsg.CATALOGO.length + " plantillas maestras pasan el examen: ninguna contiene cifras clínicas ni diagnósticos, y todas resuelven con su contexto completo. Además " + AgendaMsg.SEMANAS.length + " filas de semana con contenido.</div>";
+}
+function reiniciarJornada() {
+  pregunta("Reiniciar la jornada de mensajes", "Se borran entregas, pedidos, citas creadas, plantillas propias y ediciones de semana del navegador.", [
+    { txt: "Cancelar", cls: "sec" },
+    { txt: "Reiniciar", cls: "peligro", fn: function () { AgendaMsg.reiniciar(); location.reload(); } }
+  ]);
+}
+
+/* ——— Pintado general ——— */
+function pintaTodo() {
+  pintaCalendario();
+  pintaCitasDia();
+  pintaRecordatorios();
+  pintaRecuperar();
+  pintaPaciente();
+  pintaSugerencia();
+  pintaDisponibilidad();
+  pintaPedidos();
+  pintaCitas();
+  pintaPlantillas();
+  pintaVista();
+  pintaGrid();
+  pintaPanelSem();
+  pintaSemPreview();
+  pintaPropias();
+  pintaEntregas();
+  pintaMetricas();
+  pintaExamen();
+}
+document.getElementById("lbl-horario").textContent = AgendaMsg.HORARIO.abre + " a " + AgendaMsg.HORARIO.cierra + " (pasos de " + AgendaMsg.HORARIO.pasoMin + " min)";
+pintaTodo();
+Jornada.bandaVeredicto("agenda", "¿El calendario le muestra su agenda de un vistazo? ¿Las sugerencias con su fuente les sirven o estorban? ¿Los huecos reflejan su consultorio real? ¿El mensaje de hemoglobina ya es claro? Conteste aquí.");
 </script>
 </body></html>

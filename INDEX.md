@@ -11,15 +11,24 @@
 ## Orden del repo (índice maestro)
 
 - **Control y gobierno** (raíz): `AGENTS.md` (reglas del agente) · `autoauditoria.sh`
-  (verificación en 3 modos) · `CHECKLIST-DE-PETICIONES.md` (pedidos y su estado) ·
-  `INVENTARIO-DECISIONES.md` (decisiones con consecuencias) · `HUELLAS.txt` (integridad).
+  (verificación en 3 modos) · `buscar-lenguaje.js` + `LENGUAJE-CANDIDATOS.json`
+  (búsqueda de palabras de desarrollador y frases sin sentido en el texto visible;
+  informe en cada T1, puerta `--exigir` pendiente de tus sustitutos) ·
+  `CADENA-DE-VERDAD.md` (precedencia: qué libro manda si
+  dos discrepan, con el procedimiento de conciliación) · `CHECKLIST-DE-PETICIONES.md` (pedidos y su estado) ·
+  `CHECKLIST-MAESTRO.md` (la ronda completa 2026-10-26: cada petición con estado,
+  evidencia y su trío de capas) · `PLAN-DE-REGRESO.md` (los pasos: 60% de mejoras y
+  regreso al hogar del producto, fases 0–4 con sus gates) · `INVENTARIO-DECISIONES.md` (decisiones con consecuencias) · `HUELLAS.txt` (integridad).
 - **Índices de capas y registro maestro** (raíz): `REGISTRO-DEL-SOFTWARE.md` (fuente de
   verdad de la construcción: alcance, requerimientos, decisiones de diseño y mapa de
   mapas) · `INDICE-FRONTEND.md` (elementos y acoples del lado de las pantallas) ·
   `INDICE-BACKEND.md` (lo planteado del lado de detrás + mapa de acople motor↔operación).
 - **Mapa y verdad** (raíz): `INDEX.md` (este mapa) · `LEEME.md` (cómo usar la carpeta) ·
   `COMPARATIVA.md` · `CONSTRUCCION.md` · `BANDEJA-DECISIONES.md` · `AUDITORIA-FUENTES.md`.
-- **Auditoría** (raíz): `AUDITORIA-ADVERSARIAL-PRUEBAS.md` · `PROPUESTAS-DE-MEJORA.md`.
+- **Auditoría** (raíz): `AUDITORIA-ADVERSARIAL-PRUEBAS.md` · `PROPUESTAS-DE-MEJORA.md` ·
+  `AUDITORIA-ADVERSARIAL-REGISTRO-CONVERSACION.md` (la auditoría del volcado de la
+  conversación contra la base del sistema) · `REGISTRO-CONVERSACION.md` (el volcado mismo,
+  evidencia cruda de la sesión).
 - **Espejos de la maestra** (no editar aquí): `01-DIBUJOS` a `05-LEY`.
 - **Fuente del backend** (documentos, no código): `06-FUENTE-BACKEND`.
 - **Flujos dibujados**: `08-FLUJOS`.
@@ -27,7 +36,8 @@
 - **Carrera de continuidad**: `12-AGENDA-Y-MENSAJES`.
 - **Frontend activo (versión V4)**: `12-FRONT-SINTESIS` con `VERSIONES.md` (genealogía),
   `SINTESIS-SUMATORIA.md` (la lógica), `SINTESIS-REGISTRO.json` (el avance),
-  `PLAN-DE-IMPLEMENTACION.md` (qué sigue) · `PLAN-DE-TRABAJO.md` (tramos para
+  `PLAN-DE-IMPLEMENTACION.md` (qué sigue) · `KPIS-Y-DOD.md` (indicadores clave y definición de terminado
+  por pantalla) · `PLAN-DE-TRABAJO.md` (tramos para
   dejar el modelo listo y el protocolo permanente de ediciones sobre pantallas
   ya implementadas).
 
@@ -45,7 +55,9 @@
   prueba RF por RF) + `PROPUESTAS.html` con sus 4 propuestas + 3 recorridos por rol**, riel de dos grupos reales y menú de contexto
   para las pantallas de la paciente, estados que se mueven solos de verdad, y `puente.js`
   que las hace usables. Su `LEEME.md` es el manifiesto; las páginas de la ronda 1 quedan
-  como memoria.
+  como memoria. **Estado (default de la decisión D-4): memoria histórica — fuera de la
+  cola de construcción** (su lógica ya fue absorbida por la síntesis); el destino físico
+  (archivarla o conservarla con aviso) espera tu frase.
 - **`10-PRUEBA-ENFERMERIA/` y `11-PRUEBA-MEDICA/`** — **entregables de sesión por rol**
   (2026-10-25): 6+6 pantallas navegables con el día de las 18 pacientes precargado, motor
   v3 de eventos con reparaciones aplicadas, banda de veredicto por pantalla y hoja

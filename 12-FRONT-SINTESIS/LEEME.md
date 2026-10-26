@@ -134,6 +134,14 @@ consideraciones vitales CV1…CV8 que la implementación destapó (borradores qu
 cruzaban tipos, urgencia con atención propia, migración por reconciliación y no
 por reset, suites embebidas = verde falso).
 
+**Veredicto del dueño 2026-10-26: RECHAZO TOTAL de las pantallas** (motivos en el
+checklist A7, frases en `FRASES-A-TRADUCIR.md`, lecciones en `AUDITORIA-SINTESIS.md`
+Ronda S-2, DoD v2 en `KPIS-Y-DOD.md`). Los estados mecánicos de abajo son eso,
+mecánicos: **el oficio manda y manda reconstruir desde cero**.
+
+**(Estado mecánico previo) Las 18 pantallas habían pasado su DoD completo** (núcleo + criterio específico) el
+2026-10-26 — detalle por pantalla con patrones, pruebas y cierres en `PASADAS-DE-PANTALLAS.md`.
+
 **Versión del frontend: V4** (genealogía en `VERSIONES.md`; sello V4·S1 en cada pantalla, exigido por la suite).
 
 ## Las pruebas de esta ronda (en verde el 2026-10-25)
@@ -149,6 +157,9 @@ por reset, suites embebidas = verde falso).
   invisibilidades de la semilla, rechazo accionable, pausa sin navegar, y la
   desincronización forzada → «Sincronizar» en un clic
 
+- `pruebas/pruebas-do-pantallas.js` — 77 checks de **DoD por pantalla**: barrido sin
+  mutaciones ni restos en las 18 + criterios específicos de cada una por motor (incluye
+  el cierre del autoguardado de estación y dos bugs de motor que esta suite cazó).
 - `pruebas/pruebas-registro.js` — 22 checks de la **suite del libro** (Ronda S-1
   endurecida): registro = disco = síntesis = patrones = suites, evidencia con ancla `§`,
   anti-regresión por versión (fila vieja ⇒ «DESACTUALIZADA»), **conteos EN VIVO** de las

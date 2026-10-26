@@ -1,8 +1,7 @@
 /* Ruptura E2E del módulo de atenciones (jsdom contra http://127.0.0.1:8123).
    Busca exactamente los huecos del análisis §2 y las consideraciones nuevas. */
 let JSDOM, VirtualConsole;
-try { ({ JSDOM, VirtualConsole } = require("jsdom")); }
-catch (e) { ({ JSDOM, VirtualConsole } = require("/tmp/kilo/domtest/node_modules/jsdom")); }
+({ JSDOM, VirtualConsole } = require("jsdom"));
 let fallos = 0;
 const ok = (n, c, x) => { console.log((c ? "PASS " : "FAIL ") + n + (c ? "" : " — " + (x || ""))); if (!c) fallos++; };
 

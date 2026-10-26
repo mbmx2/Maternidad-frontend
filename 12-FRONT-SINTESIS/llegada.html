@@ -52,7 +52,8 @@
 <div class="panel" id="lista-hoy" style="max-width:900px"></div>
 <div id="veredicto-host"></div>
 </div></div>
-<script src="config.js"></script><script src="motor.js"></script>
+<script src="config.js"></script><script src="catalogos.js"></script>
+<script src="motor.js"></script>
 <script>
 Jornada.nav("Llegadas");
 var S = Jornada.estado();
@@ -74,8 +75,12 @@ function pintaCompletar() {
       "<div class='campo'><label>Teléfono</label><input type='text' id='c-tel'></div></div>" +
       "<div class='acciones'><button class='btn' id='btn-completa'>Completar su ficha</button></div></div>";
     document.getElementById("btn-completa").onclick = function () {
-      p.cronica = document.getElementById("c-dir").value || p.cronica;
-      Jornada.agregarEvento("ficha_completa", pidCtx, {});
+      var rfc = Jornada.completarFicha(pidCtx, {
+        ciudad: document.getElementById("c-dir").value,
+        curp: document.getElementById("c-curp") ? document.getElementById("c-curp").value : "",
+        tel: document.getElementById("c-tel") ? document.getElementById("c-tel").value : ""
+      });
+      if (!rfc.ok) { Jornada.toast(rfc.mensaje); return; }
       Jornada.toast("Ficha completa. " + p.nombre + " ya no queda en «falta completar».");
       Jornada.irA("hoy.html");
     };
@@ -142,15 +147,14 @@ document.getElementById("f-nombre").oninput = function () {
     : "";
 };
 
-function completaVisita(p, yaLlego) {
-  if (!yaLlego) Jornada.agregarEvento("llego", p.id, {});
-  p.visita = {
+function completaVisita(p, yaLlego, esExistente) {
+  var visita = {
     hora: Jornada.hm(Jornada.ahoraMin()), procedencia: document.getElementById("f-proc").value,
     ayuno: document.getElementById("f-ayuno").value, como: document.getElementById("f-como").value,
     acompanante: document.getElementById("f-acomp").value, razonDeclarada: document.getElementById("f-razon").value
   };
-  Jornada.agregarEvento("visita_completa", p.id, {});
-  Jornada.guardar();
+  var rv = Jornada.completaVisita(p.id, visita, yaLlego, esExistente);
+  if (!rv.ok) { Jornada.toast(rv.mensaje); return; }
   Jornada.toast("Visita registrada. " + p.nombre + " ya está en el tablero, en espera con su reloj.");
   Jornada.irA("hoy.html", p.id);
 }
@@ -171,17 +175,14 @@ document.getElementById("btn-guardar").onclick = function () {
       [
         { txt: "No es la misma — volver", cls: "sec" },
         { txt: "Sí, es la misma — registrar llegada", cls: "peligro", fn: function () {
-          if (!existente.cita) existente.sinCita = false;
-          completaVisita(existente, false);
+          completaVisita(existente, false, true);
         } }
       ]);
     return;
   }
-  var nuevo = { id: Jornada.uid(), nombre: nom, nacimiento: nac, caso: "Primera visita — " + document.getElementById("f-razon").value, alergias: [], sangre: "sin dato", medicacion: "sin dato", cronica: "sin dato", sinCita: true };
-  S.pacientes.push(nuevo);
-  Jornada.agregarEvento("creado", nuevo.id);
-  Jornada.guardar();
-  completaVisita(nuevo, false);
+  var rNuevo = Jornada.crearPaciente({ nombre: nom, nacimiento: nac, caso: "Primera visita — " + document.getElementById("f-razon").value, alergias: [], sangre: "sin dato", medicacion: "sin dato", cronica: "sin dato", sinCita: true });
+  if (!rNuevo.ok) { Jornada.toast(rNuevo.mensaje); return; }
+  completaVisita(rNuevo.paciente, false);
 };
 
 function pintaHoy() {

@@ -13,11 +13,23 @@ para optimizarlo → se hace en esa misma iteración, sin esperar orden nueva.
 catálogos, huellas, inventarios de decisiones) para optimizarlas → se hace.
 **L-3 ·** Si una petición exige **reconfigurar documentación** para optimizarla → se hace.
 **L-4 ·** Si una petición exige **reconfigurar archivos** → se hacen.
+**L-5 ·** Si el dueño comenta —elogie o rechace, en voz alta o por escrito— el comentario
+**genera mejora de capas**: además de registrarlo (D-2), se traduce en su **trío**:
+**(a) regla de lógica** (qué queda como verdad y dónde se escribe),
+**(b) mecanismo técnico** (cómo lo prueba una suite) y
+**(c) control de gobernanza** (dónde vive la evidencia y quién lo vigila).
+Registrar **sin el trío** = incumplimiento de L-5.
+
 **D-1 (decreto) ·** **Cero tablas** en el chat y en los `.md`: la información va en
 listas con viñetas o prosa corta. Las tablas existentes se convierten cuando el
 documento se toca; el avance de conversión vive en `CHECKLIST-DE-PETICIONES.md`.
 **D-2 (decreto) ·** Todo lo que pida el dueño queda anotado en
-`CHECKLIST-DE-PETICIONES.md` con su estado, para verificación uno por uno.
+`CHECKLIST-DE-PETICIONES.md` con su estado, para verificación uno por uno; el detalle de
+cada sesión, con su trío de capas y su evidencia, vive en `CHECKLIST-MAESTRO.md`.
+**D-3 (decreto) ·** Toda entrega de frontend se entrega **en estado final presentable**
+(no boceto, no «versión a medias»): pantallas completas, verificadas y con su banda de
+veredicto, para que el dueño ajuste sobre algo completo — «siempre se tiene que entregar
+como si ya estuviera finalizado».
 
 ## 0.5 · Cómo se habla en el chat (obligatorio — precede a todo lo demás)
 
@@ -128,7 +140,8 @@ está ✅ en PROPUESTAS §8 y lo pendiente ⬜ · 6. decisiones nuevas con su N 
 7. salida de auditoría leída completa, no recortada · 8. si tocaste una barrera,
 tiene su prueba de fuego · 9. la respuesta al dueño pasó por §0.5: sin claves sin
 traducir y en el formato «qué pasó / qué significa / qué sigue».
-10. las leyes L-1…L-4 de esta petición fueron aplicadas en la misma iteración ·
+10. las leyes L-1…L-5 de esta petición fueron aplicadas en la misma iteración ·
+10b. el comentario del dueño quedó con su trío (lógica · técnica · gobernanza) ·
 11. sin tablas ni en el chat ni en el .md que se tocó · 12. el pedido del dueño quedó
 en `CHECKLIST-DE-PETICIONES.md` con su estado.
 

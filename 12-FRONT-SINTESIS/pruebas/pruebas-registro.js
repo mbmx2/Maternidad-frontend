@@ -52,7 +52,21 @@ reg.pantallas.forEach(p => {
 ok("trampa de huella: ninguna pantalla modificada sin registrar", tocadas.length === 0, tocadas.join(" | "));
 
 /* componentes[] (E1): motor/config/css también viven en el libro */
-const compDisk = ["motor.js", "config.js", "front.css"].filter(f => fs.existsSync(path.join(RAIZ, f)));
+/* Tramo A1 (PLAN-DE-TRABAJO): la fuente de umbrales está FUERA del motor y su espejo está al día */
+const catPath = path.join(RAIZ, "catalogos.js");
+if (!fs.existsSync(catPath)) { ok("A1: existe la fuente firmable catalogos.js", false, "ausente"); }
+else {
+  ok("A1: existe la fuente firmable catalogos.js", true);
+  const motorTxt = lee("motor.js");
+  const tieneDatos = /var CATALOGO = \{/.test(motorTxt) || /LAB_RANGOS: \{/.test(motorTxt);
+  ok("A1: motor.js sin umbrales clínicos embebidos", !tieneDatos, "el motor volvió a contener datos de catálogo");
+  const antes = fs.readFileSync(path.join(RAIZ, "CATALOGOS.json"), "utf8");
+  const r = spawnSync("node", [path.join(RAIZ, "generar-catalogos.js")], { encoding: "utf8", stdio: ["ignore", "ignore", "pipe"] });
+  const despues = fs.readFileSync(path.join(RAIZ, "CATALOGOS.json"), "utf8");
+  ok("A1: espejo CATALOGOS.json idéntico al regenerar", r.status === 0 && antes === despues);
+}
+
+const compDisk = ["motor.js", "config.js", "front.css", "catalogos.js"].filter(f => fs.existsSync(path.join(RAIZ, f)));
 const compReg = (reg.componentes || []).map(c => c.archivo);
 let compProblemas = [];
 compDisk.forEach(f => { if (!compReg.includes(f)) compProblemas.push("falta componente " + f); });
@@ -199,9 +213,12 @@ ok("MG-07: INDEX raíz y LEEME raíz mencionan el protocolo",
   fs.existsSync(idxRaiz) && fs.readFileSync(idxRaiz, "utf8").includes("SINTESIS-SUMATORIA") &&
   fs.existsSync(lemeRaiz) && fs.readFileSync(lemeRaiz, "utf8").includes("SINTESIS-SUMATORIA"));
 
-/* 8 · La cola existe y hay trabajo hecho y trabajo pendiente */
+/* 8 · El libro tiene avance registrado (no vacío, no todo sin empezar).
+   OJO: exigir pend>0 era una regla ENEMIGA del objetivo: con las 18 terminadas
+   habría dado rojo. El logro no es un fallo. */
 const pend = reg.pantallas.filter(p => p.estado === "pendiente").length;
-ok("libro con piloto hecho y cola viva", pend > 0 && pend < reg.pantallas.length, "pendientes=" + pend);
-console.log("\nLibro: " + (reg.pantallas.length - pend) + " aplicadas/verificadas/auditadas · " + pend + " en cola · síntesis " + reg.sintesis_version);
+const avanzadas = reg.pantallas.length - pend;
+ok("libro con avance registrado (al menos una fila avanzada)", reg.pantallas.length > 0 && avanzadas >= 1, "avanzadas=" + avanzadas + " de " + reg.pantallas.length);
+console.log("\nLibro: " + avanzadas + " avanzadas · " + pend + " en cola · síntesis " + reg.sintesis_version + (pend === 0 ? " · cola vacía" : ""));
 console.log(fallos === 0 ? "TODO OK" : fallos + " FALLOS");
 process.exit(fallos ? 1 : 0);

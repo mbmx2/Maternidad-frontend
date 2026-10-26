@@ -35,7 +35,8 @@
 </div>
 <div id="veredicto-host"></div>
 </div></div>
-<script src="config.js"></script><script src="motor.js"></script>
+<script src="config.js"></script><script src="catalogos.js"></script>
+<script src="motor.js"></script>
 <script>
 Jornada.nav("Historia");
 var S = Jornada.estado();
@@ -71,12 +72,9 @@ document.getElementById("n-guardar").onclick = function () {
   if (!texto) { Jornada.toast("La nota está vacía: nada que firmar."); return; }
   if (!autor || !cedula) { Jornada.toast("Falta la firma: nombre y cédula. Sin firma no se señala."); return; }
   var tipo = document.getElementById("n-tipo").value;
-  var nota = { id: Jornada.uid(), pid: pid, tipo: tipo, texto: texto, autor: autor, cedula: cedula, fecha: Jornada.hoyISO(), hora: Jornada.hm(Jornada.ahoraMin()) };
-  S.notas.unshift(nota);
-  Jornada.agregarEvento("nota_firmada", pid, { tipo: tipo, notaId: nota.id });
-  if (tipo === "Interconsulta")
-    Jornada.nacerAlerta(pid, 2, "interconsulta pendiente de respuesta", "dar seguimiento a la respuesta en 7 días", "la médica");
-  Jornada.guardar();
+  var rn = Jornada.firmarNota(pid, { tipo: tipo, texto: texto, autor: autor, cedula: cedula });
+  if (!rn.ok) { Jornada.toast(rn.mensaje); return; }
+  var nota = rn.nota;
   document.getElementById("n-texto").value = "";
   document.getElementById("nota-aviso").innerHTML = "<div class='aviso verde'><b>Nota firmada e inmutable</b> — autor y cédula quedaron dentro. No hay forma de editarla desde aquí: se enmienda con una nota nueva.<span class='duenio'>" + Jornada.esc(autor) + " (céd. " + Jornada.esc(cedula) + ") · " + nota.fecha + " " + nota.hora + "</span></div>";
   Jornada.toast("Nota firmada.");

@@ -4,6 +4,7 @@ global.localStorage = { getItem: () => null, setItem: () => {} };
 const fs = require("fs");
 const path = require("path");
 eval(fs.readFileSync(path.join(__dirname, "..", "config.js"), "utf8"));
+eval(fs.readFileSync(path.join(__dirname, "..", "catalogos.js"), "utf8"));
 eval(fs.readFileSync(path.join(__dirname, "..", "motor.js"), "utf8"));
 
 // pruebas de comportamiento de las reparaciones clave

@@ -15,7 +15,7 @@
 - El documento de la lógica se convirtió a **listas sin tablas** (decreto del dueño) y
   la suite de verificación se adaptó a ese formato sin perder fuerza.
 
-## 1 · Decisiones ACTIVAS ahora (4) — con propuesta, consecuencias y árbol derivado
+## 1 · Tus decisiones con tarjeta (8 · D-1…D-8 — D-2 ejecutada; las demás activas con default)
 
 ### D-1 · Qué cuenta como «paquete completo»
 
@@ -70,6 +70,72 @@
   (moverla a una carpeta de archivo) o se conserva donde está con su aviso; y decidir
   si sus 4 propuestas de producto pendientes se descartan o viajan al nuevo proyecto.
 
+### D-5 · Firma nominal y fecha por familia de umbrales (nacida en A13, 2026-10-26)
+
+- **Propuesta:** cada familia de catálogo clínico (tensión · FCF · laboratorio ·
+  semanas · controles) tiene un dueño nominal y una fecha límite de firma.
+- **Consecuencia de aceptarla:** la firma deja de ser «la del paquete cuando llegue» y
+  se vuelve un acto con nombre y fecha, exigible por familia.
+- **Default mientras no decidas:** todo queda en el paquete §3 (firma médica) hasta
+  18/18 — es lo que ya está escrito; no se frena nada.
+- **Derivada:** al firmarse la primera familia, nace el acta de firma (quién, cuándo,
+  qué versión).
+
+### D-6 · Umbral cambiante en día activo: congelar vs reevaluar (nacida en A13)
+
+- **Propuesta:** cuando el médico cambia un rango firmado a mitad de jornada, **lo ya
+  evaluado se congela con la versión con la que se evaluó** y solo lo nuevo se evalúa
+  con el rango vigente; nada se reevalúa solo.
+- **Consecuencia de aceptarla:** cada alerta/control guarda `version` de catálogo — se
+  puede responder «¿con qué criterio de la época salió esta alerta?».
+- **Default mientras no decidas:** mismo comportamiento (congelar), pero **hoy no está
+  implementado** ni escrito: construirlo con ese default es el RQ-B de A13.
+- **Derivada:** si prefieres reevaluación automática, nace la decisión de qué se
+  muestra en lo ya cerrado (marca «reevaluado el…») y qué ve el usuario de la alerta
+  vieja.
+
+### D-7 · Objetivo numérico de fatiga de alertas (nacida en A13)
+
+- **Propuesta:** el oficio fija el número (por ejemplo: ninguna alerta clínica más de
+  45 minutos sin dueño, y tope de avisos por jornada por paciente).
+- **Consecuencia de aceptarla:** RB-15 se cierra en diseño y la métrica que ya existe
+  en el motor pasa a vigilarse contra una meta, no a coleccionarse.
+- **Default mientras no decidas:** meta provisional de 2 avisos por jornada (la que hoy
+  trae el motor, declarada cifra huérfana), con rótulo de provisional.
+- **Derivada:** al fijarse el número, nace su KPI o su fila de suite.
+
+### D-8 · ¿La ley L-5 tiene filtro de «ruido vs capa»? (nacida en A13, pregunta 20)
+
+- **Propuesta:** un criterio para que no todo comentario genere obra nueva (por
+  ejemplo: el trío solo aplica a comentarios que tocan una capa ya existente; los
+  demás quedan como nota).
+- **Consecuencia de aceptarla:** el backlog de capas deja de crecer con cada frase.
+- **Default mientras no decidas:** **sin filtro** — la ley L-5 tal como está: todo
+  comentario del dueño genera su trío (es más trabajo, nunca menos control).
+- **Derivada:** tocar L-5 es tocar `AGENTS.md`; el cambio se hace con tu frase y su
+  prueba de fuego, nunca de oficio.
+
+### D-10 · Las etiquetas del semáforo: ley propia vs propuesta LCL (nacida en A15)
+
+- **Choque:** la ley DEC-27 de este proyecto (`05-LEY`) fija
+  `normal · alerta · crítica · sin dato`; el documento 21 (LCL) con su README raíz pide
+  `NORMAL · ALERTA · ALARMA · CRÍTICO`. Dos casas, dos etiquetados.
+- **Propuesta (si adoptas la del LCL):** enmienda de la ley en la maestra + ajuste de
+  rangos, chips y pantallas, conservando **siempre** «sin dato» (lo exige RB-20: falta
+  de dato ≠ valor normal) — es decir, serían cinco, o ALARMA reemplaza a una franja
+  existente: eso también hay que decidirlo.
+- **Consecuencia de no decidir:** se queda la ley actual (el default de abajo).
+- **Default mientras no decidas:** **manda DEC-27** — por la cadena de verdad, si la
+  casa es la ley no se discute desde una carpeta (mientras tanto, la etiqueta «alarma»
+  solo existe como familia de mensajes, no como estado del semáforo).
+- **Derivadas:** si cambia → enmienda en la maestra (no aquí) · versión de glosario N0
+  del LCL · prueba de las cuatro (o cinco) etiquetas en cada pantalla con semáforo.
+
+*Numeración abierta:* D-5…D-8 nacieron en A13 y D-10 en A15. El **destino del merge
+del plan de regreso** (Fase 1 de `PLAN-DE-REGRESO.md`) espera tu frase con su default
+recomendado allí anotado: si quieres número propio, entra como **D-9**. Las rondas
+siguientes siguen desde **D-11**.
+
 ## 2 · Lo que el agente construye sin preguntar
 
 - La cola de 16 pantallas y los dos remates (el tablero de hoy y la estación).
@@ -83,6 +149,9 @@
 - Las mejoras pendientes de trazabilidad (archivo de versiones —ya hecho en V4—,
   huellas locales, tablero de decisiones, suite de presentación ampliada).
 - La ruptura de la prueba del autoguardado, en la pasada de la estación.
+- Formalizar el enchufe con esquema validable y pasar el mapa de paridad
+  pantalla ↔ operación a prueba automática (A13: RQ-G y RQ-D — son de construcción,
+  no clínicas; default reversible: esquema JSON y mapa viviendo en la §4 del índice).
 
 ## 3 · El paquete de firmas (se activa solo con 18/18 verificadas)
 
@@ -112,10 +181,18 @@ producto real exigirá después su propia obra (el backend), que tampoco se firm
 La sección 2 termina cuando la verificación completa está en verde **y** el registro
 dice **18/18 pantallas verificadas o mejor**. Solo entonces se abre la sección 3.
 
-## 5 · Tus decisiones pendientes, resumidas (10 en total)
+## 5 · Tus decisiones pendientes, resumidas (15 en total)
 
-- **Cuatro activas ahora** (D-1 alcance, D-2 hogar de mensajes, D-3 estilo, D-4 destino
-  de 07): ninguna frena la obra — todas tienen default declarado.
+- **Tres activas ahora** (D-1 alcance, D-3 estilo, D-4 destino de 07): ninguna frena la
+  obra — todas tienen default declarado. **D-2 (hogar de mensajes) quedó ejecutada el
+  2026-10-26 con su propuesta por defecto**: copia canónica del motor de mensajes en
+  `12-FRONT-SINTESIS/mensajes.js` con guardia de deriva en la autoauditoría — reversible
+  si prefieres el enlace.
+- **Cuatro nuevas de la evaluación externa A13** (D-5 firma nominal de catálogos ·
+  D-6 umbral cambiante en día activo · D-7 meta de fatiga de alertas · D-8 filtro de la
+  ley L-5): todas con default declarado en su tarjeta (§1), ninguna frena la obra.
+- **Una nueva del documento 21 (A15):** D-10 — las etiquetas del semáforo (ley DEC-27
+  vs propuesta LCL), default: manda la ley.
 - **Una de proceso** (quién autoriza las transiciones del registro): se decide con la
   entrega; provisional: la verificación con evidencia.
 - **Seis clínicas o de producto**, todas después de la obra: firma del catálogo de
@@ -124,10 +201,14 @@ dice **18/18 pantallas verificadas o mejor**. Solo entonces se abre la sección 
 
 ## 6 · Faltantes de construcción (medidos hoy, sin decisión suya)
 
-- 16 pantallas sin empezar y 2 a medio camino.
-- Los umbrales clínicos siguen dentro del programa, sin archivo firmable ni resguardo.
+- **17 pantallas esperan su reconstrucción bajo DoD v2** (la agenda ya se entregó el
+  2026-10-26; las otras 17 siguen con su estado de la ronda anterior).
+- Los umbrales clínicos ya viven en `catalogos.js` con su espejo `CATALOGOS.json` (fuera
+  del motor); **falta** su firma médica y la regla de espejo al día (ME-08).
 - Las fechas de control se adivinan del texto (la ficha no guarda fecha estimada).
-- El sistema de mensajes no está integrado en esta carpeta.
+- **Conviven dos mundos de pacientes**: la jornada clínica (motor) y la agenda de mensajes
+  (sus propias demostraciones). La pantalla de agenda los **etiqueta por origen** y en el
+  producto real serán una sola base — trabajo de construcción, no decisión tuya.
 - Calculadoras: 2 de 18. Análisis de laboratorio: 9 (el estándar pide más).
 - La pantalla de acceso no existe.
 - Estándares aplicados: 12 de 35 en las filas del registro; mejoras ejecutadas: 4 de 18.

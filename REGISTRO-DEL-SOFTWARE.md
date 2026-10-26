@@ -10,13 +10,15 @@
 ## 1 · Qué es el software (las piezas, con su alcance)
 
 - **Frontend activo (versión V4)** — carpeta `12-FRONT-SINTESIS`: 18 pantallas de la
-  jornada de una maternidad, un motor de 76 funciones como única puerta, catálogos
-  clínicos (aún dentro del motor), verificación con 9 suites y registro con huella.
+  jornada de una maternidad, un motor como única puerta, catálogos clínicos en archivo
+  firmable (`catalogos.js` + espejo `CATALOGOS.json`), verificación por suites (el conteo
+  vivo sale de `./autoauditoria.sh`) y registro con huella.
   Su genealogía completa está en `VERSIONES.md`.
 - **Sistema de continuidad (mensajes)** — carpeta `12-AGENDA-Y-MENSAJES`: motor de
   92 plantillas de mensaje en 6 familias + 40 filas de semana, con examen que impide
-  mandar cifras o diagnósticos al paciente. Su integración al frontend está pendiente
-  de tu decisión D-2.
+  mandar cifras o diagnósticos al paciente. **Integrado al frontend** el 2026-10-26: copia
+  canónica en `12-FRONT-SINTESIS/mensajes.js` con guardia de deriva (criterio DoD v2
+  D-2c de la pantalla de agenda; ejecutó la propuesta por defecto de tu decisión D-2).
 - **Backend (declarado, sin código)** — carpeta `06-FUENTE-BACKEND`: 5 documentos —
   la costura con 25 operaciones en 10 áreas, 48 requisitos (26 de pantalla y 22 de
   fondo), 17 flujos compartidos, la verdad del backend y un módulo especificado
@@ -100,6 +102,8 @@ Cada decisión de diseño nace de una regla; su consecuencia es lo que hoy vemos
 - `SINTESIS-SUMATORIA.md` → los 35 patrones que rigen cada construcción.
 - `INVENTARIO-DECISIONES.md` → tus decisiones pendientes con sus consecuencias.
 - `CHECKLIST-DE-PETICIONES.md` → tus pedidos con su estado de cumplimiento.
+- `CADENA-DE-VERDAD.md` → quién manda cuando dos libros discrepan (precedencia y
+  procedimiento de conciliación de cifras).
 - `VERSIONES.md` → genealogía del frontend y lógica de cada versión.
 - `PLAN-DE-IMPLEMENTACION.md` → el orden de trabajo y qué no se hace.
 - Auditorías (`AUDITORIA-SINTESIS.md`, `AUDITORIA-ADVERSARIAL-PRUEBAS.md`,
@@ -107,9 +111,12 @@ Cada decisión de diseño nace de una regla; su consecuencia es lo que hoy vemos
 
 ## 5 · Estado y condición de verdad
 
-- Verificación actual: **151 comprobaciones rápidas y 337 completas en verde**.
-- Avance: 1 pantalla verificada, 1 aplicada, 16 en cola; acople del enchufe: 18 de 25
-  operaciones cubiertas.
+- **Verificación viva:** solo en la salida de `./autoauditoria.sh` (iteración) y
+  `./autoauditoria.sh --completo` (transición). Aquí no se escriben números de comprobación
+  (reglas R1/R11: los números caducan y mienten).
+- **Avance vivo:** `12-FRONT-SINTESIS/SINTESIS-REGISTRO.json` — por conteo directo, sus 18
+  filas de pantalla están en `verificado`; el acople del enchufe está en
+  `INDICE-BACKEND.md` §4 (su balance medido hoy: 21 de 25 operaciones cubiertas).
 - La condición de «software completo para firmar» sigue siendo una sola: **18/18
   pantallas verificadas y la verificación completa en verde** — entonces se abre el
   paquete de firmas del inventario.

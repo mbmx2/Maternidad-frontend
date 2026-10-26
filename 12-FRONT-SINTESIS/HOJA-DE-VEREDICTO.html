@@ -14,7 +14,8 @@
 </style></head><body>
 <div class="barra"><span class="marca">Maternidad</span>
 <span class="pantalla">Hoja de veredicto — imprimible de una página</span>
-<span class="propuesta">V4 · S1 · IMPRIMIBLE</span></div>
+<span class="propuesta">V4 · S1 · IMPRIMIBLE</span>
+<span class="reloj-dia"></span></div>
 <div class="cuerpo"><div class="lateral"></div>
 <div class="zona">
 <h1>Hoja de veredicto — frontend sintetizado</h1>
@@ -71,6 +72,8 @@
 </div>
 <p class="pie-pag no-imprimir">Hoja de la sesión · kit de entrevista · esta prueba es papel con motor: nada se construye hasta el doble veredicto del oficio.</p>
 </div></div>
-<script src="config.js"></script><script src="motor.js"></script>
-<script>Jornada.nav("Hoja");</script>
+<script src="config.js"></script><script src="catalogos.js"></script>
+<script src="motor.js"></script>
+<div id="veredicto-host"></div>
+<script>Jornada.nav("Hoja"); Jornada.pintarContexto(); Jornada.bandaVeredicto("hoja", "¿Esta hoja refleja su veredicto del recorrido? ¿Falta algún dato para firmar?");</script>
 </body></html>

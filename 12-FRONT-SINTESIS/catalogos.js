@@ -1,0 +1,31 @@
+/* CATALOGOS — FUENTE FIRMABLE DE LOS UMBRALES CLÍNICOS (ley P6).
+   Este archivo es el que el médico revisa y firma: rangos de laboratorio, tensión,
+   frecuencia cardiaca fetal, tabla de resistencia a la insulina, controles por
+   situación e interacciones. El motor NO contiene umbrales: solo los aplica.
+   Regla: cambios aquí ⇒ regenerar el espejo CATALOGOS.json (generar-catalogos.js)
+   y correr la verificación; la suite pone rojo si motor.js vuelve a contener datos. */
+var CATALOGO = {
+    LAB_RANGOS: {
+      hemoglobina: { nombre: "Hemoglobina", unidad: "g/dL", bandas: [{ max: 9.9, nivel: "critica", texto: "por debajo del mínimo" }, { max: 10.9, nivel: "alerta", texto: "por debajo del rango del trimestre" }], normalTexto: "en rango del trimestre" },
+      hematocrito: { nombre: "Hematocrito", unidad: "%", bandas: [{ max: 32, nivel: "critica", texto: "por debajo del mínimo" }, { max: 35.9, nivel: "alerta", texto: "por debajo del rango del trimestre" }], normalTexto: "en rango del trimestre" },
+      glucosa: { nombre: "Glucosa en ayuno", unidad: "mg/dL", bandas: [{ max: 91, nivel: "normal", invertido: true }, { max: 125, nivel: "alerta", texto: "por arriba del rango en ayuno" }], fuera: "critica", fueraTexto: "muy por arriba del rango — evaluar hoy", normalTexto: "en rango en ayuno" },
+      insulina: { nombre: "Insulina en ayuno", unidad: "µU/mL", bandas: [{ max: 24, nivel: "normal", invertido: true }, { max: 35, nivel: "alerta", texto: "por arriba del rango en ayuno" }], fuera: "alerta", fueraTexto: "por arriba del rango en ayuno", normalTexto: "en rango en ayuno" },
+      plaquetas: { nombre: "Plaquetas", unidad: "mil/µL", bandas: [{ max: 149999, nivel: "critica", texto: "por debajo del mínimo" }, { max: 169999, nivel: "alerta", texto: "por debajo del rango" }], normalTexto: "en rango" },
+      ldh: { nombre: "LDH", unidad: "U/L", bandas: [{ max: 250, nivel: "normal", invertido: true }, { max: 450, nivel: "alerta", texto: "por arriba del rango" }], fuera: "alerta", fueraTexto: "por arriba del rango", normalTexto: "en rango" },
+      bilirrubina: { nombre: "Bilirrubina total", unidad: "mg/dL", bandas: [{ max: 1.1, nivel: "normal", invertido: true }, { max: 1.9, nivel: "alerta", texto: "por arriba del rango" }], fuera: "critica", fueraTexto: "muy por arriba del rango", normalTexto: "en rango" },
+      acido_urico: { nombre: "Ácido úrico", unidad: "mg/dL", bandas: [{ max: 5.9, nivel: "normal", invertido: true }, { max: 6.9, nivel: "alerta", texto: "por arriba del rango" }], fuera: "alerta", fueraTexto: "por arriba del rango", normalTexto: "en rango" },
+      creatinina: { nombre: "Creatinina", unidad: "mg/dL", bandas: [{ max: 0.9, nivel: "normal", invertido: true }, { max: 1.1, nivel: "alerta", texto: "por arriba del rango" }], fuera: "critica", fueraTexto: "muy por arriba del rango — evaluar hoy", normalTexto: "en rango" }
+    },
+    TA: { critica: { pas: 160, pad: 110, texto: "tensión muy por arriba — evaluar hoy" }, alerta: { pas: 140, pad: 90, texto: "tensión por arriba del rango" }, baja: { texto: "tensión por debajo del rango" } },
+    FCF: { min: 110, max: 160 },
+    HOMA: { bandas: [{ max: 2.5, nivel: "normal", invertido: true }, { max: 4.0, nivel: "alerta", texto: "índice por arriba del rango — sugiere resistencia a la insulina" }], fuera: "critica", fueraTexto: "índice muy por arriba del rango", normalTexto: "índice en rango" },
+    /* Próximo control por situación (R-41: si es derivable, nunca se captura). */
+    CONTROL: { base: 28, infeccion: 14, puerperio: 14, fertilidad: 7, egTardia: 7, egTardiaDesde: 36 },
+    INTERACCIONES: [
+      { droga: "amoxicilina", chocaCon: ["alergia:penicilina"], aviso: "choca con alergia registrada: penicilina" },
+      { droga: "ampicilina", chocaCon: ["alergia:penicilina"], aviso: "choca con alergia registrada: penicilina" },
+      { droga: "ibuprofeno", chocaCon: ["alergia:ibuprofeno", "med:warfarina"], aviso: "choca con su medicación actual: warfarina" },
+      { droga: "sulfametoxazol", chocaCon: ["alergia:sulfa"], aviso: "choca con alergia registrada: sulfa" }
+    ],
+    CALCULADORAS_18: ["Peso fetal estimado (Hadlock)", "Talla fetal estimada", "Percentil de peso fetal", "Media ponderal al nacer", "Ballard de madurez", "IMC pregestacional", "Ganancia de peso (IOM)", "Superficie corporal (du Bois)", "Riesgo tromboembólico (Caprini)", "PHQ-9", "qSOFA", "NEWS2 obstétrico", "Hemoglobina por trimestre", "Criterios OGTT 75 g", "EG por biometría fetal", "Screening de preeclampsia", "Apgar", "Resistencia a la insulina (HOMA-IR)"]
+  };
