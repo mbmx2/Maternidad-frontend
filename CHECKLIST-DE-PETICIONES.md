@@ -670,3 +670,19 @@
 - [ ] 18 calculadoras · laboratorio completo · pantalla de acceso.
 - [ ] Mejoras pendientes: tablero de decisiones, huellas locales, suite de presentación.
 - [ ] 18/18 pantallas verificadas ⇒ se abre el paquete de firmas.
+
+## A19 · Petición del 2026-10-26 05:49 (commit y push)
+
+- [x] **Commit de la iteración** → `9989b1f` (53 archivos, 5,304 líneas agregadas):
+  la agenda rehecha, el motor de mensajes canónico con su guardia, el checklist maestro,
+  la auditoría del volcado y la gobernanza al día. Autoría del repo, sin tocar la
+  configuración de git (identidad pasada de una sola vez, como en los commits previos).
+  *Se verifica:* `git log --oneline -1`.
+- [ ] **Push a un remoto** → **imposible hoy: el repositorio no tiene remoto configurado**
+  (`git push` responde «No configured push destination»). No inventé uno: para subir
+  hace falta que usted declare la dirección (por ejemplo un GitHub privado cifrado, como
+  usted mismo apuntó al hablar del respaldo). *Estado:* pendiente suyo — una línea
+  (la URL del remoto) y el push queda automático desde entonces.
+  *Trío:* **lógica** = el historial local ya es la fuente · **técnica** = `git remote add
+  <nombre> <url>` + `git push` · **gobernanza** = el push solo se declara cuando la salida
+  del comando lo confirma.
