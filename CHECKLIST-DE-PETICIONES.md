@@ -678,11 +678,12 @@
   la auditoría del volcado y la gobernanza al día. Autoría del repo, sin tocar la
   configuración de git (identidad pasada de una sola vez, como en los commits previos).
   *Se verifica:* `git log --oneline -1`.
-- [ ] **Push a un remoto** → **imposible hoy: el repositorio no tiene remoto configurado**
-  (`git push` responde «No configured push destination»). No inventé uno: para subir
-  hace falta que usted declare la dirección (por ejemplo un GitHub privado cifrado, como
-  usted mismo apuntó al hablar del respaldo). *Estado:* pendiente suyo — una línea
-  (la URL del remoto) y el push queda automático desde entonces.
+- [x] **Push a un remoto** → hecho el 2026-10-26: usted dio su cuenta (`github.com/mbmx2`)
+  y, como no existía un repositorio de este taller, se creó **privado** su
+  `mbmx2/Maternidad-frontend` («taller de diseño en papel…; sin datos de pacientes»),
+  se enlazó como `origin` y se subió la rama `master` con los tres commits.
+  *Se verifica:* `git ls-remote origin master` devuelve el mismo último commit que
+  `git log --oneline -1` local.
   *Trío:* **lógica** = el historial local ya es la fuente · **técnica** = `git remote add
   <nombre> <url>` + `git push` · **gobernanza** = el push solo se declara cuando la salida
   del comando lo confirma.
