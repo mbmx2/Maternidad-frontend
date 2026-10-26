@@ -28,7 +28,10 @@
 - **Auditoría** (raíz): `AUDITORIA-ADVERSARIAL-PRUEBAS.md` · `PROPUESTAS-DE-MEJORA.md` ·
   `AUDITORIA-ADVERSARIAL-REGISTRO-CONVERSACION.md` (la auditoría del volcado de la
   conversación contra la base del sistema) · `REGISTRO-CONVERSACION.md` (el volcado mismo,
-  evidencia cruda de la sesión).
+  evidencia cruda de la sesión) · `13-CONTRASTE-DE-CALIDAD/` (la carpeta dedicada de
+  auditoría externa: entregas y propias, preguntas vivas, requerimientos con su
+  comprobación, criterios de terminado por módulo, plan de la rebanada funcional y
+  puente al lenguaje clínico común del documento 21 — pedido del dueño A21).
 - **Espejos de la maestra** (no editar aquí): `01-DIBUJOS` a `05-LEY`.
 - **Fuente del backend** (documentos, no código): `06-FUENTE-BACKEND`.
 - **Flujos dibujados**: `08-FLUJOS`.

@@ -161,3 +161,10 @@ y el commit del sello cambian.
   plantillas en 6 familias + 40 semanas, agenda con disponibilidad, editor de
   plantillas, dedupe con clave; su `AUDITORIA-ADVERSARIAL.md` tiene 6 rondas y sus
   `pruebas/` suman 102 checks en verde.
+- `13-CONTRASTE-DE-CALIDAD/` — la carpeta dedicada de auditoría externa (pedido del
+  dueño A21): auditoría de las entregas **y de las propias propuestas** del evaluador
+  (con retractaciones incluidas), las preguntas vivas con su estado y dueño, los
+  requerimientos RQ-A…RQ-J con su comprobación que puede fallar, los criterios de
+  terminado por módulo (positivos y negativos), el plan de la rebanada funcional
+  (que frontend y backend funcionen juntos y eso valide las plantillas con un
+  número) y el puente al lenguaje clínico común (documento 21).

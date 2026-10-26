@@ -636,6 +636,45 @@
   antes de tocar nada · **gobernanza** = alcance decidido con número y fecha, no por
   efecto de arrastre de un documento.
 
+## A21 · Petición del 2026-10-26 05:36–05:55 (carpeta dedicada de contraste + commit + repositorio público) — numerada A21 por colisión: el constructor ya había registrado A19 y A20 con parte de estas órdenes
+
+- [x] **Carpeta dedicada `13-CONTRASTE-DE-CALIDAD/`** → pediste «genera una carpeta
+  dedicada a esto específicamente» (la auditoría adversarial, las mejoras, los flujos
+  estructurados y el acercamiento a la práctica médica). Entregada con 7 archivos:
+  `LEEME.md` (mapa y reglas) · `AUDITORIA-DE-LA-ENTREGA.md` (hallazgos F-01…F-08 con
+  comando, estado y retractaciones: F-04 y F-06 se retractan al medir) ·
+  `AUDITORIA-PROPIA.md` (M-01…M-06: quien audita también se audita) ·
+  `PREGUNTAS-VIVAS.md` (las 20 preguntas con estado y dueño + 4 nuevas) ·
+  `REQUISITOS-CON-DIENTES.md` (RQ-A…RQ-J con su comprobación que puede fallar) ·
+  `DOD-POR-MODULO.md` (criterios de terminado por módulo y por artefacto, con checks
+  positivos y negativos) · `PLAN-REBANADA-FUNCIONAL.md` (el plan para que frontend y
+  backend funcionen juntos y eso valide las plantillas con un número) ·
+  `PUENTE-LCL.md` (mapa documento 21 ↔ este repo). *Nota:* la sección nació como A19
+  y se renumeró a A21 al detectar que el constructor ya había registrado A19 y A20
+  con parte de estas órdenes — el propio hallazgo F-01 (colisión de numeración),
+  reproducido y corregido en la misma hora. Durante la verificación apareció un rojo
+  en la suite documental de la agenda: falso positivo por fecha (el generador del
+  JSON maestro sella «hoy» y cruzó la medianoche: el único cambio del diff es el
+  campo fecha 2026-10-25 → 2026-10-26); regenerado y en verde.
+  *Se verifica:* abrir la carpeta; todo hallazgo con su comando; toda cifra con su fecha; retractaciones escritas.
+  *Trío:* **lógica** = la auditoría que no se audita a sí misma es teatro ·
+  **técnica** = comandos de solo lectura + línea base T1 verde (238 PASS · 0 FALLO,
+  corte 2026-10-25 23:50, coincide con K-02) antes de escribir ·
+  **gobernanza** = registro A21 + entradas en INDEX y LEEME raíz.
+- [x] **Commit y repositorio público** → pediste «una vez que termines commit git
+  push» y «genera el repositorio público commit». Ejecutado: commit local de toda la
+  obra (incluida esta carpeta) y creación del repositorio **público** en la cuenta
+  GitHub del dueño (mbmx2) con su empuje. Escaneo de secretos previo (`rg` con
+  patrones de llaves, tokens y contraseñas): **cero coincidencias**. *Nota
+  registrada:* el volcado de conversación (`REGISTRO-CONVERSACION.md`, 154 KB) viaja
+  público — lo pediste con la orden explícita; si algún día quieres retirarlo, es
+  decisión tuya y solo tuya (pregunta viva 22 en `PREGUNTAS-VIVAS.md`).
+  *Se verifica:* `git log` con el commit · URL pública del repo · T1 en verde tras
+  el commit. *Trío:* **lógica** = la obra completa en un solo lugar, auditable por
+  cualquiera · **técnica** = escaneo de secretos + T1 verde como puerta del empuje ·
+  **gobernanza** = el repo público es la evidencia máxima de «nada declarado sin
+  comando».
+
 ## B · Peticiones vivas de todo el proyecto
 
 - [x] **Hablar en lenguaje humano** en el chat, sin siglas sin traducir, con la forma
