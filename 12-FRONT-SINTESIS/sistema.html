@@ -1,0 +1,56 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8">
+<meta name="sintesis" content="S1">
+<meta name="viewport" content="width=1024">
+<title>Sistema — administración del dueño</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="front.css"></head><body>
+<div class="barra"><span class="marca">Maternidad</span>
+<span class="pantalla">Sistema — administración del dueño</span>
+<span id="contexto-gatillo" class="vacio"></span>
+<span class="propuesta">V4 · S1 · PAPEL CON MOTOR</span>
+<span class="reloj-dia"></span></div>
+<div class="cuerpo"><div class="lateral"></div>
+<div class="zona">
+<h1>Sistema (dueño)</h1>
+<p class="subtitulo">Lo que solo mira el dueño: personas y roles, catálogos con su firma, y el estado de la copia de seguridad. Aquí nada se cambia en caliente: los catálogos se firman y la firma es la que dispara.</p>
+<div class="grilla2">
+<div class="panel sombra">
+<h3>Personas y roles</h3>
+<div class="linea">· <b>Médica</b> — consulta, urgencias, catálogos clínicos, notas firmadas.</div>
+<div class="linea">· <b>Enfermería</b> — puerta, estación, laboratorio, estaciones a mitad.</div>
+<div class="linea">· <b>Recepción</b> — agenda, recordatorios, no-llegados.</div>
+<div class="linea">· <b>Dueño</b> — personas, catálogos firmados, instalación, respaldos.</div>
+<div class="linea nota">La sesión de prueba no pide PIN (R-26 es fase con acceso real): aquí se declara su lugar en el flujo.</div>
+</div>
+<div class="panel sombra">
+<h3>Catálogos — firma del médico</h3>
+<div class="linea">· <span class="chip ambar">Rangos de laboratorio — borrador en demostración</span></div>
+<div class="linea">· <span class="chip ambar">Umbrales de tensión y FCF — borrador en demostración</span></div>
+<div class="linea">· <span class="chip ambar">Interacciones fármaco-alergia — borrador en demostración</span></div>
+<div class="linea">· <span class="chip ambar">Tabla HOMA-IR — borrador en demostración</span></div>
+<div class="linea">· <span class="chip ambar">Calendario de controles por EG — borrador en demostración</span></div>
+<div class="linea nota">P6 de la ley: ningún umbral vive en el código. Estos son los borradores que el médico firma; con la firma, se vuelven los catálogos reales.</div>
+</div>
+</div>
+<div class="panel sombra">
+<h3>Respaldo y bitácora</h3>
+<div id="respaldo"></div>
+<div class="linea" style="margin-top:8px">Eventos del día registrados: <b id="cuenta-eventos"></b> · notas firmadas: <b id="cuenta-notas"></b> · alertas cerradas con firma: <b id="cierre-firmas"></b></div>
+</div>
+<div id="veredicto-host"></div>
+</div></div>
+<script src="config.js"></script><script src="motor.js"></script>
+<script>
+Jornada.nav("Sistema");
+var S = Jornada.estado();
+document.getElementById("respaldo").innerHTML = S.respaldoTarde
+  ? "<span class='chip verde'>Respaldo de la tarde ensayado y verificado</span> — el parque vivo quedó intacto. <a href='falla.html'>Volver a ensayar →</a>"
+  : "<span class='chip ambar'>Respaldo de la tarde PENDIENTE</span> — <a href='falla.html'>ensayar en Fallas antes de apagar</a>.";
+document.getElementById("cuenta-eventos").textContent = String(S.eventos.length);
+document.getElementById("cuenta-notas").textContent = String(S.notas.length);
+var firmas = S.alertas.filter(function (a) { return a.estado !== "pendiente" && a.quien; }).length;
+document.getElementById("cierre-firmas").textContent = String(firmas);
+Jornada.pintarContexto();
+Jornada.bandaVeredicto("sistema", "¿Los roles de esta lista son los de su consultorio? ¿Falta un rol? ¿Quién firma los catálogos clínicos en su centro?");
+</script>
+</body></html>

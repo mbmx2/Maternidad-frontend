@@ -1,0 +1,1703 @@
+{
+  "version": 2,
+  "fecha": "2026-10-25",
+  "nota": "Generado desde mensajes.js por generar-maestro.js — constancia máquina-legible de la batería. BORRADORES: requieren firma del médico antes de vigencia (P6).",
+  "familias": [
+    "logistica",
+    "laboratorio",
+    "semana",
+    "diagnostico",
+    "cuidado",
+    "alarma"
+  ],
+  "conteo": {
+    "plantillas": 92,
+    "semanas": 40,
+    "por_familia": {
+      "logistica": 14,
+      "laboratorio": 16,
+      "semana": 6,
+      "diagnostico": 24,
+      "cuidado": 18,
+      "alarma": 14
+    },
+    "diagnosticos": 9
+  },
+  "marcadores_soportados": [
+    "nombre",
+    "nombre_completo",
+    "unidad",
+    "telefono_unidad",
+    "horario_unidad",
+    "fecha_cita",
+    "hora_cita",
+    "fecha_original",
+    "fecha_cierre",
+    "opciones_reprogramacion",
+    "motivo_general",
+    "documento",
+    "semana",
+    "trimestre",
+    "signos_alarma",
+    "desarrollo_bebe",
+    "cuidado_semana"
+  ],
+  "horario_catalogo": {
+    "abre": "09:00",
+    "cierra": "13:00",
+    "pasoMin": 30
+  },
+  "plantillas": [
+    {
+      "id": "L01",
+      "familia": "logistica",
+      "subfamilia": "citas",
+      "nombre": "Recordatorio de cita",
+      "disparo": "cita programada 1 día antes",
+      "poblacion": "general",
+      "canales": [
+        "whatsapp",
+        "llamada",
+        "impreso"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, le recordamos su cita mañana {{fecha_cita}} a las {{hora_cita}} en {{unidad}}. Si no puede acudir, avísenos para reagendar."
+    },
+    {
+      "id": "L02",
+      "familia": "logistica",
+      "subfamilia": "citas",
+      "nombre": "Confirmación de cita",
+      "disparo": "cita creada o reprogramada",
+      "poblacion": "general",
+      "canales": [
+        "whatsapp",
+        "llamada"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, ¿nos confirma su cita el {{fecha_cita}} a las {{hora_cita}}? Responda por este medio o llámenos al {{telefono_unidad}}."
+    },
+    {
+      "id": "L03",
+      "familia": "logistica",
+      "subfamilia": "disponibilidad",
+      "nombre": "Solicitud de disponibilidad",
+      "disparo": "control derivado sin cita",
+      "poblacion": "general",
+      "canales": [
+        "whatsapp",
+        "llamada"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, para agendar su próxima visita: ¿qué días y horarios le acomodan esta semana? Con gusto la esperamos en {{unidad}}."
+    },
+    {
+      "id": "L04",
+      "familia": "logistica",
+      "subfamilia": "disponibilidad",
+      "nombre": "Reprogramación ofrecida",
+      "disparo": "cita debe moverse",
+      "poblacion": "general",
+      "canales": [
+        "whatsapp",
+        "llamada",
+        "impreso"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, su cita del {{fecha_original}} no está disponible. Le ofrecemos: {{opciones_reprogramacion}}. ¿Le acomoda alguna? Disculpe las molestias."
+    },
+    {
+      "id": "L05",
+      "familia": "logistica",
+      "subfamilia": "disponibilidad",
+      "nombre": "Cancelación por causa imprevista",
+      "disparo": "fuerza mayor del consultorio",
+      "poblacion": "general",
+      "canales": [
+        "whatsapp",
+        "llamada",
+        "impreso"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, por {{motivo_general}} no podremos atenderle el {{fecha_original}}. Le ofrecemos: {{opciones_reprogramacion}} — o indíquenos sus días disponibles para la próxima semana y la reprogramamos. Disculpe las molestias."
+    },
+    {
+      "id": "L06",
+      "familia": "logistica",
+      "subfamilia": "inasistencia",
+      "nombre": "Seguimiento de inasistencia",
+      "disparo": "no llegó sin avisar",
+      "poblacion": "general",
+      "canales": [
+        "whatsapp",
+        "llamada"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, no pudimos atenderle el día de su cita. Queremos acompañarle: indíquenos cuándo puede acudir y le agendamos."
+    },
+    {
+      "id": "L07",
+      "familia": "logistica",
+      "subfamilia": "bienvenida",
+      "nombre": "Bienvenida — primera visita",
+      "disparo": "registro nuevo",
+      "poblacion": "general",
+      "canales": [
+        "impreso",
+        "whatsapp"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, bienvenida a {{unidad}}. Su ficha ya está lista; en su próxima visita la esperamos {{fecha_cita}} a las {{hora_cita}}."
+    },
+    {
+      "id": "L08",
+      "familia": "logistica",
+      "subfamilia": "disponibilidad",
+      "nombre": "Seguimiento de respuesta",
+      "disparo": "disponibilidad pedida sin respuesta en 48 horas",
+      "poblacion": "general",
+      "canales": [
+        "whatsapp",
+        "llamada"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, le escribimos para su próxima cita: ¿qué día y hora le acomodan? Con su respuesta la agendamos en {{unidad}}."
+    },
+    {
+      "id": "L09",
+      "familia": "logistica",
+      "subfamilia": "horarios",
+      "nombre": "Cambio de horario del consultorio",
+      "disparo": "horario general publicado por el dueño",
+      "poblacion": "general",
+      "canales": [
+        "whatsapp",
+        "impreso"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, le informamos un cambio de horario de {{unidad}}: atenderemos {{horario_unidad}}. Sus citas se mantienen; cualquier duda, llámenos."
+    },
+    {
+      "id": "L10",
+      "familia": "logistica",
+      "subfamilia": "horarios",
+      "nombre": "Ausencia de la médica",
+      "disparo": "agenda médica fuera del consultorio ese día",
+      "poblacion": "general",
+      "canales": [
+        "whatsapp",
+        "llamada"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, su cita del {{fecha_cita}} no se puede atender por un imprevisto de la agenda. Le ofrecemos: {{opciones_reprogramacion}} — o díganos sus días disponibles."
+    },
+    {
+      "id": "L11",
+      "familia": "logistica",
+      "subfamilia": "horarios",
+      "nombre": "Cierre por vacaciones",
+      "disparo": "cierre programado del consultorio",
+      "poblacion": "general",
+      "canales": [
+        "whatsapp",
+        "impreso"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, {{unidad}} cerrará por vacaciones del {{fecha_original}} al {{fecha_cierre}}. Si necesita atención antes, avísenos y la reprogramamos con tiempo."
+    },
+    {
+      "id": "L12",
+      "familia": "logistica",
+      "subfamilia": "citas",
+      "nombre": "Confirmación de cambio",
+      "disparo": "reprogramación aceptada por la paciente",
+      "poblacion": "general",
+      "canales": [
+        "whatsapp",
+        "llamada"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, quedó confirmada su nueva cita: {{fecha_cita}} a las {{hora_cita}} en {{unidad}}. Si algo cambia, avísenos con tiempo, por favor."
+    },
+    {
+      "id": "L13",
+      "familia": "logistica",
+      "subfamilia": "documentos",
+      "nombre": "Documentos pendientes",
+      "disparo": "ficha con documentos faltantes",
+      "poblacion": "general",
+      "canales": [
+        "whatsapp",
+        "impreso"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, para completar su expediente le falta: {{documento}}. Puede traerlo en su próxima visita. Si tiene dudas, llámenos."
+    },
+    {
+      "id": "L14",
+      "familia": "logistica",
+      "subfamilia": "horarios",
+      "nombre": "Aviso de espera larga",
+      "disparo": "espera mayor a 30 minutos en sala",
+      "poblacion": "general",
+      "canales": [
+        "whatsapp"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, estamos con una espera mayor a la prevista en {{unidad}}. Gracias por su paciencia; le avisaremos en cuanto podamos atenderle."
+    },
+    {
+      "id": "B01",
+      "familia": "laboratorio",
+      "subfamilia": "controles",
+      "nombre": "Control de hemoglobina",
+      "disparo": "banda de hemoglobina en alerta o plazo vencido (el mensaje no lleva el valor)",
+      "poblacion": "embarazo",
+      "canales": [
+        "whatsapp",
+        "llamada"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, le toca su control de hemoglobina. Cite en recepción cuando le acomode; si siente mareo o cansancio excesivo, acuda antes."
+    },
+    {
+      "id": "B02",
+      "familia": "laboratorio",
+      "subfamilia": "controles",
+      "nombre": "Tamizaje de glucosa",
+      "disparo": "plazo de tamizaje vencido",
+      "poblacion": "embarazo",
+      "canales": [
+        "whatsapp",
+        "llamada"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, le toca su tamizaje de glucosa. Recuerde que algunos estudios piden ayuno — avísenos si tiene dudas antes de acudir."
+    },
+    {
+      "id": "B03",
+      "familia": "laboratorio",
+      "subfamilia": "resultados",
+      "nombre": "Resultados listos para recoger",
+      "disparo": "resultados capturados hoy",
+      "poblacion": "general",
+      "canales": [
+        "whatsapp",
+        "llamada"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, sus resultados de laboratorio de hoy ya están listos. Pase a recogerlos en {{unidad}} o coméntenos si prefiere otra forma."
+    },
+    {
+      "id": "B04",
+      "familia": "laboratorio",
+      "subfamilia": "estudios",
+      "nombre": "Estudio de imagen pendiente",
+      "disparo": "estudio sin capturar",
+      "poblacion": "general",
+      "canales": [
+        "whatsapp",
+        "llamada"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, le recordamos que su estudio de imagen sigue pendiente. Tráigalo cuando pueda y lo integraremos a su expediente."
+    },
+    {
+      "id": "B05",
+      "familia": "laboratorio",
+      "subfamilia": "estudios",
+      "nombre": "Preparación de estudio con ayuno",
+      "disparo": "estudio agendado que pide ayuno",
+      "poblacion": "general",
+      "canales": [
+        "whatsapp",
+        "impreso"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, para su estudio del {{fecha_cita}}: acuda en ayuno (sin comer desde 8 horas antes) y tome agua si se lo indicaron. Si tiene dudas, llámenos."
+    },
+    {
+      "id": "B06",
+      "familia": "laboratorio",
+      "subfamilia": "controles",
+      "nombre": "Control de plaquetas",
+      "disparo": "plazo de control de plaquetas vencido",
+      "poblacion": "embarazo",
+      "canales": [
+        "whatsapp",
+        "llamada"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, le toca su control de plaquetas. Cite en recepción cuando le acomode y traiga sus estudios previos."
+    },
+    {
+      "id": "B07",
+      "familia": "laboratorio",
+      "subfamilia": "controles",
+      "nombre": "Panel de laboratorio del trimestre",
+      "disparo": "control trimestral de laboratorio",
+      "poblacion": "embarazo",
+      "canales": [
+        "whatsapp",
+        "llamada"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, le toca su control de laboratorio del trimestre. Avísenos cuándo le acomoda acudir en ayuno si su médico lo indicó."
+    },
+    {
+      "id": "B08",
+      "familia": "laboratorio",
+      "subfamilia": "controles",
+      "nombre": "Estudio de orina pendiente",
+      "disparo": "urocultivo por repetir o sin entregar",
+      "poblacion": "embarazo",
+      "canales": [
+        "whatsapp",
+        "llamada"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, le falta entregar su estudio de orina. Tráigalo cuando pueda; la primera muestra la toma en casa y la recibe en frasco estéril."
+    },
+    {
+      "id": "B09",
+      "familia": "laboratorio",
+      "subfamilia": "resultados",
+      "nombre": "Repetición de estudio",
+      "disparo": "resultado que pide repetición (sin cifra en el mensaje)",
+      "poblacion": "general",
+      "canales": [
+        "whatsapp",
+        "llamada"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, su médico le indicó repetir un estudio. Acuda cuando le acomode; con gusto le imprimimos la indicación."
+    },
+    {
+      "id": "B10",
+      "familia": "laboratorio",
+      "subfamilia": "controles",
+      "nombre": "Control hormonal",
+      "disparo": "plazo de control hormonal vencido",
+      "poblacion": "general",
+      "canales": [
+        "whatsapp",
+        "llamada"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, le toca su control hormonal programado. Tome su pastilla en ayuno si así se lo indicaron y traiga la dosis actual."
+    },
+    {
+      "id": "B11",
+      "familia": "laboratorio",
+      "subfamilia": "controles",
+      "nombre": "Control de ácido úrico",
+      "disparo": "plazo de ácido úrico vencido",
+      "poblacion": "embarazo",
+      "canales": [
+        "whatsapp",
+        "llamada"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, le toca su control de ácido úrico. Cite en recepción cuando le acomode."
+    },
+    {
+      "id": "B12",
+      "familia": "laboratorio",
+      "subfamilia": "controles",
+      "nombre": "Control de creatinina",
+      "disparo": "plazo de función renal vencido",
+      "poblacion": "general",
+      "canales": [
+        "whatsapp",
+        "llamada"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, le toca su control de creatinina (función de sus riñones). Acuda en ayuno si así se lo indicaron."
+    },
+    {
+      "id": "B13",
+      "familia": "laboratorio",
+      "subfamilia": "controles",
+      "nombre": "Perfil de colesterol y triglicéridos",
+      "disparo": "plazo de perfil de lípidos vencido",
+      "poblacion": "general",
+      "canales": [
+        "whatsapp",
+        "llamada"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, le toca su control de colesterol y triglicéridos. Acuda en ayuno y traiga su lista de alimentos de la semana."
+    },
+    {
+      "id": "B14",
+      "familia": "laboratorio",
+      "subfamilia": "resultados",
+      "nombre": "Ultrasonido listo",
+      "disparo": "estudio de ultrasonido capturado",
+      "poblacion": "embarazo",
+      "canales": [
+        "whatsapp",
+        "llamada"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, su estudio de ultrasonido ya está listo: pase a recogerlo o coméntenos cómo prefiere recibirlo."
+    },
+    {
+      "id": "B15",
+      "familia": "laboratorio",
+      "subfamilia": "controles",
+      "nombre": "Grupo y Rh",
+      "disparo": "control de grupo y Rh del embarazo",
+      "poblacion": "embarazo",
+      "canales": [
+        "whatsapp",
+        "llamada"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, le toca su control de grupo y Rh en el próximo control. Traiga sus papeles previos si los tiene."
+    },
+    {
+      "id": "B16",
+      "familia": "laboratorio",
+      "subfamilia": "estudios",
+      "nombre": "Serologías de control",
+      "disparo": "serologías del embarazo pendientes",
+      "poblacion": "embarazo",
+      "canales": [
+        "whatsapp",
+        "llamada"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, le toca entregar sus estudios de sangre de control. Avísenos si necesita la hoja de indicaciones."
+    },
+    {
+      "id": "S00",
+      "familia": "semana",
+      "subfamilia": "semanal",
+      "nombre": "Acompañamiento por semana de embarazo",
+      "disparo": "semana derivada de la fecha estimada (una vez por semana, deduplicado)",
+      "poblacion": "embarazo",
+      "canales": [
+        "whatsapp",
+        "impreso"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, está en la semana {{semana}} de su embarazo ({{trimestre}}). {{desarrollo_bebe}}. {{cuidado_semana}}. Si presenta {{signos_alarma}}, comuníquese de inmediato o acuda: no deje que avance."
+    },
+    {
+      "id": "S01",
+      "familia": "semana",
+      "subfamilia": "etapas",
+      "nombre": "Etapa — primer trimestre (semanas 1 a 13)",
+      "disparo": "semana derivada 1–13",
+      "poblacion": "embarazo",
+      "canales": [
+        "whatsapp",
+        "impreso"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, está en su {{trimestre}}. Cuide su descanso, tome su vitamina prenatal todos los días y acuda a su primer control. Si presenta dolor fuerte, sangrado o mucho mareo, comuníquese de inmediato."
+    },
+    {
+      "id": "S02",
+      "familia": "semana",
+      "subfamilia": "etapas",
+      "nombre": "Etapa — segundo trimestre (semanas 14 a 27)",
+      "disparo": "semana derivada 14–27",
+      "poblacion": "embarazo",
+      "canales": [
+        "whatsapp",
+        "impreso"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, está en su {{trimestre}}: ya pasaron las primeras náuseas. Camine unos minutos al día, mantenga su alimentación variada y no falte a su control. Si siente los movimientos de su bebé menos de lo habitual, avísenos."
+    },
+    {
+      "id": "S03",
+      "familia": "semana",
+      "subfamilia": "etapas",
+      "nombre": "Etapa — tercer trimestre (semanas 28 a 40)",
+      "disparo": "semana derivada 28–40",
+      "poblacion": "embarazo",
+      "canales": [
+        "whatsapp",
+        "impreso"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, está en su {{trimestre}}, la recta final: prepare su bolsa, descanse del lado izquierdo si se lo recomienda su médica y vigile los movimientos de su bebé cada día. Si algo la preocupa, llámenos."
+    },
+    {
+      "id": "S04",
+      "familia": "semana",
+      "subfamilia": "preparacion",
+      "nombre": "Preparación para el parto (semana 36 en adelante)",
+      "disparo": "semana derivada 36+",
+      "poblacion": "embarazo",
+      "canales": [
+        "whatsapp",
+        "impreso"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, ya está en semana de preparación: tenga lista la bolsa, el camino al hospital y sus acompañantes. Si pierde líquido, tiene contracciones seguidas o sangrado, venga de inmediato."
+    },
+    {
+      "id": "S05",
+      "familia": "semana",
+      "subfamilia": "postparto",
+      "nombre": "Primeros días de recuperación",
+      "disparo": "recién dada de alta del parto",
+      "poblacion": "puerperio",
+      "canales": [
+        "whatsapp",
+        "llamada"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, estos días su cuerpo se está recuperando: descanse, tome agua y vigile fiebre, sangrado o dolor fuerte — si aparece alguno, avísenos de inmediato. Cuente con nosotros para su bebé."
+    },
+    {
+      "id": "D01",
+      "familia": "diagnostico",
+      "subfamilia": "seguimiento",
+      "nombre": "Puerperio — control de seguimiento",
+      "disparo": "episodio de puerperio activo",
+      "poblacion": "puerperio",
+      "canales": [
+        "whatsapp",
+        "llamada"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, estamos acompañando su recuperación. Su control es el {{fecha_cita}} a las {{hora_cita}}; si tiene fiebre, sangrado o dolor fuerte, acuda antes."
+    },
+    {
+      "id": "D02",
+      "familia": "diagnostico",
+      "subfamilia": "seguimiento",
+      "nombre": "Seguimiento de tratamiento",
+      "disparo": "protocolo de tratamiento activo en la ficha",
+      "poblacion": "infeccion",
+      "canales": [
+        "whatsapp",
+        "llamada"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, le recordamos su control de seguimiento el {{fecha_cita}} a las {{hora_cita}}. Termine su tratamiento y traiga sus papeles al consultorio."
+    },
+    {
+      "id": "D03",
+      "familia": "diagnostico",
+      "subfamilia": "seguimiento",
+      "nombre": "Acompañamiento de fertilidad",
+      "disparo": "protocolo de fertilidad activo",
+      "poblacion": "fertilidad",
+      "canales": [
+        "whatsapp",
+        "llamada"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, su siguiente paso del protocolo es el {{fecha_cita}} a las {{hora_cita}}. Cualquier duda sobre el proceso, llámenos a {{unidad}}."
+    },
+    {
+      "id": "D04",
+      "familia": "diagnostico",
+      "subfamilia": "seguimiento",
+      "nombre": "Seguimiento sensible",
+      "disparo": "revisión sensible programada (duelo)",
+      "poblacion": "duelo",
+      "canales": [
+        "llamada",
+        "impreso"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, le recordamos su cita de seguimiento el {{fecha_cita}} a las {{hora_cita}}. Estamos para acompañarle; si prefiere otro día, díganos con calma."
+    },
+    {
+      "id": "D05",
+      "familia": "diagnostico",
+      "subfamilia": "seguimiento",
+      "nombre": "Revisión programada",
+      "disparo": "revisión de tumoración en agenda",
+      "poblacion": "tumoracion",
+      "canales": [
+        "whatsapp",
+        "llamada"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, su revisión programada es el {{fecha_cita}} a las {{hora_cita}} en {{unidad}}. Si presenta dolor fuerte o sangrado, acuda antes."
+    },
+    {
+      "id": "D06",
+      "familia": "diagnostico",
+      "subfamilia": "seguimiento",
+      "nombre": "Planificación — próxima visita",
+      "disparo": "planificación con próxima visita",
+      "poblacion": "planificacion",
+      "canales": [
+        "whatsapp",
+        "llamada"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, su próxima cita de planificación es el {{fecha_cita}} a las {{hora_cita}}. Cualquier duda, con gusto la atendemos en {{unidad}}."
+    },
+    {
+      "id": "D07",
+      "familia": "diagnostico",
+      "subfamilia": "vacunacion",
+      "nombre": "Vacunación — siguiente aplicación",
+      "disparo": "esquema de vacunación activo",
+      "poblacion": "vacunacion",
+      "canales": [
+        "whatsapp",
+        "llamada"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, toca su siguiente aplicación del esquema de vacunación. Le esperamos el {{fecha_cita}} a las {{hora_cita}}; si ese día tiene fiebre, avísenos para reprogramar."
+    },
+    {
+      "id": "D08",
+      "familia": "diagnostico",
+      "subfamilia": "acompanamiento",
+      "nombre": "Acompañamiento en el embarazo adolescente",
+      "disparo": "paciente menor de 20 años",
+      "poblacion": "embarazo",
+      "canales": [
+        "whatsapp",
+        "llamada"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, su control es el {{fecha_cita}} a las {{hora_cita}}. Puede venir acompañada de la persona que elija; aquí la atendemos con confidencialidad y sin juicios."
+    },
+    {
+      "id": "D09",
+      "familia": "diagnostico",
+      "subfamilia": "acompanamiento",
+      "nombre": "Acompañamiento a partir de los 35 años",
+      "disparo": "paciente mayor de 35 años",
+      "poblacion": "embarazo",
+      "canales": [
+        "whatsapp",
+        "llamada"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, por su edad su control incluye estudios extra: su próxima cita es el {{fecha_cita}} a las {{hora_cita}}. Traiga sus papeles previos."
+    },
+    {
+      "id": "D10",
+      "familia": "diagnostico",
+      "subfamilia": "indicaciones",
+      "nombre": "Control de descanso",
+      "disparo": "indicación de descanso en la ficha",
+      "poblacion": "embarazo",
+      "canales": [
+        "whatsapp",
+        "impreso"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, siga su indicación de descanso: evite esfuerzos y mantenga sus controles. Si siente contracciones o sangrado, avísenos de inmediato."
+    },
+    {
+      "id": "D11",
+      "familia": "diagnostico",
+      "subfamilia": "seguimiento",
+      "nombre": "Control del crecimiento de su bebé",
+      "disparo": "seguimiento por estudios de crecimiento",
+      "poblacion": "embarazo",
+      "canales": [
+        "whatsapp",
+        "llamada"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, su control del crecimiento es el {{fecha_cita}} a las {{hora_cita}}. No falte: después de cada estudio le explicamos todo con calma."
+    },
+    {
+      "id": "D12",
+      "familia": "diagnostico",
+      "subfamilia": "nutricion",
+      "nombre": "Acompañamiento nutricional",
+      "disparo": "control de peso o nutrición",
+      "poblacion": "embarazo",
+      "canales": [
+        "whatsapp",
+        "llamada"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, su cita de nutrición es el {{fecha_cita}} a las {{hora_cita}}. Traiga su libreta de alimentos si la tiene; haremos un plan a su medida."
+    },
+    {
+      "id": "D13",
+      "familia": "diagnostico",
+      "subfamilia": "seguimiento",
+      "nombre": "Control de su tensión",
+      "disparo": "control por tensión elevada en la ficha",
+      "poblacion": "embarazo",
+      "canales": [
+        "whatsapp",
+        "llamada"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, le toca su control de tensión. Tome su medicamento si lo tiene indicado y acuda con sus papeles el {{fecha_cita}} a las {{hora_cita}}."
+    },
+    {
+      "id": "D14",
+      "familia": "diagnostico",
+      "subfamilia": "seguimiento",
+      "nombre": "Control hormonal",
+      "disparo": "seguimiento hormonal de la ficha",
+      "poblacion": "general",
+      "canales": [
+        "whatsapp",
+        "llamada"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, su control hormonal es el {{fecha_cita}} a las {{hora_cita}}. Tome su pastilla en ayuno si así se lo indicaron, y traiga la dosis actual."
+    },
+    {
+      "id": "D15",
+      "familia": "diagnostico",
+      "subfamilia": "tratamientos",
+      "nombre": "Cierre de tratamiento con hierro",
+      "disparo": "tratamiento de hierro por terminar",
+      "poblacion": "embarazo",
+      "canales": [
+        "whatsapp",
+        "llamada"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, está por terminar su tratamiento con hierro: su control de cierre es el {{fecha_cita}} a las {{hora_cita}}. No suspenda la pastilla sin indicación."
+    },
+    {
+      "id": "D16",
+      "familia": "diagnostico",
+      "subfamilia": "tratamientos",
+      "nombre": "Fin de su tratamiento",
+      "disparo": "tratamiento con antibióticos por terminar",
+      "poblacion": "infeccion",
+      "canales": [
+        "whatsapp",
+        "llamada"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, está por terminar su tratamiento: termínelo completo, aunque se sienta bien, y acuda a su control el {{fecha_cita}} a las {{hora_cita}}."
+    },
+    {
+      "id": "D17",
+      "familia": "diagnostico",
+      "subfamilia": "seguimiento",
+      "nombre": "Embarazo múltiple — controles seguidos",
+      "disparo": "embarazo gemelar en la ficha",
+      "poblacion": "gemelar",
+      "canales": [
+        "whatsapp",
+        "llamada"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, su embarazo requiere controles más seguidos: su próxima cita es el {{fecha_cita}} a las {{hora_cita}}. Cuente con más tiempo de consulta; llámenos ante cualquier cambio."
+    },
+    {
+      "id": "D18",
+      "familia": "diagnostico",
+      "subfamilia": "postquirurgico",
+      "nombre": "Recuperación después de cirugía",
+      "disparo": "cesárea u otra cirugía reciente",
+      "poblacion": "puerperio",
+      "canales": [
+        "whatsapp",
+        "llamada"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, vigile su herida: si enrojece, supura o le duele mucho, avísenos. Su control de recuperación es el {{fecha_cita}} a las {{hora_cita}}."
+    },
+    {
+      "id": "D19",
+      "familia": "diagnostico",
+      "subfamilia": "referencia",
+      "nombre": "Control con su médica especialista",
+      "disparo": "referencia a control de alto riesgo",
+      "poblacion": "embarazo",
+      "canales": [
+        "whatsapp",
+        "llamada"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, su control con la especialista es el {{fecha_cita}} a las {{hora_cita}}. Lleve todos sus estudios; aquí seguimos acompañándole."
+    },
+    {
+      "id": "D20",
+      "familia": "diagnostico",
+      "subfamilia": "tratamientos",
+      "nombre": "Seguimiento de medicación crónica",
+      "disparo": "medicación crónica en la ficha",
+      "poblacion": "general",
+      "canales": [
+        "whatsapp",
+        "llamada"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, revise que tenga su medicación para la semana. Su control es el {{fecha_cita}} a las {{hora_cita}}; traiga la lista actual de sus pastillas."
+    },
+    {
+      "id": "D21",
+      "familia": "diagnostico",
+      "subfamilia": "acompanamiento",
+      "nombre": "Acompañamiento de su ánimo",
+      "disparo": "tamizaje de ánimo en consulta",
+      "poblacion": "general",
+      "canales": [
+        "whatsapp",
+        "llamada"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, su cita de acompañamiento es el {{fecha_cita}} a las {{hora_cita}}. Si estos días se siente muy triste o muy ansiosa, avísenos: acompañarse ayuda."
+    },
+    {
+      "id": "D22",
+      "familia": "diagnostico",
+      "subfamilia": "vacunacion",
+      "nombre": "Vacunación del embarazo",
+      "disparo": "esquema de vacunación en el embarazo",
+      "poblacion": "embarazo",
+      "canales": [
+        "whatsapp",
+        "llamada"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, le toca su vacuna del embarazo en la próxima visita. Avísenos si ese día tiene fiebre."
+    },
+    {
+      "id": "D23",
+      "familia": "diagnostico",
+      "subfamilia": "lactancia",
+      "nombre": "Seguimiento de lactancia",
+      "disparo": "control de lactancia materna",
+      "poblacion": "puerperio",
+      "canales": [
+        "whatsapp",
+        "llamada"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, su control de lactancia es el {{fecha_cita}} a las {{hora_cita}}. Si le cuesta el amamantamiento o hay dolor, venga o llámenos: se puede resolver."
+    },
+    {
+      "id": "D24",
+      "familia": "diagnostico",
+      "subfamilia": "planificacion",
+      "nombre": "Planificación de la próxima gestación",
+      "disparo": "planificación tras un desenlace",
+      "poblacion": "planificacion",
+      "canales": [
+        "whatsapp",
+        "llamada"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, su control de planificación es el {{fecha_cita}} a las {{hora_cita}}. Haremos un plan con calma para su próxima gestación."
+    },
+    {
+      "id": "F01",
+      "familia": "cuidado",
+      "subfamilia": "hidratacion",
+      "nombre": "Hidratación diaria",
+      "disparo": "tip de acompañamiento o indicación del personal",
+      "poblacion": "embarazo",
+      "canales": [
+        "whatsapp",
+        "impreso"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, recuerde tomar agua durante el día: un vaso cada vez que pueda, más si hace calor. Si orina poco o siente mareo, avísenos."
+    },
+    {
+      "id": "F02",
+      "familia": "cuidado",
+      "subfamilia": "alimentacion",
+      "nombre": "Alimentación variada",
+      "disparo": "tip de acompañamiento nutricional",
+      "poblacion": "embarazo",
+      "canales": [
+        "whatsapp",
+        "impreso"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, coma variado: fruta, verdura, frijol y proteína cada día; evite frituras y refrescos. En su control revisamos su plan."
+    },
+    {
+      "id": "F03",
+      "familia": "cuidado",
+      "subfamilia": "descanso",
+      "nombre": "Descanso y sueño",
+      "disparo": "tip de acompañamiento o indicación de descanso",
+      "poblacion": "embarazo",
+      "canales": [
+        "whatsapp",
+        "impreso"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, descanse lo que pueda: duerma del lado izquierdo con una almohada entre las piernas si le resulta cómodo. Si no puede dormir por dolor o preocupación, coméntenos."
+    },
+    {
+      "id": "F04",
+      "familia": "cuidado",
+      "subfamilia": "actividad",
+      "nombre": "Actividad física autorizada",
+      "disparo": "tip de acompañamiento",
+      "poblacion": "embarazo",
+      "canales": [
+        "whatsapp",
+        "impreso"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, camine 20 a 30 minutos al día si su médico lo autoriza; pare si siente dolor, mareo o contracciones."
+    },
+    {
+      "id": "F05",
+      "familia": "cuidado",
+      "subfamilia": "suplementos",
+      "nombre": "Prenatal diario",
+      "disparo": "indicación de suplemento",
+      "poblacion": "embarazo",
+      "canales": [
+        "whatsapp",
+        "impreso"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, tome su pastilla prenatal todos los días, preferiblemente a la misma hora. Si le produce malestar, tómela con comida y avísenos."
+    },
+    {
+      "id": "F06",
+      "familia": "cuidado",
+      "subfamilia": "suplementos",
+      "nombre": "Cómo tomar su hierro",
+      "disparo": "indicación de hierro",
+      "poblacion": "embarazo",
+      "canales": [
+        "whatsapp",
+        "impreso"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, tome su hierro con algo de vitamina C (un limón o una fruta) y evite tomarlo con café o leche. En su control revisamos cómo le va."
+    },
+    {
+      "id": "F07",
+      "familia": "cuidado",
+      "subfamilia": "suplementos",
+      "nombre": "Cómo tomar su calcio",
+      "disparo": "indicación de calcio",
+      "poblacion": "embarazo",
+      "canales": [
+        "whatsapp",
+        "impreso"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, tome su calcio en horarios separados de su hierro; ayuda a sus huesos y a los de su bebé."
+    },
+    {
+      "id": "F08",
+      "familia": "cuidado",
+      "subfamilia": "preparacion",
+      "nombre": "Preparación del pecho",
+      "disparo": "semana 36 en adelante o indicación",
+      "poblacion": "embarazo",
+      "canales": [
+        "whatsapp",
+        "impreso"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, ya puede preparar su pecho: lave con agua y jabón neutro y no pele la piel; el calostro sale solo. Si se agrieta, avísenos."
+    },
+    {
+      "id": "F09",
+      "familia": "cuidado",
+      "subfamilia": "higiene",
+      "nombre": "Higiene y cambios normales",
+      "disparo": "tip de acompañamiento",
+      "poblacion": "embarazo",
+      "canales": [
+        "whatsapp",
+        "impreso"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, use ropa cómoda y transpirable, lávese con jabón neutro y vigile cualquier olor o picazón fuerte: si aparece, avísenos."
+    },
+    {
+      "id": "F10",
+      "familia": "cuidado",
+      "subfamilia": "bucal",
+      "nombre": "Salud bucal",
+      "disparo": "orientación bucal del embarazo",
+      "poblacion": "embarazo",
+      "canales": [
+        "whatsapp",
+        "impreso"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, cuide sus encías: lávese después de cada comida y acuda al dentista en el segundo trimestre si le sangran."
+    },
+    {
+      "id": "F11",
+      "familia": "cuidado",
+      "subfamilia": "sexualidad",
+      "nombre": "Sexualidad en el embarazo",
+      "disparo": "orientación íntima del embarazo",
+      "poblacion": "embarazo",
+      "canales": [
+        "whatsapp"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, si mantiene relaciones y está cómoda, no hay problema mientras no haya sangrado ni dolor. Si aparece alguno, avísenos y suspenda."
+    },
+    {
+      "id": "F12",
+      "familia": "cuidado",
+      "subfamilia": "laboral",
+      "nombre": "Trabajo y embarazo",
+      "disparo": "orientación laboral",
+      "poblacion": "embarazo",
+      "canales": [
+        "whatsapp",
+        "impreso"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, si su trabajo exige esfuerzo o estar mucho tiempo de pie, pida su adaptación con este documento. Levántese y camine un rato cada hora."
+    },
+    {
+      "id": "F13",
+      "familia": "cuidado",
+      "subfamilia": "viajes",
+      "nombre": "Viajes y traslados",
+      "disparo": "viaje programado o indicación",
+      "poblacion": "embarazo",
+      "canales": [
+        "whatsapp",
+        "impreso"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, si va a viajar: lleve su expediente, hidratése y muévase cada hora. Después de la semana 34, evite viajes largos sin consultarnos."
+    },
+    {
+      "id": "F14",
+      "familia": "cuidado",
+      "subfamilia": "peso",
+      "nombre": "Ganancia de peso saludable",
+      "disparo": "control de peso por trimestre",
+      "poblacion": "embarazo",
+      "canales": [
+        "whatsapp",
+        "impreso"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, su ganancia de peso se revisa en cada control: no se preocupe por un solo número; cuidamos la tendencia juntos."
+    },
+    {
+      "id": "F15",
+      "familia": "cuidado",
+      "subfamilia": "emocional",
+      "nombre": "Estrés y acompañamiento emocional",
+      "disparo": "solicitud del personal o de la paciente",
+      "poblacion": "general",
+      "canales": [
+        "whatsapp",
+        "llamada"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, si siente mucho estrés, hablemos: en su próxima cita podemos buscar apoyo. Pedir ayuda también es cuidarse."
+    },
+    {
+      "id": "F16",
+      "familia": "cuidado",
+      "subfamilia": "preparacion",
+      "nombre": "Qué llevar a su cita",
+      "disparo": "semana 36 en adelante o primera visita",
+      "poblacion": "general",
+      "canales": [
+        "whatsapp",
+        "impreso"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, lleve siempre su expediente y una lista de sus preguntas; en la bolsa del hospital: documentación, ropa para usted y para su bebé, y lo que le guste para el parto."
+    },
+    {
+      "id": "F17",
+      "familia": "cuidado",
+      "subfamilia": "malestares",
+      "nombre": "Malestares comunes — náuseas",
+      "disparo": "orientación por náuseas",
+      "poblacion": "embarazo",
+      "canales": [
+        "whatsapp",
+        "impreso"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, para las náuseas: coma poquito y seguido, evite olores fuertes y no se quede en ayunas. Si vomita mucho y no puede tomar líquidos, avísenos."
+    },
+    {
+      "id": "F18",
+      "familia": "cuidado",
+      "subfamilia": "preparacion",
+      "nombre": "Respiración para el trabajo de parto",
+      "disparo": "preparación para el parto",
+      "poblacion": "embarazo",
+      "canales": [
+        "whatsapp",
+        "impreso"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, practique respiración profunda 5 minutos al día: inhalar por la nariz y exhalar por la boca. Le servirá en el trabajo de parto."
+    },
+    {
+      "id": "A01",
+      "familia": "alarma",
+      "subfamilia": "inmediato",
+      "nombre": "Alarma — cefalea intensa",
+      "disparo": "señal de alarma: decisión del personal o aviso de la paciente",
+      "poblacion": "embarazo",
+      "canales": [
+        "llamada",
+        "whatsapp",
+        "impreso"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, la cefalea intensa es una señal de alarma: no tome medicamento por su cuenta y acuda hoy. Si es muy fuerte o viene con visión borrosa, venga de inmediato."
+    },
+    {
+      "id": "A02",
+      "familia": "alarma",
+      "subfamilia": "inmediato",
+      "nombre": "Alarma — visión borrosa",
+      "disparo": "señal de alarma",
+      "poblacion": "embarazo",
+      "canales": [
+        "llamada",
+        "whatsapp",
+        "impreso"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, la visión borrosa es una señal de alarma: acuda hoy o llámenos; si además tiene cefalea, venga de inmediato."
+    },
+    {
+      "id": "A03",
+      "familia": "alarma",
+      "subfamilia": "inmediato",
+      "nombre": "Alarma — hinchazón súbita",
+      "disparo": "señal de alarma",
+      "poblacion": "embarazo",
+      "canales": [
+        "llamada",
+        "whatsapp",
+        "impreso"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, la hinchazón repentina de cara o manos es señal de alarma: acuda hoy sin faltar."
+    },
+    {
+      "id": "A04",
+      "familia": "alarma",
+      "subfamilia": "inmediato",
+      "nombre": "Alarma — sangrado genital",
+      "disparo": "señal de alarma",
+      "poblacion": "embarazo",
+      "canales": [
+        "llamada",
+        "whatsapp",
+        "impreso"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, cualquier sangrado es señal de alarma: venga de inmediato o llame a emergencias; no se quede en casa a esperar."
+    },
+    {
+      "id": "A05",
+      "familia": "alarma",
+      "subfamilia": "inmediato",
+      "nombre": "Alarma — falta de aire",
+      "disparo": "señal de alarma",
+      "poblacion": "embarazo",
+      "canales": [
+        "llamada",
+        "whatsapp",
+        "impreso"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, la dificultad para respirar es señal de alarma: venga de inmediato o llame a emergencias."
+    },
+    {
+      "id": "A06",
+      "familia": "alarma",
+      "subfamilia": "inmediato",
+      "nombre": "Alarma — fiebre",
+      "disparo": "señal de alarma",
+      "poblacion": "puerperio",
+      "canales": [
+        "llamada",
+        "whatsapp"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, la fiebre es señal de alarma: tómese líquidos y avísenos hoy; si es alta o viene con escalofríos, acuda ya."
+    },
+    {
+      "id": "A07",
+      "familia": "alarma",
+      "subfamilia": "inmediato",
+      "nombre": "Alarma — contracciones seguidas",
+      "disparo": "señal de alarma",
+      "poblacion": "embarazo",
+      "canales": [
+        "llamada",
+        "whatsapp",
+        "impreso"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, si siente el vientre duro seguido y con dolor, anote cada cuánto vienen y avísenos; si son seguidas, venga de inmediato."
+    },
+    {
+      "id": "A08",
+      "familia": "alarma",
+      "subfamilia": "inmediato",
+      "nombre": "Alarma — movimiento fetal disminuido",
+      "disparo": "señal de alarma",
+      "poblacion": "embarazo",
+      "canales": [
+        "llamada",
+        "whatsapp"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, si su bebé mueve menos que lo habitual: tome agua, acuéstese del lado izquierdo y avísenos hoy; si no responde, venga de inmediato."
+    },
+    {
+      "id": "A09",
+      "familia": "alarma",
+      "subfamilia": "inmediato",
+      "nombre": "Alarma — dolor en la boca del estómago",
+      "disparo": "señal de alarma",
+      "poblacion": "embarazo",
+      "canales": [
+        "llamada",
+        "whatsapp"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, el dolor fuerte en la parte alta del abdomen es señal de alarma: acuda hoy."
+    },
+    {
+      "id": "A10",
+      "familia": "alarma",
+      "subfamilia": "inmediato",
+      "nombre": "Alarma — dolor abdominal intenso",
+      "disparo": "señal de alarma",
+      "poblacion": "embarazo",
+      "canales": [
+        "llamada",
+        "whatsapp"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, el dolor fuerte y continuo del vientre es señal de alarma: venga de inmediato."
+    },
+    {
+      "id": "A11",
+      "familia": "alarma",
+      "subfamilia": "inmediato",
+      "nombre": "Alarma — pérdida de líquido",
+      "disparo": "señal de alarma",
+      "poblacion": "embarazo",
+      "canales": [
+        "llamada",
+        "whatsapp"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, si siente que perdió líquido: no se bañe ni tenga relaciones, y venga de inmediato con su expediente."
+    },
+    {
+      "id": "A12",
+      "familia": "alarma",
+      "subfamilia": "inmediato",
+      "nombre": "Alarma — crisis o convulsión",
+      "disparo": "señal de alarma",
+      "poblacion": "embarazo",
+      "canales": [
+        "llamada"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, si presenta una crisis: proteja su cabeza, no le meta nada en la boca y llame a emergencias de inmediato; después avísenos."
+    },
+    {
+      "id": "A13",
+      "familia": "alarma",
+      "subfamilia": "inmediato",
+      "nombre": "Alarma — herida con señales de alarma",
+      "disparo": "postparto o postquirúrgico",
+      "poblacion": "puerperio",
+      "canales": [
+        "llamada",
+        "whatsapp"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, si su herida enrojece, supura o huele mal, avísenos hoy: a tiempo se trata."
+    },
+    {
+      "id": "A14",
+      "familia": "alarma",
+      "subfamilia": "inmediato",
+      "nombre": "Alarma — hinchazón o dolor en una pierna",
+      "disparo": "señal de alarma",
+      "poblacion": "general",
+      "canales": [
+        "llamada",
+        "whatsapp"
+      ],
+      "borrador": true,
+      "texto": "Hola {{nombre}}, la hinchazón o el dolor en una sola pierna es señal de alarma: acuda hoy."
+    }
+  ],
+  "semanas": [
+    {
+      "semana": 1,
+      "desarrollo": "Su cuerpo ya está preparando el embarazo, aunque todavía no lo note",
+      "cuidado": "Tome su vitamina prenatal con ácido fólico y evite alcohol, tabaco y medicamentos sin indicación",
+      "borrador": true,
+      "fuente": "borrador científico pendiente de firma"
+    },
+    {
+      "semana": 2,
+      "desarrollo": "El embarazo apenas está comenzando dentro de usted",
+      "cuidado": "Descanse y comience a llevar una lista de sus preguntas para el primer control",
+      "borrador": true,
+      "fuente": "borrador científico pendiente de firma"
+    },
+    {
+      "semana": 3,
+      "desarrollo": "Su bebé empieza a formarse desde las primeras semanas",
+      "cuidado": "Siga tomando su vitamina prenatal todos los días",
+      "borrador": true,
+      "fuente": "borrador científico pendiente de firma"
+    },
+    {
+      "semana": 4,
+      "desarrollo": "La vida de su bebé ya está en marcha",
+      "cuidado": "Si tiene sangrado o dolor fuerte, avísenos de inmediato",
+      "borrador": true,
+      "fuente": "borrador científico pendiente de firma"
+    },
+    {
+      "semana": 5,
+      "desarrollo": "Su bebé es todavía muy pequeño y crece muy rápido",
+      "cuidado": "Puede empezar con mareos matutinos: coma poquito y seguido",
+      "borrador": true,
+      "fuente": "borrador científico pendiente de firma"
+    },
+    {
+      "semana": 6,
+      "desarrollo": "Su bebé ya tiene forma temprana y late su corazón primitivo",
+      "cuidado": "Evite olores fuertes y no se quede en ayunas",
+      "borrador": true,
+      "fuente": "borrador científico pendiente de firma"
+    },
+    {
+      "semana": 7,
+      "desarrollo": "Se están formando los brazos y las piernas de su bebé",
+      "cuidado": "Descanse cuando sienta cansancio; es normal en estas semanas",
+      "borrador": true,
+      "fuente": "borrador científico pendiente de firma"
+    },
+    {
+      "semana": 8,
+      "desarrollo": "Su bebé ya tiene formados los dedos de manos y pies",
+      "cuidado": "Elija alimentos sencillos si le dan asco los olores",
+      "borrador": true,
+      "fuente": "borrador científico pendiente de firma"
+    },
+    {
+      "semana": 9,
+      "desarrollo": "Su bebé ya puede moverse, aunque usted aún no lo siente",
+      "cuidado": "Tome su vitamina y tome agua durante el día",
+      "borrador": true,
+      "fuente": "borrador científico pendiente de firma"
+    },
+    {
+      "semana": 10,
+      "desarrollo": "Los órganos de su bebé ya están formándose",
+      "cuidado": "Evite frituras y refrescos; coma fruta y verdura cada día",
+      "borrador": true,
+      "fuente": "borrador científico pendiente de firma"
+    },
+    {
+      "semana": 11,
+      "desarrollo": "Su bebé ya tiene formadas sus manos y puede abrir y cerrar los dedos",
+      "cuidado": "Tome suficiente agua durante el día y acuda a su control programado",
+      "borrador": true,
+      "fuente": "borrador científico pendiente de firma"
+    },
+    {
+      "semana": 12,
+      "desarrollo": "Su bebé ya mueve los brazos y las piernas con más fuerza",
+      "cuidado": "Si las náuseas son fuertes, coma seguido en porciones pequeñas",
+      "borrador": true,
+      "fuente": "borrador científico pendiente de firma"
+    },
+    {
+      "semana": 13,
+      "desarrollo": "Su bebé ya tiene formada su cara y sus dientes primitivos",
+      "cuidado": "Termine su primer trimestre con su control y sus estudios al día",
+      "borrador": true,
+      "fuente": "borrador científico pendiente de firma"
+    },
+    {
+      "semana": 14,
+      "desarrollo": "Su bebé ya se mueve aunque usted todavía no lo siente bien",
+      "cuidado": "Comience a caminar unos minutos al día si se siente bien",
+      "borrador": true,
+      "fuente": "borrador científico pendiente de firma"
+    },
+    {
+      "semana": 15,
+      "desarrollo": "Los huesos de su bebé se están fortaleciendo",
+      "cuidado": "Tome su calcio y su hierro en horarios separados",
+      "borrador": true,
+      "fuente": "borrador científico pendiente de firma"
+    },
+    {
+      "semana": 16,
+      "desarrollo": "Su bebé ya oye y puede responder a los sonidos suaves",
+      "cuidado": "Hable con su bebé: lo que usted siente, él también",
+      "borrador": true,
+      "fuente": "borrador científico pendiente de firma"
+    },
+    {
+      "semana": 17,
+      "desarrollo": "Su bebé ya puede hacer muecas con su cara",
+      "cuidado": "No falte a su control; ya sentirá más seguido los movimientos",
+      "borrador": true,
+      "fuente": "borrador científico pendiente de firma"
+    },
+    {
+      "semana": 18,
+      "desarrollo": "Su bebé ya tiene oídos formados y empieza a escuchar",
+      "cuidado": "Duerma del lado izquierdo si le resulta cómodo",
+      "borrador": true,
+      "fuente": "borrador científico pendiente de firma"
+    },
+    {
+      "semana": 19,
+      "desarrollo": "A mitad de su embarazo su bebé ya se mueve y usted puede sentirlo",
+      "cuidado": "Camine unos minutos al día si su médico lo autoriza",
+      "borrador": true,
+      "fuente": "borrador científico pendiente de firma"
+    },
+    {
+      "semana": 20,
+      "desarrollo": "Su bebé ya tiene su piel delicada y sus movimientos son más fuertes",
+      "cuidado": "Cuente los movimientos de su bebé casi todos los días",
+      "borrador": true,
+      "fuente": "borrador científico pendiente de firma"
+    },
+    {
+      "semana": 21,
+      "desarrollo": "Su bebé ya parpadea y crece a buen ritmo",
+      "cuidado": "Si su bebé mueve menos de lo habitual, avísenos hoy",
+      "borrador": true,
+      "fuente": "borrador científico pendiente de firma"
+    },
+    {
+      "semana": 22,
+      "desarrollo": "Su bebé ya tiene cejas y pestañas primitivas",
+      "cuidado": "Tome agua y coma variedad; su piel necesita cuidado",
+      "borrador": true,
+      "fuente": "borrador científico pendiente de firma"
+    },
+    {
+      "semana": 23,
+      "desarrollo": "Su bebé ya puede responder a la luz y al sonido",
+      "cuidado": "Acuda a su control del segundo trimestre aunque se sienta bien",
+      "borrador": true,
+      "fuente": "borrador científico pendiente de firma"
+    },
+    {
+      "semana": 24,
+      "desarrollo": "Su bebé ya prueba los sabores del líquido que lo rodea",
+      "cuidado": "Cuide su alimentación: coma variedad y camine después de comer",
+      "borrador": true,
+      "fuente": "borrador científico pendiente de firma"
+    },
+    {
+      "semana": 25,
+      "desarrollo": "Su bebé ya mueve los brazos y las piernas con fuerza",
+      "cuidado": "Si siente hinchazón repentina de cara o manos, avísenos hoy",
+      "borrador": true,
+      "fuente": "borrador científico pendiente de firma"
+    },
+    {
+      "semana": 26,
+      "desarrollo": "Sus ojos ya están formados y empiezan a abrirse",
+      "cuidado": "Prepare su lista de preguntas para el tercer trimestre",
+      "borrador": true,
+      "fuente": "borrador científico pendiente de firma"
+    },
+    {
+      "semana": 27,
+      "desarrollo": "Su bebé ya reconoce su voz y su ritmo",
+      "cuidado": "Descanse del lado izquierdo unos minutos varias veces al día",
+      "borrador": true,
+      "fuente": "borrador científico pendiente de firma"
+    },
+    {
+      "semana": 28,
+      "desarrollo": "Su bebé ya abre los ojos y su cara tiene contornos visibles",
+      "cuidado": "Tome suficiente agua y no falte a su control prenatal",
+      "borrador": true,
+      "fuente": "borrador científico pendiente de firma"
+    },
+    {
+      "semana": 29,
+      "desarrollo": "Su bebé ya puede abrir los ojos y su cara tiene contornos visibles",
+      "cuidado": "Tome suficiente agua y no falte a su control prenatal",
+      "borrador": true,
+      "fuente": "borrador científico pendiente de firma"
+    },
+    {
+      "semana": 30,
+      "desarrollo": "Su bebé ya tiene uñas y su piel es más suave",
+      "cuidado": "Vigile los movimientos de su bebé cada día",
+      "borrador": true,
+      "fuente": "borrador científico pendiente de firma"
+    },
+    {
+      "semana": 31,
+      "desarrollo": "Su bebé ya gira y busca la posición más cómoda",
+      "cuidado": "Prepare su bolsa del hospital en estos días",
+      "borrador": true,
+      "fuente": "borrador científico pendiente de firma"
+    },
+    {
+      "semana": 32,
+      "desarrollo": "Su bebé ya puede sostener la cabeza con más control",
+      "cuidado": "No falte a su control de estas semanas: son más seguidos",
+      "borrador": true,
+      "fuente": "borrador científico pendiente de firma"
+    },
+    {
+      "semana": 33,
+      "desarrollo": "Su bebé ya está ganando peso y se ve más lleno",
+      "cuidado": "Duerma lo que pueda y evite esfuerzos pesados",
+      "borrador": true,
+      "fuente": "borrador científico pendiente de firma"
+    },
+    {
+      "semana": 34,
+      "desarrollo": "Los pulmones de su bebé ya están casi listos",
+      "cuidado": "Practique la respiración profunda todos los días",
+      "borrador": true,
+      "fuente": "borrador científico pendiente de firma"
+    },
+    {
+      "semana": 35,
+      "desarrollo": "Su bebé ya está de cabeza hacia abajo preparándose",
+      "cuidado": "Si siente presión o contracciones seguidas, avísenos",
+      "borrador": true,
+      "fuente": "borrador científico pendiente de firma"
+    },
+    {
+      "semana": 36,
+      "desarrollo": "Su bebé está casi listo para nacer y ocupa ya casi todo el espacio",
+      "cuidado": "Prepare su bolsa del hospital y descanse lo que necesite",
+      "borrador": true,
+      "fuente": "borrador científico pendiente de firma"
+    },
+    {
+      "semana": 37,
+      "desarrollo": "Su bebé ya se considera a término y sigue creciendo",
+      "cuidado": "Cuente los movimientos de su bebé y tenga su expediente listo",
+      "borrador": true,
+      "fuente": "borrador científico pendiente de firma"
+    },
+    {
+      "semana": 38,
+      "desarrollo": "Su bebé ya está en posición y con buena energía",
+      "cuidado": "Si pierde líquido o tiene contracciones seguidas, venga de inmediato",
+      "borrador": true,
+      "fuente": "borrador científico pendiente de firma"
+    },
+    {
+      "semana": 39,
+      "desarrollo": "Su cuerpo y su bebé ya están listos para el trabajo de parto",
+      "cuidado": "Descanse, coma ligero y no se aleje del consultorio",
+      "borrador": true,
+      "fuente": "borrador científico pendiente de firma"
+    },
+    {
+      "semana": 40,
+      "desarrollo": "Su bebé ya llegó a su fecha estimada de nacimiento",
+      "cuidado": "Si pasa la fecha sin señales, llámenos: revisamos juntos el plan",
+      "borrador": true,
+      "fuente": "borrador científico pendiente de firma"
+    }
+  ],
+  "diagnosticos": {
+    "embarazo_normal": {
+      "nombre": "Embarazo de bajo riesgo",
+      "etiqueta": "embarazo",
+      "patron": "embarazo"
+    },
+    "embarazo_multiple": {
+      "nombre": "Embarazo múltiple",
+      "etiqueta": "gemelar",
+      "patron": {
+        "dias": 14,
+        "motivo": "embarazo múltiple — control cada 2 semanas"
+      }
+    },
+    "puerperio": {
+      "nombre": "Puerperio",
+      "etiqueta": "puerperio",
+      "patron": {
+        "dias": 14,
+        "motivo": "puerperio — control de recuperación"
+      }
+    },
+    "infeccion": {
+      "nombre": "Infección en seguimiento",
+      "etiqueta": "infeccion",
+      "patron": {
+        "dias": 14,
+        "motivo": "seguimiento de infección (cada 2 semanas)"
+      }
+    },
+    "fertilidad": {
+      "nombre": "Protocolo de fertilidad",
+      "etiqueta": "fertilidad",
+      "patron": {
+        "dias": 7,
+        "motivo": "protocolo de fertilidad (semanal durante el protocolo)"
+      }
+    },
+    "tumoracion": {
+      "nombre": "Tumoración en revisión",
+      "etiqueta": "tumoracion",
+      "patron": {
+        "dias": 56,
+        "motivo": "revisión de tumoración (cada 2 meses)"
+      }
+    },
+    "duelo": {
+      "nombre": "Duelo obstétrico",
+      "etiqueta": "duelo",
+      "patron": {
+        "dias": 28,
+        "motivo": "revisión de duelo obstétrico"
+      }
+    },
+    "planificacion": {
+      "nombre": "Planificación familiar",
+      "etiqueta": "planificacion",
+      "patron": {
+        "dias": 84,
+        "motivo": "planificación (cada 3 meses)"
+      }
+    },
+    "vacunacion_vph": {
+      "nombre": "Esquema de vacunación",
+      "etiqueta": "vacunacion",
+      "patron": {
+        "dias": 60,
+        "motivo": "esquema de vacunación (cada 2 meses)"
+      }
+    }
+  },
+  "frontera_DEC32": {
+    "regla": "El mensaje al paciente nunca lleva cifras clínicas, valores ni nombres de enfermedad.",
+    "examen": "examenInocuidad corre en el motor antes de copiar y antes de entregar."
+  }
+}

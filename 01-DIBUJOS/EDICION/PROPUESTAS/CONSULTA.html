@@ -1,0 +1,148 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8">
+<title>PROPUESTA — Modo consulta (vista con la paciente enfrente)</title>
+<link rel="stylesheet" href="estilo.css"></head><body>
+
+<div class="barra">
+  <span class="marca">Maternidad</span>
+  <span class="pantalla">Consulta — García Luna, María</span>
+  <span class="propuesta">PROPUESTA DE DISEÑO</span>
+  <button class="ayuda">Ayuda</button>
+</div>
+
+<div class="cuerpo">
+  <div class="lateral">
+    <a href="TABLERO.html">Inicio (tablero)</a>
+    <a href="EMERGENCIA.html">Nueva paciente</a>
+    <a href="PROTOCOLOS.html">Ficha</a>
+    <a href="CONTROL.html">Control prenatal</a>
+    <a href="INDICE.html">Embarazo</a>
+    <a href="INDICE.html">Calculadoras</a>
+    <a href="INDICE.html">Apoyo clínico</a>
+    <a href="INDICE.html">Historia</a>
+    <a href="CONSULTA.html" class="activo">Consulta</a>
+    <a href="INDICE.html">Ultrasonido</a>
+    <a href="INDICE.html">Agenda</a>
+    <a href="PAUSA.html">Atenciones abiertas</a>
+    <a href="INDICE.html">Respaldo</a>
+    <a href="INDICE.html">Sistema</a>
+  </div>
+
+  <div class="zona">
+    <div class="pregunta" style="margin-top:0;margin-bottom:16px;max-width:none">
+      <span class="rotulo">PROPUESTA · dibujo 2 de 6 · la vista cuando la médica está CON la paciente</span>
+      Todo lo clínico de esta paciente en una sola pantalla, con su identidad a la vista y
+      los accesos a un clic — sin navegar de vuelta al inicio.
+    </div>
+
+    <!-- CINTA DE IDENTIDAD: siempre arriba en toda pantalla donde se escribe o se decide, con los datos que salvan -->
+    <div class="cinta azul">
+      <span class="fuerte">GARCÍA LUNA, María</span>
+      <span class="datos">19/03/1990 · 36 años · expediente 000184 · CURP GALM900319MDFRNR08</span>
+      <span class="homónima">⚠ otra paciente parecida: GALA LUNA, Marisela (1992) — revise a cuál atiende</span>
+      <span class="homónima" style="background:#fdecea;color:#8a1c1c">⚠ ALERGIA: penicilina · sulfas</span>
+      <span class="homónima" style="background:#eaf3fa;color:#1b4f72">🩸 A negativo (RH−)</span>
+      <span class="homónima" style="background:#fdf7ec;color:#8a6d1a">💊 labetalol 12/12 h · hierro 1/día</span>
+      <span style="margin-left:auto"><span class="chip azul">EMBARAZO 28 SEMANAS</span></span>
+    </div>
+    <div class="subtitulo" style="margin-top:-6px">
+      <b>Los datos que salvan viajan en la cinta</b> —alergia, tipo de sangre, medicación—
+      en toda pantalla, como el brazalete de alergia de una paciente.
+    </div>
+
+    <h1>Consulta de hoy — control de las 28 semanas</h1>
+    <div class="subtitulo">
+      Paciente en color <b>azul</b> en todo el sistema (su tarjeta del tablero, su cinta,
+      su botón de guardar). Lo que ve a la izquierda se recalcula del expediente; lo que
+      hace a la derecha queda guardado en su historial.
+    </div>
+
+    <div class="rejilla">
+
+      <div class="col1">
+        <div class="panel">
+          <h3>Su estado, de un vistazo</h3>
+          <div class="linea"><span class="chip rojo">ALERGIAS</span> Penicilina · Sulfas</div>
+          <div class="linea"><span class="chip rojo">TIPO DE SANGRE</span> <b>A negativo (RH−)</b> — en embarazo, profilaxis de Rh si aplica · <span class="chip ambar">MEDICACIÓN ACTUAL</span> sulfato de hierro 1/día · labetalol 100 mg cada 12 h</div>
+          <div class="linea"><span class="chip ambar">ÚLTIMOS SIGNOS (16 oct)</span>
+            peso 72,4 kg · tensión 110/68 · fetus 148 lpm · sin banderas</div>
+          <div class="linea"><span class="chip verde">LABORATORIO</span> hemoglobina 11,2
+            (normal) · proteinuria negativa · glucosa 95 (normal)</div>
+          <div class="semisemaforo">
+            <span class="chip verde">hierro NORMAL</span>
+            <span class="chip verde">azúcar NORMAL</span>
+            <span class="chip ambar">peso +2,1 kg en 2 semanas</span>
+            <span class="chip gris">sin datos de orina esta semana</span>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>Sus protocolos activos (2)</h3>
+          <div class="linea">▸ <b>Embarazo — semana 28 de 40</b>
+            <span class="chip azul">al día</span> próximo control: 30 oct
+            · <a href="PROTOCOLOS.html">ver calendario completo →</a></div>
+          <div class="linea">▸ <b>Planificación de su posparto</b>
+            <span class="chip gris">se activa al nacer</span></div>
+        </div>
+
+        <div class="panel">
+          <h3>Lo reciente, sin buscarlo</h3>
+          <div class="linea">16 oct · control prenatal — sin alertas · nota firmada por
+            Dra. Ruvalcaba (cédula 7845123)</div>
+          <div class="linea">14 oct · ultrasonido biometría fetal — estudio completo,
+            imágenes en su expediente</div>
+          <div class="linea">09 oct · laboratorio — 3 resultados, todos en rango</div>
+          <div class="linea" style="color:#922b21"><b>Pendiente:</b> tamizaje de diabetes
+            gestacional — vence en 9 días · <a href="INDICE.html">ver pendientes →</a></div>
+        </div>
+      </div>
+
+      <div class="col2">
+        <div class="panel">
+          <h3>Hacer ahora, con ella enfrente</h3>
+          <div style="display:flex;flex-direction:column;gap:9px;margin-top:4px">
+            <a href="CONTROL.html"><button class="btn grande" style="width:100%">
+              Registrar control de hoy</button></a>
+            <a href="INDICE.html"><button class="btn sec" style="width:100%">
+              Abrir su ultrasonido del 14 oct</button></a>
+            <a href="INDICE.html"><button class="btn sec" style="width:100%">
+              Calculadora (IMC, HOMA…)</button></a>
+            <a href="INDICE.html"><button class="btn sec" style="width:100%">
+              Escribir nota de historia</button></a>
+            <a href="INDICE.html"><button class="btn sec" style="width:100%">
+              Generar consentimiento</button></a>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>Su próxima cita</h3>
+          <div class="linea"><b>30 oct, 10:00</b> — control de las 30 semanas</div>
+          <div class="linea">Recordatorio preparado: WhatsApp con su nombre y su semana</div>
+          <button class="btn sec" style="width:100%;margin-top:6px">Cambiar la cita</button>
+        </div>
+
+        <div class="panel" style="border-left:5px solid #2e9e4f">
+          <h3>Cerrar su consulta</h3>
+          <div class="linea">Al terminar, María pasa a <b>«atendida»</b> en el tablero y
+            libera su turno.</div>
+          <button class="btn" style="width:100%;background:#2e9e4f">✓ Terminar consulta</button>
+          <button class="btn sec" style="width:100%;margin-top:6px">
+            ↩ Dejar pausada para después</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="pregunta">
+      <span class="rotulo">PREGUNTA PARA EL EQUIPO — responda con la plantilla de revisión</span>
+      <b>Con la paciente enfrente, ¿esto es todo lo que necesitan ver?</b> ¿Qué le falta?
+      ¿Qué sobra y le estorba? ¿El aviso de paciente parecida los ayudaría o los
+      confundiría? ¿Están de acuerdo en que lo de <b>azul</b> le pertenezca solo a ella?
+      <div class="veredicto"><b>Veredicto:</b> ☐ Así está bien, lo apruebo ·
+        ☐ Así está bien, pero con cambios · ☐ Esto no sirve así, hay que rediseñarlo</div>
+    </div>
+
+    <footer>Propuesta 2 de 6 · lógica: pilar 3 (cinta de identidad), pilar 1 (color por
+      paciente), pilar 4 (protocolos) · flujo 1 ·
+      <a href="TABLERO.html">← volver al tablero</a></footer>
+  </div>
+</div>
+</body></html>

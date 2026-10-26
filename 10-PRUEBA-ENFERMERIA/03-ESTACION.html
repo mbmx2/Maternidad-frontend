@@ -1,0 +1,193 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=1024">
+<title>Estación de constantes — prueba de piso</title>
+<link rel="stylesheet" href="estilo.css"></head><body>
+<div class="barra"><span class="marca">Maternidad</span>
+<span class="pantalla">Estación de constantes — 3 minutos</span>
+<span class="propuesta">PRUEBA REAL · ENFERMERÍA</span>
+<span class="reloj-dia"></span></div>
+<div class="cuerpo"><div class="lateral"></div>
+<div class="zona">
+<h1>Estación de constantes</h1>
+<p class="subtitulo">Cinta de identidad arriba, 10 campos, 9 banderas explicadas. Los cálculos aparecen solos al llenar. <b>Guardar nunca bloquea</b>: lo fuera de rango se confirma, no se rechaza.</p>
+<div class="campo"><label>Paciente de la estación</label><select id="sel-pac"></select></div>
+<div id="cinta"></div>
+<div class="panel sombra">
+<h3>Los 10 campos (R-14)</h3>
+<div class="fila-form">
+<div class="campo"><label>1 · Fecha</label><input type="date" id="c-fecha"></div>
+<div class="campo"><label>2 · Peso (kg)</label><input type="number" step="0.1" id="c-peso"></div>
+<div class="campo"><label>3 · Tensión — sistólica</label><input type="number" id="c-pas"></div>
+<div class="campo"><label>4 · Tensión — diastólica</label><input type="number" id="c-pad"></div>
+<div class="campo"><label>5 · Altura uterina (cm)</label><input type="number" id="c-au"></div>
+<div class="campo"><label>6 · Frecuencia cardiaca fetal</label><input type="number" id="c-fcf"></div>
+<div class="campo"><label>7 · Presentación</label><select id="c-pres"><option value="">—</option><option>Cefálica</option><option>Pélvica</option><option>Transversa</option><option>Por confirmar</option></select></div>
+<div class="campo"><label>8 · Proteinuria</label><select id="c-prot"><option value="">—</option><option>negativo</option><option>trazas</option><option>1+</option><option>2+</option><option>3+</option></select></div>
+<div class="campo"><label>9 · Edema</label><select id="c-edema"><option value="">—</option><option>negativo</option><option>+ tobillos</option><option>+ cara o manos</option></select></div>
+<div class="campo"><label>10 · Síntoma (lo que ella refiere)</label><input type="text" id="c-sint"></div>
+</div>
+<div class="chips-fila" id="chips"></div>
+</div>
+<div class="panel sombra">
+<h3>Las 9 banderas — cada una explica qué es</h3>
+<div class="checks" id="banderas"></div>
+</div>
+<div style="margin:12px 0">
+<button class="btn pri2" id="btn-guardar">Guardar control</button>
+<button class="btn sec" id="btn-pausar">Pausar a media estación</button>
+</div>
+<div id="panel-avisos"></div>
+<div id="veredicto-host"></div>
+</div></div>
+<script src="config.js"></script><script src="motor.js"></script>
+<script>
+Jornada.nav("03-ESTACION.html");
+var S = Jornada.estado();
+var pid = Jornada.contextoPaciente();
+function listaEspera() {
+  return S.pacientes.filter(function (p) {
+    var e = Jornada.estadoDe(p.id).estado;
+    return e === "espera" || e === "llego" || e === "estacion_hecha" || e === "estacion_mitad";
+  });
+}
+function pintaSel() {
+  var sel = document.getElementById("sel-pac");
+  var lista = listaEspera();
+  if (!lista.length) { sel.innerHTML = "<option value=''>Nadie espera estación ahora</option>"; return; }
+  sel.innerHTML = "";
+  lista.forEach(function (p) {
+    var o = document.createElement("option");
+    o.value = p.id; o.textContent = p.nombre + " — " + p.caso;
+    sel.appendChild(o);
+  });
+  if (pid) sel.value = pid;
+}
+function pintaCinta() {
+  var p = Jornada.paciente(document.getElementById("sel-pac").value);
+  var host = document.getElementById("cinta");
+  if (!p) { host.innerHTML = ""; return; }
+  var salvar = (p.alergias.length ? p.alergias.join(", ") : "sin alergias conocidas");
+  host.innerHTML = "<div class='cinta'><span class='nombre'>" + p.nombre + "</span> · nacida " + p.nacimiento +
+    "<div class='det'><span class='salvar'>Datos que salvan:</span> alergias: " + salvar +
+    " · tipo de sangre: " + p.sangre + " · medicación: " + p.medicacion + " · crónicas: " + p.cronica + "</div></div>";
+  document.getElementById("btn-guardar").textContent = "Guardar control de " + p.nombre;
+}
+function pintaBanderas() {
+  var host = document.getElementById("banderas");
+  host.innerHTML = "";
+  Jornada.BANDERAS.forEach(function (b) {
+    var lab = document.createElement("label");
+    lab.innerHTML = "<input type='checkbox' value='" + b.id + "'> <b>" + b.nombre + "</b><div class='ayuda' style='margin-left:22px'>" + b.explica + "</div>";
+    host.appendChild(lab);
+  });
+}
+function pintaChips() {
+  var p = Jornada.paciente(document.getElementById("sel-pac").value);
+  if (!p) return;
+  var chips = [];
+  var pas = parseInt(document.getElementById("c-pas").value, 10);
+  var pad = parseInt(document.getElementById("c-pad").value, 10);
+  if (pas && pad) { var b = Jornada.bandaTA(pas, pad); chips.push({ texto: "TA " + pas + "/" + pad + " — " + b.texto, nivel: b.nivel }); }
+  var fcf = parseInt(document.getElementById("c-fcf").value, 10);
+  if (fcf) chips.push(fcf < 110 || fcf > 160 ? { texto: "FCF " + fcf + " — por fuera de 110–160", nivel: "alerta" } : { texto: "FCF " + fcf + " — en rango", nivel: "normal" });
+  Jornada.labDe(p.id).forEach(function (l) {
+    var bb = Jornada.evaluarBandaLab(l.analito, l.valor);
+    chips.push({ texto: Jornada.LAB_RANGOS[l.analito].nombre + " " + l.valor + " — " + bb.texto, nivel: bb.nivel });
+  });
+  document.getElementById("chips").innerHTML = chips.map(function (c) {
+    var cls = c.nivel === "critica" ? "rojo" : c.nivel === "alerta" ? "ambar" : c.nivel === "normal" ? "verde" : "gris";
+    return "<span class='chip " + cls + "'>" + c.texto + "</span>";
+  }).join(" ") || "<span class='ayuda'>Los cálculos aparecen solos conforme llene.</span>";
+}
+function restaurarBorrador() {
+  var p = Jornada.paciente(document.getElementById("sel-pac").value);
+  if (!p) return;
+  var ev = null;
+  S.eventos.forEach(function (e) { if (e.pid === p.id && e.tipo === "estacion_mitad") ev = e; });
+  if (ev && ev.borrador && Jornada.estadoDe(p.id).estado === "estacion_mitad") {
+    var b = ev.borrador;
+    ["peso", "pas", "pad", "au", "fcf", "sint"].forEach(function (k) { if (b[k] != null) document.getElementById("c-" + k).value = b[k]; });
+    if (b.pres) document.getElementById("c-pres").value = b.pres;
+    if (b.prot) document.getElementById("c-prot").value = b.prot;
+    if (b.edema) document.getElementById("c-edema").value = b.edema;
+    Jornada.toast("Retomó la estación de " + p.nombre + " exactamente donde la dejó.");
+  }
+  pintaChips();
+}
+document.getElementById("sel-pac").onchange = function () { pid = this.value; restaurarBorrador(); pintaCinta(); };
+["c-pas", "c-pad", "c-fcf", "c-peso", "c-au", "c-prot", "c-sint", "c-pres", "c-edema"].forEach(function (id) {
+  document.getElementById(id).oninput = pintaChips;
+  document.getElementById(id).onchange = pintaChips;
+});
+function recoge() {
+  return {
+    peso: document.getElementById("c-peso").value, pas: document.getElementById("c-pas").value,
+    pad: document.getElementById("c-pad").value, au: document.getElementById("c-au").value,
+    fcf: document.getElementById("c-fcf").value, pres: document.getElementById("c-pres").value,
+    prot: document.getElementById("c-prot").value, edema: document.getElementById("c-edema").value,
+    sint: document.getElementById("c-sint").value
+  };
+}
+document.getElementById("btn-pausar").onclick = function () {
+  var p = Jornada.paciente(document.getElementById("sel-pac").value);
+  if (!p) return;
+  Jornada.agregarEvento("estacion_mitad", p.id, { borrador: recoge(), duenio: "enfermería" });
+  Jornada.toast("Estación a mitad de " + p.nombre + ": todo conservado. Retómensela cuando quiera.");
+  location.href = "05-PAUSA.html?p=" + p.id;
+};
+document.getElementById("btn-guardar").onclick = function () {
+  var p = Jornada.paciente(document.getElementById("sel-pac").value);
+  if (!p) { Jornada.toast("Elija primero a quién atiende."); return; }
+  var b = recoge();
+  if (!b.peso && !b.pas && !b.pad) { Jornada.toast("Capture al menos peso o tensión para que el control valga."); return; }
+  var marcadas = [];
+  document.querySelectorAll("#banderas input:checked").forEach(function (i) { marcadas.push(i.value); });
+  var sigue = function () {
+    S.controles.push({ pid: p.id, t: Date.now(), fecha: document.getElementById("c-fecha").value || Jornada.hoyISO(), peso: b.peso, pas: b.pas, pad: b.pad, au: b.au, fcf: b.fcf, presentacion: b.pres, proteinuria: b.prot, edema: b.edema, sintoma: b.sint, banderas: marcadas });
+    Jornada.agregarEvento("estacion_guardada", p.id, {});
+    var avisos = [];
+    var bt = Jornada.bandaTA(parseInt(b.pas, 10), parseInt(b.pad, 10));
+    if (bt.nivel === "normal") avisos.push({ cls: "verde", html: "Tensión " + b.pas + "/" + b.pad + " — <b>en rango</b>. Peso " + b.peso + " kg registrado.", accion: "", duenio: "" });
+    if (bt.nivel === "alerta" || bt.nivel === "critica") {
+      Jornada.nacerAlerta(p.id, bt.nivel === "critica" ? 4 : 3, "tensión " + b.pas + "/" + b.pad + " — " + bt.texto, bt.nivel === "critica" ? "evaluar hoy, no dejar salir sin valorar" : "repetir tensión y anotar en la nota", "médica");
+      avisos.push({ cls: bt.nivel === "critica" ? "rojo" : "ambar", html: "Tensión " + b.pas + "/" + b.pad + " — " + bt.texto, accion: bt.nivel === "critica" ? "Acción: evaluar hoy — la alerta ya está en el tablero y en pendientes." : "Acción: repetir en unos minutos y anotar.", duenio: "Dueño: la médica" });
+    }
+    var triada = ["cefalea", "vision", "hinchazon"].every(function (x) { return marcadas.indexOf(x) >= 0; });
+    if (triada) {
+      Jornada.nacerAlerta(p.id, 4, "cefalea + visión borrosa + hinchazón", "evaluar preeclampsia hoy", "médica");
+      Jornada.agregarEvento("urgencia", p.id, { motivo: "tríada de banderas" });
+      if (!p.marcador) p.marcador = "urgente";
+      Jornada.guardar();
+      avisos.push({ cls: "rojo", html: "Las tres banderas juntas encienden la alerta más seria del sistema.", accion: "Acción: avisar a la médica de VOZ — la urgencia se cierra en la sala. Su tarjeta ya subió al frente del tablero.", duenio: "Dueño: la médica" });
+    } else {
+      marcadas.forEach(function (idb) {
+        var info = Jornada.banderaInfo(idb);
+        Jornada.nacerAlerta(p.id, 3, info.nombre, "valorar en la consulta de hoy y anotar en la nota", "médica");
+        avisos.push({ cls: "ambar", html: "Bandera: " + info.nombre + ".", accion: "Acción: valorar en la consulta y anotar en la nota.", duenio: "Dueño: la médica" });
+      });
+    }
+    if (!avisos.length) avisos.push({ cls: "verde", html: "Control registrado completo. Sin banderas ni tensiones fuera de rango.", accion: "", duenio: "" });
+    avisos.sort(function (x, y) { var o = { verde: 0, ambar: 1, rojo: 2 }; return o[x.cls] - o[y.cls]; });
+    document.getElementById("panel-avisos").innerHTML = "<div class='panel sombra'><h3>Panel de avisos de la visita — se entrega al guardar, no antes</h3>" +
+      avisos.map(function (a) { return "<div class='aviso " + a.cls + "'>" + a.html + (a.accion ? "<span class='accion'>" + a.accion + "</span>" : "") + (a.duenio ? "<span class='duenio'>" + a.duenio + "</span>" : "") + "</div>"; }).join("") +
+      "<div style='margin-top:10px'><a class='btn chico' href='01-TABLERO.html'>Ver el tablero →</a> <a class='btn sec chico' href='05-PAUSA.html?p=" + p.id + "'>Pausar / otra paciente →</a></div></div>";
+    Jornada.guardar();
+    Jornada.toast("Control de " + p.nombre + " guardado. La estación se libera.");
+  };
+  var bt2 = Jornada.bandaTA(parseInt(b.pas, 10), parseInt(b.pad, 10));
+  var fueras = bt2.nivel !== "normal" && bt2.nivel !== "sin_dato";
+  if (marcadas.length || fueras) {
+    Jornada.modal("Guardar con hallazgo", "Hay banderas marcadas o tensión fuera de rango. <b>Guardar nunca bloquea</b> — se confirma y el aviso sale con su acción.", [
+      { txt: "Volver a revisar", cls: "sec" },
+      { txt: "Sí, guardar el control", cls: "pri2", fn: sigue }
+    ]);
+  } else sigue();
+};
+pintaSel();
+pintaBanderas();
+document.getElementById("c-fecha").value = Jornada.hoyISO();
+restaurarBorrador();
+pintaCinta();
+Jornada.bandaVeredicto("estacion", "¿Esto evita escribir en la ficha equivocada? ¿Falta un campo que tomen siempre? ¿Las 9 banderas cubren lo que ustedes vigilan de verdad?");
+</script>
+</body></html>

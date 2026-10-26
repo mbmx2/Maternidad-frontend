@@ -1,0 +1,174 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=1024">
+<title>Modo consulta — prueba médica</title>
+<link rel="stylesheet" href="estilo.css"></head><body>
+<div class="barra"><span class="marca">Maternidad</span>
+<span class="pantalla">Modo consulta — con la paciente enfrente</span>
+<span class="propuesta">PRUEBA REAL · MÉDICA</span>
+<span class="reloj-dia"></span></div>
+<div class="cuerpo"><div class="lateral"></div>
+<div class="zona">
+<h1>Modo consulta</h1>
+<p class="subtitulo">Identidad a la vista, datos que salvan en la cinta, cálculos que ya corrieron, avisos al guardar. Con la paciente enfrente, el detalle clínico está <b>a un clic</b> — la superficie se lee tranquila.</p>
+<div class="campo"><label>Paciente en consulta</label><select id="c-sel"></select></div>
+<div id="cinta"></div>
+<div class="grilla2">
+<div class="panel sombra">
+<h3>Lo que ya corrió solo</h3>
+<div class="chips-fila" id="chips"></div>
+<div class="linea" style="color:#667;margin-top:6px">Nadie fue a la pantalla de calculadoras: el cálculo ocurre cuando los datos existen.</div>
+</div>
+<div class="panel sombra">
+<h3>Semáforo de la paciente</h3>
+<div class="semaforo" id="sema"></div>
+</div>
+</div>
+<div class="panel sombra">
+<h3>Prescripción — se verifica ANTES de completar el guardado</h3>
+<div class="fila-form">
+<div class="campo"><label>Medicamento</label><input type="text" id="rx-droga" placeholder="Ej. amoxicilina"></div>
+<div class="campo"><label>Vía y dosis (informativo)</label><input type="text" id="rx-dosis" placeholder="Ej. oral 500 mg cada 8 h"></div>
+</div>
+<button class="btn" id="rx-guardar">Guardar prescripción</button>
+<div id="rx-avisos"></div>
+</div>
+<div class="panel sombra">
+<h3>La nota — cierre natural de la consulta</h3>
+<div class="campo"><label>Tipo de nota</label><select id="n-tipo"><option>Control prenatal</option><option>Consulta general</option><option>Interconsulta</option><option>Cierre de urgencia</option></select></div>
+<div class="campo"><label>Evolución</label><textarea id="n-texto" rows="4" style="max-width:640px" placeholder="Sus palabras de consulta…"></textarea></div>
+<div id="cierre-avisos"></div>
+<button class="btn pri2" id="n-guardar">Cerrar la consulta con la nota</button>
+</div>
+<div id="panel-avisos"></div>
+<div id="veredicto-host"></div>
+</div></div>
+<script src="config.js"></script><script src="motor.js"></script>
+<script>
+Jornada.nav("02-CONSULTA.html");
+var S = Jornada.estado();
+var pid = Jornada.contextoPaciente();
+function candidatas() {
+  return S.pacientes.filter(function (p) {
+    var e = Jornada.estadoDe(p.id).estado;
+    return ["en_atencion", "pausada", "espera", "urgente", "llego", "estacion_hecha", "estacion_mitad", "por_registrar"].indexOf(e) >= 0;
+  });
+}
+function pintaSel() {
+  var sel = document.getElementById("c-sel");
+  sel.innerHTML = "";
+  candidatas().forEach(function (p) {
+    var o = document.createElement("option");
+    o.value = p.id; o.textContent = p.nombre + " — " + Jornada.estadoDe(p.id).estado.replace(/_/g, " ");
+    sel.appendChild(o);
+  });
+  if (pid) sel.value = pid;
+}
+function pintaCierre() {
+  var p = Jornada.paciente(document.getElementById("c-sel").value);
+  var host = document.getElementById("cierre-avisos");
+  if (!p) { host.innerHTML = ""; return; }
+  var pend = Jornada.alertasDe(p.id).filter(function (a) { return a.estado === "pendiente" && a.tipo !== 4; });
+  if (!pend.length) { host.innerHTML = "<div class='linea' style='color:#667'>Sin avisos pendientes: la nota cierra la consulta directo.</div>"; return; }
+  host.innerHTML = "<div class='linea'><b>¿La nota resolvió estos avisos? (el cierre se ancla a su firma — sin doble texto)</b></div><div class='checks'>" +
+    pend.map(function (a) {
+      return "<label><input type='checkbox' checked class='chk-cierre' value='" + a.id + "'> " + a.texto + " — <span style='color:#667'>" + a.accion + "</span></label>";
+    }).join("") + "</div>";
+}
+function pintaTodo() {
+  var p = Jornada.paciente(document.getElementById("c-sel").value);
+  if (!p) return;
+  var salvar = (p.alergias.length ? p.alergias.join(", ") : "sin alergias conocidas");
+  document.getElementById("cinta").innerHTML = "<div class='cinta'><span class='nombre'>" + p.nombre + "</span> · nacida " + p.nacimiento + " · " + p.caso +
+    (p.eg ? " · EG: " + p.eg + " semanas (derivada)" : "") +
+    "<div class='det'><span class='salvar'>Datos que salvan:</span> alergias: " + salvar + " · tipo de sangre: " + p.sangre +
+    " · medicación: " + p.medicacion + " · crónicas: " + p.cronica + "</div></div>";
+  var chips = Jornada.resolverChips(p.id);
+  document.getElementById("chips").innerHTML = chips.length
+    ? chips.map(function (c) {
+        var cls = c.nivel === "critica" ? "rojo" : c.nivel === "alerta" ? "ambar" : c.nivel === "normal" ? "verde" : "gris";
+        return "<span class='chip " + cls + "'>" + c.texto + "</span>";
+      }).join("")
+    : "<span class='ayuda'>Sin datos capturados todavía — la estación y el laboratorio los alimentan.</span>";
+  var vistos = {};
+  Jornada.labDe(p.id).forEach(function (l) { vistos[l.analito] = l; });
+  var sh = "";
+  Object.keys(Jornada.LAB_RANGOS).forEach(function (k) {
+    var r = Jornada.LAB_RANGOS[k];
+    if (vistos[k]) {
+      var b = Jornada.evaluarBandaLab(k, vistos[k].valor);
+      sh += "<div class='sema-item " + b.nivel + "'><b>" + r.nombre + "</b>" + vistos[k].valor + "<div class='nivel'>" + b.texto + "</div></div>";
+    } else sh += "<div class='sema-item sin_dato'><b>" + r.nombre + "</b>sin resultado<div class='nivel'>SIN DATO</div></div>";
+  });
+  S.calculos.forEach(function (x) {
+    if (x.pid === p.id && x.homa != null) {
+      var bb = Jornada.evaluarBandaHoma(x.homa);
+      sh += "<div class='sema-item " + bb.nivel + "'><b>HOMA-IR (calculado)</b>" + x.homa + "<div class='nivel'>" + bb.texto + "</div></div>";
+    }
+  });
+  document.getElementById("sema").innerHTML = sh;
+  var als = Jornada.alertasDe(p.id).filter(function (a) { return a.estado === "pendiente"; });
+  document.getElementById("panel-avisos").innerHTML = als.length
+    ? "<div class='panel sombra'><h3>Panel de avisos de esta consulta — primero lo verde, después lo rojo</h3>" + als.map(function (a) { return Jornada.avisoHTML(a, true); }).join("") + "</div>"
+    : "";
+  pintaCierre();
+}
+document.getElementById("c-sel").onchange = function () { pid = this.value; pintaTodo(); };
+document.getElementById("rx-guardar").onclick = function () {
+  var p = Jornada.paciente(document.getElementById("c-sel").value);
+  var droga = document.getElementById("rx-droga").value.trim().toLowerCase();
+  var host = document.getElementById("rx-avisos");
+  if (!p || !droga) { Jornada.toast("Escriba el medicamento."); return; }
+  var choques = [];
+  (p.alergias || []).forEach(function (al) {
+    if (droga.indexOf(al.slice(0, 5)) >= 0 || (al === "penicilina" && (droga.indexOf("amoxicilina") >= 0 || droga.indexOf("ampicilina") >= 0)))
+      choques.push("alergia registrada: " + al);
+  });
+  Jornada.INTERACCIONES.forEach(function (i) {
+    if (droga.indexOf(i.droga) >= 0) {
+      i.chocaCon.forEach(function (c) {
+        if (c.indexOf("alergia:") === 0 && p.alergias.indexOf(c.split(":")[1]) >= 0) choques.push(i.aviso);
+        if (c.indexOf("med:") === 0 && p.medicacion.indexOf(c.split(":")[1]) >= 0) choques.push(i.aviso);
+      });
+    }
+  });
+  if (choques.length) {
+    Jornada.modal("No se guardó la prescripción", "Choca con: <b>" + choques.join(" · ") + "</b>. La seguridad es la única razón para detener el guardado — y se dice el riesgo por su nombre.", [
+      { txt: "Cambiar el medicamento", cls: "sec" },
+      { txt: "Forzar igual (queda registrado el riesgo)", cls: "peligro", fn: function () {
+        host.innerHTML = "<div class='aviso rojo'>Forzada con confirmación: " + choques.join(" · ") + ".<span class='duenio'>Quedó en la bitácora con el riesgo nombrado.</span></div>";
+        Jornada.nacerAlerta(p.id, 6, "prescripción forzada contra: " + choques.join(" · "), "revisar antes de surtir", "médica");
+        pintaTodo();
+      } }
+    ]);
+    return;
+  }
+  host.innerHTML = "<div class='aviso verde'>Sin interacción conocida. Prescripción registrada como informativa — el software no prescribe dosis.</div>";
+};
+document.getElementById("n-guardar").onclick = function () {
+  var p = Jornada.paciente(document.getElementById("c-sel").value);
+  var texto = document.getElementById("n-texto").value.trim();
+  if (!p) return;
+  if (!texto) { Jornada.toast("La nota necesita su evolución — aunque sea una línea."); return; }
+  var cerrarIds = [];
+  document.querySelectorAll(".chk-cierre:checked").forEach(function (i) { cerrarIds.push(i.value); });
+  S.notas.push({ pid: p.id, tipo: document.getElementById("n-tipo").value, texto: texto, cerradaEn: Jornada.hm(Jornada.ahoraMin()) });
+  Jornada.agregarEvento("nota_cerrada", p.id, { tipo: document.getElementById("n-tipo").value });
+  var abierta = null;
+  S.atenciones.forEach(function (a) { if (a.pid === p.id && a.abierta) abierta = a; });
+  if (abierta) abierta.abierta = false;
+  cerrarIds.forEach(function (id) { Jornada.cerrarAlerta(id, "anclada a la nota firmada"); });
+  Jornada.agregarEvento("atendida", p.id, { via: "consulta" });
+  var f = Jornada.proximaFechaControl(p);
+  Jornada.guardar();
+  document.getElementById("panel-avisos").innerHTML = "<div class='panel sombra'><h3>Consulta cerrada</h3>" +
+    "<div class='aviso verde'><b>Nota guardada y consulta cerrada.</b> " +
+    (cerrarIds.length ? "Se cerraron " + cerrarIds.length + " aviso(s) anclados a esta nota — sin escribir el mismo texto dos veces." : "Los avisos que la nota no resuelve siguen pendientes con su dueño.") +
+    "<span class='accion'>Próximo control derivado del protocolo: " + Jornada.fechaLarga(f.fecha) + " — la agenda ya lo tiene listo.</span></div>" +
+    "<a class='btn chico' href='01-TABLERO.html'>Volver al tablero →</a> <a class='btn sec chico' href='06-AGENDA.html'>Ver agenda y recordatorios →</a></div>";
+  Jornada.toast("Consulta de " + p.nombre + " cerrada.");
+};
+pintaSel();
+pintaTodo();
+Jornada.bandaVeredicto("consulta", "¿Es todo lo que necesita ver con ella enfrente? ¿El cierre de avisos anclado a la nota hace lo que usted haría a mano? ¿La prescripción que se niega explica el riesgo como usted lo diría?");
+</script>
+</body></html>

@@ -1,0 +1,6 @@
+{
+  "name": "pruebas-front-sintesis",
+  "private": true,
+  "description": "Suites de 12-FRONT-SINTESIS. Las e2e necesitan jsdom (npm install) y servidor: python3 -m http.server 8123 en la carpeta madre.",
+  "devDependencies": { "jsdom": "^24.0.0" }
+}

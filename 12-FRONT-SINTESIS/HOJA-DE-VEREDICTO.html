@@ -1,0 +1,76 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8">
+<meta name="sintesis" content="S1">
+<meta name="viewport" content="width=1024">
+<title>Hoja de veredicto — sesión de diseño</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="front.css">
+<style>
+@media print {
+  body { min-width:0; overflow:visible; display:block; }
+  .zona { overflow:visible; padding:0; }
+  .campo input { border:none; border-bottom:1px solid #333; }
+  .tabla-fila { display:flex; gap:8px; align-items:center; margin:5px 0; }
+}
+</style></head><body>
+<div class="barra"><span class="marca">Maternidad</span>
+<span class="pantalla">Hoja de veredicto — imprimible de una página</span>
+<span class="propuesta">V4 · S1 · IMPRIMIBLE</span></div>
+<div class="cuerpo"><div class="lateral"></div>
+<div class="zona">
+<h1>Hoja de veredicto — frontend sintetizado</h1>
+<p class="subtitulo">Llénela durante el recorrido o después. Con esto y <b>dos firmas del oficio</b>, el diseño queda veredictado: una sola opinión es insumo, no aprobación.</p>
+<div class="panel">
+<div class="fila-form">
+<div class="campo"><label>Nombre de quien prueba</label><input type="text"></div>
+<div class="campo"><label>Rol</label><input type="text"></div>
+<div class="campo"><label>Fecha</label><input type="date"></div>
+<div class="campo"><label>Antigüedad en el oficio</label><input type="text"></div>
+</div>
+</div>
+<div class="panel">
+<h3>Recorrido — marque en cada pantalla</h3>
+<div class="tabla-fila"><b style="width:240px">1 · Hoy (el tablero)</b> ☐ Apruebo · ☐ Con cambios · ☐ No sirve</div>
+<div class="tabla-fila" style="padding-left:244px"><input type="text" style="width:100%" placeholder="Cambios o comentarios"></div>
+<div class="tabla-fila"><b style="width:240px">2 · Llegadas (la puerta)</b> ☐ Apruebo · ☐ Con cambios · ☐ No sirve</div>
+<div class="tabla-fila" style="padding-left:244px"><input type="text" style="width:100%" placeholder="Cambios o comentarios"></div>
+<div class="tabla-fila"><b style="width:240px">3 · Estación de constantes</b> ☐ Apruebo · ☐ Con cambios · ☐ No sirve</div>
+<div class="tabla-fila" style="padding-left:244px"><input type="text" style="width:100%" placeholder="Cambios o comentarios"></div>
+<div class="tabla-fila"><b style="width:240px">4 · Laboratorio en papel</b> ☐ Apruebo · ☐ Con cambios · ☐ No sirve</div>
+<div class="tabla-fila" style="padding-left:244px"><input type="text" style="width:100%" placeholder="Cambios o comentarios"></div>
+<div class="tabla-fila"><b style="width:240px">5 · Consulta</b> ☐ Apruebo · ☐ Con cambios · ☐ No sirve</div>
+<div class="tabla-fila" style="padding-left:244px"><input type="text" style="width:100%" placeholder="Cambios o comentarios"></div>
+<div class="tabla-fila"><b style="width:240px">6 · La urgencia</b> ☐ Apruebo · ☐ Con cambios · ☐ No sirve</div>
+<div class="tabla-fila" style="padding-left:244px"><input type="text" style="width:100%" placeholder="Cambios o comentarios"></div>
+<div class="tabla-fila"><b style="width:240px">7 · Pendientes</b> ☐ Apruebo · ☐ Con cambios · ☐ No sirve</div>
+<div class="tabla-fila" style="padding-left:244px"><input type="text" style="width:100%" placeholder="Cambios o comentarios"></div>
+<div class="tabla-fila"><b style="width:240px">8 · Atenciones (pausa)</b> ☐ Apruebo · ☐ Con cambios · ☐ No sirve</div>
+<div class="tabla-fila" style="padding-left:244px"><input type="text" style="width:100%" placeholder="Cambios o comentarios"></div>
+<div class="tabla-fila"><b style="width:240px">9 · Agenda y recordatorios</b> ☐ Apruebo · ☐ Con cambios · ☐ No sirve</div>
+<div class="tabla-fila" style="padding-left:244px"><input type="text" style="width:100%" placeholder="Cambios o comentarios"></div>
+<div class="tabla-fila"><b style="width:240px">10 · Cierre y traspaso</b> ☐ Apruebo · ☐ Con cambios · ☐ No sirve</div>
+<div class="tabla-fila" style="padding-left:244px"><input type="text" style="width:100%" placeholder="Cambios o comentarios"></div>
+</div>
+<div class="panel">
+<h3>Preguntas del recorrido completo</h3>
+<div class="campo"><label>1 · ¿El tablero refleja su mañana real? ¿Qué columna falta o sobra?</label><textarea rows="2" style="width:100%"></textarea></div>
+<div class="campo"><label>2 · ¿Qué dato mínimo exigen ANTES de atender, que aquí falte o sobre?</label><textarea rows="2" style="width:100%"></textarea></div>
+<div class="campo"><label>3 · ¿Los avisos llegan como usted los querría (acción, dueño, reloj)? ¿Falta uno?</label><textarea rows="2" style="width:100%"></textarea></div>
+<div class="campo"><label>4 · Cuando la interrumpen, ¿la pausa hace lo que necesita? ¿Cuántas aguanta el equipo?</label><textarea rows="2" style="width:100%"></textarea></div>
+<div class="campo"><label>5 · ¿El cierre le entrega todo lo que la tarde necesita? ¿Qué le falta anotar?</label><textarea rows="2" style="width:100%"></textarea></div>
+<div class="campo"><label>6 · De todo el recorrido: ¿qué le hace la vida más fácil y qué le complica?</label><textarea rows="2" style="width:100%"></textarea></div>
+</div>
+<div class="panel">
+<h3>Veredicto doble — el diseño avanza con dos firmas del oficio</h3>
+<div class="veredicto">☐ Esto refleja mi día · ☐ Refleja mi día con cambios · ☐ No refleja mi día — hay que rediseñarlo</div>
+<div class="fila-form" style="margin-top:10px">
+<div class="campo"><label>Firma 1 (rol)</label><input type="text"></div>
+<div class="campo"><label>Firma 2 (rol)</label><input type="text"></div>
+<div class="campo"><label>Hora de cierre</label><input type="text"></div>
+</div>
+<div class="linea nota" style="margin-top:8px">Una sola opinión es insumo, no aprobación. Con dos personas del oficio marcando «apruebo» es que una pantalla avanza (DEC-19).</div>
+</div>
+<p class="pie-pag no-imprimir">Hoja de la sesión · kit de entrevista · esta prueba es papel con motor: nada se construye hasta el doble veredicto del oficio.</p>
+</div></div>
+<script src="config.js"></script><script src="motor.js"></script>
+<script>Jornada.nav("Hoja");</script>
+</body></html>

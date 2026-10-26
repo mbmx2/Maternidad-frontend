@@ -1,0 +1,71 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=1024">
+<title>Avisos de la jornada — prueba médica</title>
+<link rel="stylesheet" href="estilo.css"></head><body>
+<div class="barra"><span class="marca">Maternidad</span>
+<span class="pantalla">Avisos de la jornada — todos con acción y dueño</span>
+<span class="propuesta">PRUEBA REAL · MÉDICA</span>
+<span class="reloj-dia"></span></div>
+<div class="cuerpo"><div class="lateral"></div>
+<div class="zona">
+<h1>Los seis tipos de aviso</h1>
+<p class="subtitulo">Ningún aviso sale sin acción, dueño y —si aplica— plazo. Primero lo verde, después lo rojo. Y el detalle clínico está a un clic: la superficie se lee con calma.</p>
+<div class="grilla3">
+<div class="panel sombra"><h3><span class="chip verde">1 · Verde</span></h3><div class="linea">«Está bien» — peso en rango, tensión normal. Lo normal también se dice.</div></div>
+<div class="panel sombra"><h3><span class="chip ambar">2 · Plazo</span></h3><div class="linea">«Repetir urocultivo en 7 días» — crea solo un pendiente con fecha en la agenda.</div></div>
+<div class="panel sombra"><h3><span class="chip rojo">3 · Problema</span></h3><div class="linea">«Cefalea + visión borrosa — evaluar hoy». Sale después de guardar, con su acción.</div></div>
+<div class="panel sombra"><h3><span class="chip rojo">4 · Urgencia</span></h3><div class="linea">Mueve al equipo: la tarjeta salta al frente y no se cierra hasta atender. Cierra la voz.</div></div>
+<div class="panel sombra"><h3><span class="chip azul">5 · Contexto</span></h3><div class="linea">Alergias, sangre, medicación — está siempre presente, no avisa: es el colchón.</div></div>
+<div class="panel sombra"><h3><span class="chip rojo">6 · Interacción</span></h3><div class="linea">Al prescribir: choca con alergia o medicación. El único que sí puede detener.</div></div>
+</div>
+<div class="panel sombra" id="fatiga"></div>
+<div class="panel sombra">
+<h3>Pendientes — con su acción, dueño y reloj</h3>
+<div id="pendientes"></div>
+</div>
+<div class="panel sombra">
+<h3>Cerrados recientes (bitácora)</h3>
+<div id="cerrados"></div>
+</div>
+<div id="veredicto-host"></div>
+</div></div>
+<script src="config.js"></script><script src="motor.js"></script>
+<script>
+Jornada.nav("03-ALERTAS.html");
+var S = Jornada.estado();
+function pinta() {
+  var f = Jornada.metricaFatiga();
+  document.getElementById("fatiga").innerHTML = "<h3>La fatiga, medida</h3>" +
+    "<div class='linea'><span class='chip " + (f.media > f.meta ? "rojo" : "verde") + "'>" + f.avisos + " avisos en " + f.visitas + " visitas — " + f.media + " por visita</span> · meta: menos de " + f.meta + " por visita. <span style='color:#667'>Se mide al sistema, nunca a las personas.</span></div>" +
+    "<div class='linea' style='color:#667'>Los umbrales de esta meta viven en catálogo firmado — no en el código.</div>";
+  var pend = Jornada.alertasPendientes().slice().sort(function (x, y) { return (x.tipo === 4 ? 1 : 0) - (y.tipo === 4 ? 1 : 0) || x.nacida - y.nacida; });
+  var host = document.getElementById("pendientes");
+  if (!pend.length) host.innerHTML = "<div class='vacio'>Sin avisos pendientes. Buen día.</div>";
+  else {
+    host.innerHTML = pend.map(function (a) {
+      var extra = Jornada.vencida(a) ? " <span class='chip rojo'>VENCIDO — sube al tablero</span>" : "";
+      var ir = a.tipo === 4 ? " <a class='btn peligro chico' href='04-URGENCIA.html?p=" + a.pid + "'>Ir a urgencias →</a>" : " <a class='btn sec chico' href='02-CONSULTA.html?p=" + a.pid + "'>Abrir consulta →</a>";
+      return Jornada.avisoHTML(a, true).replace("</div>", "<div style='margin-top:6px'>" + ir + " <button class='btn sec chico' data-cerrar='" + a.id + "'>Marcar atendida</button>" + extra + "</div></div>");
+    }).join("");
+    host.querySelectorAll("button[data-cerrar]").forEach(function (b) {
+      b.onclick = function () {
+        Jornada.modal("Cerrar este aviso", "El cierre queda en la bitácora con quién lo vio. Si la nota firmada lo resolvió, se cierra anclado a la nota desde la consulta — aquí se cierra manual con motivo.", [
+          { txt: "Dejarlo pendiente", cls: "sec" },
+          { txt: "Atendido — cerrar", cls: "pri2", fn: function () {
+            Jornada.cerrarAlerta(b.getAttribute("data-cerrar"), "atendido manualmente");
+            Jornada.toast("Aviso cerrado y registrado.");
+            pinta();
+          } }
+        ]);
+      };
+    });
+  }
+  var hist = S.alertas.filter(function (a) { return a.estado !== "pendiente"; }).slice(-6).reverse();
+  document.getElementById("cerrados").innerHTML = hist.length
+    ? hist.map(function (a) { return Jornada.avisoHTML(a, false) + ""; }).join("")
+    : "<div class='vacio'>Todavía sin avisos cerrados.</div>";
+}
+pinta();
+Jornada.bandaVeredicto("alertas", "¿Así quieren que les avise? ¿Falta un tipo de aviso? ¿La meta de menos de 2 avisos por visita les parece la correcta? ¿El detalle clínico a un clic es suficiente?");
+</script>
+</body></html>

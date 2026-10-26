@@ -1,0 +1,233 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8">
+<meta name="sintesis" content="S1">
+<meta name="viewport" content="width=1024">
+<title>Atenciones abiertas — pausa y retorno</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="front.css"></head><body>
+<div class="barra"><span class="marca">Maternidad</span>
+<span class="pantalla">Atenciones abiertas — pausa y retorno</span>
+<span id="contexto-gatillo" class="vacio"></span>
+<span class="propuesta">V4 · S1 · PAPEL CON MOTOR</span>
+<span class="reloj-dia"></span></div>
+<div class="cuerpo"><div class="lateral"></div>
+<div class="zona">
+<h1>Atenciones abiertas: varias a la vez, ninguna se pisa</h1>
+<p class="subtitulo">La lista se <b>deduce de los hechos</b>: lo que está abierto según los eventos Y las atenciones, con sus divergencias a la vista y su reparación a un clic. La interrupción pausa con todo lo suyo y se retoma campo por campo. Si alguien más toca lo suyo, ve <b>«en uso de X»</b> — la emergencia puede tomarla, pero queda registrado. Sin tope rígido: cuántas aguanta lo dice el equipo.</p>
+<div class="panel sombra" id="equipo-panel"></div>
+<div class="panel sombra" id="metrica-panel"></div>
+<div class="panel sombra">
+<h3>Lo que está abierto ahora <span class="nota">(derivado de hechos + objetos)</span></h3>
+<div id="lista"></div>
+</div>
+<div class="panel sombra">
+<h3>Abrir una atención nueva</h3>
+<div class="fila-form">
+<div class="campo" style="max-width:380px"><label>Paciente</label><select id="p-nueva"></select></div>
+<div class="campo" style="max-width:300px"><label>Tipo (catálogo)</label><select id="p-tipo"></select></div>
+</div>
+<div class="acciones">
+<button class="btn" id="btn-abrir">Abrir atención</button>
+<button class="btn peligro chico" id="btn-robar">Probar: tomar una «en uso» (emergencia)</button>
+</div>
+<div id="salida-rechazo"></div>
+</div>
+<div class="panel sombra">
+<h3>Quién tomó qué, cuándo — la bitácora de la pantalla</h3>
+<div id="bitacora"></div>
+<div class="linea nota">Todo lo que cambia dueños o estados pasa por aquí. La toma por emergencia no solo se guarda: se <b>ve</b>.</div>
+</div>
+<div id="veredicto-host"></div>
+</div></div>
+<script src="config.js"></script><script src="motor.js"></script>
+<script>
+Jornada.nav("Atenciones");
+var S = Jornada.estado();
+var pid = Jornada.leerContexto();
+var CAT = Jornada.TIPOS_ATENCION;
+
+function pintaEquipo() {
+  document.getElementById("equipo-panel").innerHTML = "<h3>El equipo hoy</h3>" +
+    "<div class='linea'><span class='chip " + (S.equipoFuera ? "ambar" : "verde") + "'>" +
+    (S.equipoFuera ? "EQUIPO FUERA — la médica está en sala de parto" : "Equipo completo en el consultorio") + "</span></div>" +
+    "<div class='acciones'><button class='btn sec chico' id='btn-sala'>" + (S.equipoFuera ? "La médica volvió de sala" : "Simular: la médica sale a sala") + "</button></div>";
+  document.getElementById("btn-sala").onclick = function () {
+    Jornada.alternarEquipo(); /* MT-01: ninguna mutación directa desde la pantalla */
+    pinta();
+  };
+}
+function pintaMetrica() {
+  var m = Jornada.metricaAtenciones();
+  var c = Jornada.conciliarAtenciones();
+  document.getElementById("metrica-panel").innerHTML = "<h3>La carga, medida</h3>" +
+    "<div class='linea'>" +
+    "<span class='chip " + (m.abiertas > 3 ? "ambar" : "verde") + "'>" + m.abiertas + " abiertas</span> " +
+    "<span class='chip " + (m.pausadas ? "ambar" : "gris") + "'>" + m.pausadas + " pausadas</span> " +
+    "<span class='chip " + (m.urgentes ? "rojo" : "gris") + "'>" + m.urgentes + " urgente(s)</span> " +
+    "<span class='chip " + (m.divergencias ? "rojo" : "verde") + "'>" + m.divergencias + " desincronizada(s)</span> " +
+    "<span class='chip azul'>medias: " + (m.minutosMedioAbierto == null ? "—" : m.minutosMedioAbierto + " min abierta") +
+    (m.minutosMedioPausada == null ? "" : " · " + m.minutosMedioPausada + " min pausada") + "</span> " +
+    "<span class='chip gris'>" + m.tomas + " toma(s) del día</span></div>" +
+    "<div class='linea nota'>Se mide al sistema, nunca a las personas. Sin tope: si el chip se pone ámbar, es una conversación del equipo — no un bloqueo.</div>";
+  if (m.divergencias) {
+    document.getElementById("metrica-panel").innerHTML += c.divergencias.map(function (dv) {
+      return "<div class='aviso rojo'><b>Desincronizado:</b> " + Jornada.esc(Jornada.nombrePac(dv.pid)) + " — " + Jornada.esc(dv.detalle) +
+        "<span class='accion'>Acción: pulse «Sincronizar» o «Cerrar» en su fila: la reparación es de un clic y queda registrada.</span></div>";
+    }).join("");
+  }
+}
+function chipReloj(min, prefijo) {
+  if (min == null) return "";
+  var cls = min >= 45 ? "reloj min45" : min >= 30 ? "reloj min30" : "reloj";
+  return "<span class='" + cls + "'>" + prefijo + " " + min + " min</span>";
+}
+function pintaLista() {
+  var host = document.getElementById("lista");
+  var c = Jornada.conciliarAtenciones();
+  var ahora = Jornada.ahoraMin();
+  var html = "";
+  c.filas.forEach(function (f) {
+    var t = CAT[f.tipo] || { nombre: f.tipo, pantalla: "hoy.html" };
+    var clsBorde = f.divergencia ? "#c0392b" : (f.pausada ? "#d97706" : "#2e9e4f");
+    var chipEstado = f.divergencia
+      ? "<span class='chip rojo'>" + (f.divergencia === "huérfano" ? "atención huérfana" : "sin objeto de atención") + "</span>"
+      : "<span class='chip " + (f.pausada ? "ambar" : "verde") + "'>" + (f.pausada ? "pausada — todo conservado" : "en uso") + "</span>";
+    var tipoChip = f.estado === "urgente" ? "<span class='chip rojo'>urgente</span>" : "<span class='chip azul'>" + Jornada.esc(t.nombre) + "</span>";
+    var minsAbierta = f.abiertaEn != null ? Math.max(0, ahora - f.abiertaEn) : null;
+    var minsPausada = f.pausada && f.pausadaEn != null ? Math.max(0, ahora - f.pausadaEn) : null;
+    var acciones = "";
+    if (f.divergencia === "sin_objeto") {
+      acciones = "<button class='btn chico' data-sinc='" + f.pid + "'>Sincronizar (crear lo que falta)</button>";
+    } else if (f.divergencia === "huérfano") {
+      acciones = "<button class='btn peligro chico' data-cerrar='" + f.pid + "'>Cerrar — el estado ya no está abierto</button>";
+    } else if (f.conObjeto) {
+      acciones = f.pausada
+        ? "<button class='btn chico' data-retomar='" + f.atencionId + "'>▶ Retomar donde quedó</button>"
+        : "<button class='btn sec chico' data-pausar='" + f.atencionId + "' data-tipo='" + f.tipo + "'>Pausar y pasar a otra</button>";
+    }
+    acciones += " <a class='btn sec chico' href='" + t.pantalla + "?p=" + f.pid + "'>" +
+      (f.estado === "urgente" && !f.conObjeto ? "Ir a la urgencia →" : "Ir a su pantalla →") + "</a>";
+    html += "<div class='panel' style='margin-bottom:8px;border-left:5px solid " + clsBorde + "'>" +
+      "<h3 style='display:flex;gap:8px;align-items:center;flex-wrap:wrap'>" + Jornada.esc(Jornada.nombrePac(f.pid)) + tipoChip + chipReloj(minsAbierta, "abierta") + chipReloj(minsPausada, "pausada") + "</h3>" +
+      "<div class='linea'>" + chipEstado + " Estado: <b>" + f.estado.replace(/_/g, " ") + "</b> · Dueño: <b>" + Jornada.esc(f.duenio) + "</b>" +
+      (f.abiertaEn != null ? " · abierta a las " + Jornada.hm(f.abiertaEn) : "") +
+      (f.pausada && f.pausadaEn != null ? " · pausada a las " + Jornada.hm(f.pausadaEn) : "") +
+      (f.borrador ? " · <span class='chip azul'>borrador conservado</span>" : "") + "</div>" +
+      "<div class='acciones'>" + acciones + "</div></div>";
+  });
+  if (!c.filas.length)
+    html = "<div class='vacio'>No hay atenciones abiertas. Puede abrir varias: el sistema las mantiene separadas, con su dueño y su borrador.</div>";
+  html += "<div class='linea nota' style='margin-top:8px'>" + c.filas.length + " en pantalla · sin tope fijo: el equipo decide cuántas aguanta.</div>";
+  host.innerHTML = html;
+
+  host.querySelectorAll("button[data-pausar]").forEach(function (b) {
+    b.onclick = function () {
+      var id = b.getAttribute("data-pausar");
+      var tipo = b.getAttribute("data-tipo");
+      var a = null;
+      S.atenciones.forEach(function (x) { if (x.id === id) a = x; });
+      if (!a) return;
+      /* M5: la estación se pausa AQUÍ con su borrador autoguardado — sin navegar. */
+      Jornada.pausarAtencion(id, tipo === "estacion" ? a.borrador : null);
+      Jornada.toast(tipo === "estacion"
+        ? "Estación pausada con su último borrador — retómela desde su tarjeta o desde aquí."
+        : "Pausada. Retómela desde aquí o desde su tarjeta — nada se pierde.");
+      pinta();
+    };
+  });
+  host.querySelectorAll("button[data-retomar]").forEach(function (b) {
+    b.onclick = function () {
+      var r = Jornada.retomarAtencion(b.getAttribute("data-retomar"));
+      if (!r.ok) { Jornada.toast(r.mensaje); return; }
+      Jornada.irA((CAT[r.atencion.tipo] ? CAT[r.atencion.tipo].pantalla : "hoy.html"), r.atencion.pid);
+    };
+  });
+  host.querySelectorAll("button[data-sinc]").forEach(function (b) {
+    b.onclick = function () {
+      var r = Jornada.repararAtencion(b.getAttribute("data-sinc"));
+      if (!r.ok) { Jornada.toast(r.mensaje); return; }
+      Jornada.toast("Sincronizada: se creó el objeto de atención que faltaba — queda registrado en la bitácora.");
+      pinta();
+    };
+  });
+  host.querySelectorAll("button[data-cerrar]").forEach(function (b) {
+    b.onclick = function () {
+      var r = Jornada.repararAtencion(b.getAttribute("data-cerrar"));
+      if (!r.ok) { Jornada.toast(r.mensaje); return; }
+      Jornada.toast("Cerrada la atención huérfana: el estado del paciente era el verdadero.");
+      pinta();
+    };
+  });
+}
+function pintaNueva() {
+  var selTipo = document.getElementById("p-tipo");
+  if (!selTipo.options.length) {
+    Object.keys(CAT).forEach(function (k) {
+      if (CAT[k].abrible === false) return; /* C15: la urgencia se declara en su pantalla */
+      var o = document.createElement("option");
+      o.value = k; o.textContent = CAT[k].nombre + " (dueño: " + CAT[k].duenio + ")";
+      selTipo.appendChild(o);
+    });
+  }
+  var sel = document.getElementById("p-nueva");
+  sel.innerHTML = "";
+  S.pacientes.forEach(function (p) {
+    var e = Jornada.estadoDe(p.id).estado;
+    if (e === "espera" || e === "llego" || e === "estacion_hecha" || e === "estacion_mitad") {
+      var o = document.createElement("option");
+      o.value = p.id; o.textContent = p.nombre;
+      sel.appendChild(o);
+    }
+  });
+  if (!sel.innerHTML) sel.innerHTML = "<option value=''>Sin pacientes en espera</option>";
+}
+document.getElementById("btn-abrir").onclick = function () {
+  var pidN = document.getElementById("p-nueva").value;
+  var tipo = document.getElementById("p-tipo").value;
+  var salida = document.getElementById("salida-rechazo");
+  if (!pidN) { Jornada.toast("No hay pacientes en espera."); return; }
+  var r = Jornada.abrirAtencion(pidN, tipo, null);
+  if (!r.ok) {
+    Jornada.toast(r.mensaje);
+    /* M9: un rechazo siempre ofrece el siguiente paso concreto */
+    salida.innerHTML = "<div class='aviso ambar'>" + Jornada.esc(r.mensaje) +
+      "<span class='accion'>Acción inmediata: <a href='" + (CAT[tipo] ? CAT[tipo].pantalla : "consulta.html") + "?p=" + pidN + "'>abrir su pantalla y retomarla →</a></span></div>";
+    pinta();
+    return;
+  }
+  salida.innerHTML = "";
+  Jornada.irA((CAT[tipo] ? CAT[tipo].pantalla : "hoy.html"), pidN);
+};
+document.getElementById("btn-robar").onclick = function () {
+  var abierta = null;
+  S.atenciones.forEach(function (a) { if (a.abierta && !a.pausada) abierta = a; });
+  if (!abierta) { Jornada.toast("No hay ninguna atención «en uso» para la prueba."); return; }
+  Jornada.modal("Atención en uso de otra persona", "Esta atención la tiene abierta <b>" + Jornada.esc(abierta.duenio) + "</b>. En una emergencia la prioridad puede tomarla — pero <b>queda registrado quién la tomó</b>.", [
+    { txt: "Déjela como está", cls: "sec" },
+    { txt: "Tomarla por emergencia (queda registrado)", cls: "peligro", fn: function () {
+      var r = Jornada.tomarPorEmergencia(abierta.id, "enfermería");
+      if (!r.ok) { Jornada.toast(r.mensaje); return; }
+      Jornada.toast("Tomada. La bitácora de esta pantalla ya la muestra, con quién la tenía antes.");
+      pinta();
+    } }
+  ]);
+};
+function pintaBitacora() {
+  var host = document.getElementById("bitacora");
+  var tipos = ["atencion_tomada", "atencion_sincronizada", "atencion_cerrada", "estacion_mitad", "pausada", "estacion_retomada", "retomada"];
+  var evs = S.eventos.filter(function (e) { return tipos.indexOf(e.tipo) >= 0; }).slice(-8).reverse();
+  if (!evs.length) { host.innerHTML = "<div class='vacio'>Sin movimientos registrados todavía.</div>"; return; }
+  host.innerHTML = evs.map(function (e) {
+    var det = "";
+    if (e.tipo === "atencion_tomada") det = " — <b>" + Jornada.esc(e.antes) + "</b> → <b>" + Jornada.esc(e.ahora) + "</b>";
+    else if (e.tipo === "pausada" || e.tipo === "estacion_mitad") det = " — dueño: " + Jornada.esc(e.duenio || "—") + (e.borrador ? " · con borrador" : "");
+    else if (e.tipo === "atencion_sincronizada" || e.tipo === "atencion_cerrada") det = " — " + Jornada.esc(e.motivo || "");
+    else if (e.tipo === "retomada" || e.tipo === "estacion_retomada") det = " — retomada";
+    return "<div class='linea'>" + Jornada.hm(e.min) + " · <b>" + Jornada.esc(e.pid ? Jornada.nombrePac(e.pid) : "sistema") + "</b> — " + e.tipo.replace(/_/g, " ") + det + "</div>";
+  }).join("");
+}
+function pinta() { pintaEquipo(); pintaMetrica(); pintaLista(); pintaNueva(); pintaBitacora(); }
+pinta();
+Jornada.pintarContexto();
+Jornada.bandaVeredicto("pausa", "¿La lista le muestra la verdad (hechos + objetos y sus desincronismos)? ¿Los relojes de lo abierto y de lo pausado le sirven? ¿La métrica informa sin bloquear? ¿Cuántas abiertas aguanta el equipo?");
+</script>
+</body></html>

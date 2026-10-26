@@ -1,0 +1,165 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=1024">
+<title>Los17 requerimientos de interacción (FL-01…FL-17) dibujados</title>
+<link rel="stylesheet" href="flujos.css"></head>
+<body><div class="envoltura">
+
+<div class="cabecera">
+  <h1>FL-01 a FL-17 — el flujo declarado, dibujado como cadena</h1>
+  <div class="sub">Cada requerimiento de <code>06-FUENTE-BACKEND/REQ-FLUJO.md</code> en su
+  forma visual: <b>paso del día → pantallas → funciones/módulos → estructura de código</b>.
+  Al final, su cobertura en las dos rondas. Cadenas = dibujo; la casa que manda sigue siendo
+  el archivo de texto.</div>
+  <div class="leyenda"><span class="l-fis">físico</span><span class="l-dig">digital</span>
+  <span class="l-pan">pantalla</span><span class="l-eve">estado/evento</span></div>
+</div>
+
+<div class="tira"><div class="titulo">FL-01 · Abrir y ver el día (9:50)</div>
+  <div class="mini"><span class="m fis">encender</span><span class="f">→</span>
+  <span class="m dig">arrancar-día: lee eventos heredados</span><span class="f">→</span>
+  <span class="m pant">Hoy — botones + chips + reloj grande</span><span class="f">→</span>
+  <span class="m eve">tablero = fold de hechos</span><span class="f">→</span>
+  <span class="m dig">★ sigue = marca del equipo (B6)</span></div>
+  <div class="cobertura">Código: presentación pinta vista derivada · ratchet «inicio = tablero» ·
+  <b>FL-01</b> · v2 (dictámenes 2026-10-25): pantalla llamada **Hoy** con hora, chips
+  clicables, «Paciente abierta» en la barra y prioridad humana · ronda2 <span class="ok">cubierto</span>.</div></div>
+
+<div class="tira"><div class="titulo">FL-02 · Las llamadas antes de encender</div>
+  <div class="mini"><span class="m fis">teléfono contestado</span><span class="f">→</span>
+  <span class="m dig">AGENDA prepara recordatorios</span><span class="f">→</span>
+  <span class="m pant">agenda.html (copiar)</span><span class="f">→</span>
+  <span class="m eve">cero red — la llamada es humana</span></div>
+  <div class="cobertura"><b>FL-02</b> · ronda2 <span class="ok">cubierto</span> ·
+  ronda1 <span class="par">C-25 diálogo</span> · sin envío automático (P1).</div></div>
+
+<div class="tira"><div class="titulo">FL-03 · La puerta: llegó con cita o sin cita</div>
+  <div class="mini"><span class="m fis">«¿con cita?»</span><span class="f">→</span>
+  <span class="m pant">llegada.html</span><span class="f">→</span>
+  <span class="m dig">registrar_llegada / registro_rapido (4 datos de libreta)</span><span class="f">→</span>
+  <span class="m dig">paso de visita dentro del flujo</span><span class="f">→</span>
+  <span class="m eve">evento llegada → tablero reordena</span></div>
+  <div class="cobertura">Código: evento persistido idempotente · <b>FL-03</b> ·
+  ronda2 <span class="ok">cubierto</span> (v2: bloques reordenados por dictamen) ·
+  homónimas cableadas desde B-022 (R-10) · la visita ya no es bloque aparte.</div></div>
+
+<div class="tira"><div class="titulo">FL-04 · La cita que pasó y no llegó (11:15)</div>
+  <div class="mini"><span class="m dig">cita vencida ∧ sin llegada</span><span class="f">→</span>
+  <span class="m eve">estado «no llegó» — automático</span><span class="f">→</span>
+  <span class="m pant">hoy.html → agenda.html reagendar</span></div>
+  <div class="cobertura">Código: regla en dominio, no temporizador de pantalla · <b>FL-04</b> ·
+  ronda2 <span class="par">estado y reagendar sí; botón de marcado manual aún no — automatizar pendiente</span> · ronda1 <span class="ok">TABLERO
+  con estado</span>.</div></div>
+
+<div class="tira"><div class="titulo">FL-05 · El carril de constantes (10:10)</div>
+  <div class="mini"><span class="m pant">estacion.html + cinta</span><span class="f">→</span>
+  <span class="m dig">guardar_control:10 campos, nunca bloquea</span><span class="f">→</span>
+  <span class="m eve">evento control_guardado → chips y alertas después</span><span class="f">→</span>
+  <span class="m pant">pendientes.html (si dispara)</span></div>
+  <div class="cobertura">Código: escritura atómica con clave (atención, paciente) · <b>FL-05</b> ·
+  ronda2 <span class="ok">cubierto — 10 campos y alerta que nace al guardar (H-062/063 reparados)</span> ·
+  ronda1 <span class="ok">CONTROL</span>.</div></div>
+
+<div class="tira"><div class="titulo">FL-06 · La interrupción: doble mano (10:25)</div>
+  <div class="mini"><span class="m fis">suena el teléfono</span><span class="f">→</span>
+  <span class="m dig">pausar / retomar con clave de atención</span><span class="f">→</span>
+  <span class="m pant">estacion.html (pausar) · hoy (retomar)</span><span class="f">→</span>
+  <span class="m eve">estación a medias · «en uso de X»</span></div>
+  <div class="cobertura">Código: estado por atención, cola al escritor único · <b>FL-06</b> ·
+  ronda2 <span class="ok">cubierto — atenciones.html con «en uso de X»</span> ·
+  ronda1 <span class="ok">PAUSA</span>.</div></div>
+
+<div class="tira"><div class="titulo">FL-07 · La que llegó con papel (10:40)</div>
+  <div class="mini"><span class="m fis">entrega impreso</span><span class="f">→</span>
+  <span class="m dig">capturar_laboratorio:3 datos/30 s</span><span class="f">→</span>
+  <span class="m eve">«escrito tardío» → semáforo contra catálogo firmado</span></div>
+  <div class="cobertura">Código: LAB_RANGOS firmado; semáforo = fold · <b>FL-07</b> ·
+  ronda2 <span class="ok">cubierto — laboratorio.html</span> · ronda1 <span class="ok">LABORATORIO</span> · O8.</div></div>
+
+<div class="tira"><div class="titulo">FL-08 · La urgencia: primero la voz (11:00)</div>
+  <div class="mini"><span class="m fis">gritar al equipo</span><span class="f">→</span>
+  <span class="m dig">marcar_urgencia → tarjeta al frente, mismo segundo</span><span class="f">→</span>
+  <span class="m eve">alerta con dueño · cierre atendida/referida/motivo</span></div>
+  <div class="cobertura">Código: evento persistido reordena (fold) · dedupe · entrega T1–T4 ·
+  <b>FL-08</b> ·   ronda2 <span class="ok">cubierto — cierre con firma, marcador ⚠ y salto al frente (H-061/062 reparados)</span> ·
+  ronda1 <span class="ok">demo alertas</span> · O4: termina en voz.</div></div>
+
+<div class="tira"><div class="titulo">FL-09 · La consulta de la médica</div>
+  <div class="mini"><span class="m pant">hoy → consulta.html</span><span class="f">→</span>
+  <span class="m dig">cinta + lo capturado + cálculos solos</span><span class="f">→</span>
+  <span class="m dig">nota firmada (inmutable)</span><span class="f">→</span>
+  <span class="m eve">consulta_cerrada → agenda propone</span></div>
+  <div class="cobertura">Código: cambio solo desde tablero · derivados una sola casa · <b>FL-09</b> ·
+  ronda2 <span class="ok">cubierto — historia.html con notas y asistente NOM-004; interconsulta por nota</span> · ronda1
+  <span class="ok">CONSULTA+HISTORIA+NOM004</span>.</div></div>
+
+<div class="tira"><div class="titulo">FL-10 · El equipo se fue a sala (10:30)</div>
+  <div class="mini"><span class="m fis">cesárea</span><span class="f">→</span>
+  <span class="m eve">evento de equipo: «en sala»</span><span class="f">→</span>
+  <span class="m pant">hoy.html — frase en la espera</span></div>
+  <div class="cobertura">Código: estado del equipo en el mismo canal que los pacientes · <b>FL-10</b> ·
+  ronda2 <span class="ok">cubierto — botón de estado del equipo en Hoy (H-061 reparado)</span> · ronda1
+  <span class="par">chip fijo</span> · O10.</div></div>
+
+<div class="tira"><div class="titulo">FL-11 · El corte de la cesárea (flujo2)</div>
+  <div class="mini"><span class="m dig">pausa conserva todo</span><span class="f">→</span>
+  <span class="m dig">parto: fecha, vía, bebés, peso → cierra episodio</span><span class="f">→</span>
+  <span class="m eve">episodio cerrado → tablero libera · puerperio activo</span></div>
+  <div class="cobertura">Código: escritura de dominio que dispara eventos · <b>FL-11</b> ·
+  ronda2 <span class="ok">cubierto — parto.html (nueva)</span> · ronda1 <span class="ok">PARTO</span> ·
+  R-35.</div></div>
+
+<div class="tira"><div class="titulo">FL-12 · Parto en la puerta sin expediente</div>
+  <div class="mini"><span class="m fis">llega en trabajo de parto</span><span class="f">→</span>
+  <span class="m dig">registro mínimo &lt;1 min → folio</span><span class="f">→</span>
+  <span class="m eve">rojo al frente + «falta completar» con plazo</span><span class="f">→</span>
+  <span class="m dig">ficha después sin duplicar</span></div>
+  <div class="cobertura">Código: alta atómica + antihomónima al completar · <b>FL-12</b> ·
+  ronda2 <span class="ok">cubierto: emergencia.html (registro y rojo)</span> · ronda1 <span class="ok">EMERGENCIA</span> ·
+  <span class="no">la duración del plazo sigue a decisión del equipo</span>.</div></div>
+
+<div class="tira"><div class="titulo">FL-13 · Los avisos con dueño (12:15)</div>
+  <div class="mini"><span class="m dig">pendiente con paciente, responsable y vencimiento</span><span class="f">→</span>
+  <span class="m eve">al vencer: sube al tablero</span><span class="f">→</span>
+  <span class="m pant">Pendientes — «Lo que falta hacer» → «Le toca a:»</span></div>
+  <div class="cobertura">Código: pendientes como datos, no constantes · <b>FL-13</b> ·
+  ronda2 <span class="par">reconstruido con paciente en cada uno y lenguaje de sala (B-029);
+  sigue parcial por la decisión §5.3 (cruce de roles)</span> · O3.</div></div>
+
+<div class="tira"><div class="titulo">FL-14 · Se fue la luz / el equipo falla (flujos6/7)</div>
+  <div class="mini"><span class="m eve">escritura atómica</span><span class="f">→</span>
+  <span class="m dig">puente de papel con campos mínimos</span><span class="f">→</span>
+  <span class="m dig">transcripción con hora real + mensajes humanos</span><span class="f">→</span>
+  <span class="m eve">tablero «a medias» · bitácora</span></div>
+  <div class="cobertura">Código: temporal+rename · catálogo de mensajes · <b>FL-14</b> ·
+  ronda2 <span class="ok">cubierto — falla.html</span> · ronda1 <span class="ok">FALLA</span> ·
+  contrato DEGRADACION.</div></div>
+
+<div class="tira"><div class="titulo">FL-15 · El cierre y el traspaso (13:50)</div>
+  <div class="mini"><span class="m dig">fold del día (sin captura nueva)</span><span class="f">→</span>
+  <span class="m pant">cierre.html — imprimir</span><span class="f">→</span>
+  <span class="m eve">respaldo de tarde · agenda de mañana</span></div>
+  <div class="cobertura">Código: cierre = vista derivada; traspaso de solo salida · <b>FL-15</b> ·
+  ronda2 <span class="ok">cubierto (impresión real)</span> · ronda1 <span class="ok">CIERRE</span> ·
+  O5.</div></div>
+
+<div class="tira"><div class="titulo">FL-16 · Una verdad, muchos equipos (alertas en paralelo)</div>
+  <div class="mini"><span class="m dig">ALERTAS publica</span><span class="f">→</span>
+  <span class="m dig">PC y celular a la par — misma verdad, distinto tamaño</span><span class="f">→</span>
+  <span class="m falta">sin señal ⇒ recupera al volver (fase de hardware)</span></div>
+  <div class="cobertura">Código: pendiente de ingeniería (G3) · <b>FL-16</b> ·
+  ronda2 <span class="no">[SUPUESTO] declarado</span> · ronda1 <span class="par">declarado en
+  ALERTAS</span> · no bloquea el diseño.</div></div>
+
+<div class="tira"><div class="titulo">FL-17 · Los documentos con la paciente en contexto</div>
+  <div class="mini"><span class="m pant">consulta / documentos.html</span><span class="f">→</span>
+  <span class="m dig">DOC-01: traductor → relleno → verificación → atómico</span><span class="f">→</span>
+  <span class="m dig">consentimiento veto (DOC-14) · compartir sin identidad (DOC-17…22)</span></div>
+  <div class="cobertura">Casa: MOD-DOCUMENTOS (22 funciones) · <b>FL-17</b> ·
+  ronda2 <span class="par">lista de plantillas y avisos — sin camino completo</span> ·
+  ronda1 <span class="ok">DOCUMENTOS</span> · R-05…R-09, R-23.</div></div>
+
+<footer class="pie">Fuente: <code>06-FUENTE-BACKEND/REQ-FLUJO.md</code> (el texto manda; este
+archivo dibuja) · orden de construcción de módulos según su propio encabezado ·
+<a href="INDICE.html">volver al índice comparativo</a></footer>
+
+</div></body></html>

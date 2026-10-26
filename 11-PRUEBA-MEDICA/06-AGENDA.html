@@ -1,0 +1,95 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=1024">
+<title>Agenda y recordatorios — prueba médica</title>
+<link rel="stylesheet" href="estilo.css"></head><body>
+<div class="barra"><span class="marca">Maternidad</span>
+<span class="pantalla">Agenda y recordatorios de continuidad</span>
+<span class="propuesta">PRUEBA REAL · MÉDICA</span>
+<span class="reloj-dia"></span></div>
+<div class="cuerpo"><div class="lateral"></div>
+<div class="zona">
+<h1>Agenda y recordatorios</h1>
+<p class="subtitulo">La próxima cita se <b>deriva</b> del protocolo (nunca se captura a mano). El recordatorio sale con nombre y fecha — <b>nunca con cifras ni diagnósticos</b> — y lo entrega una persona: el software lo prepara, usted lo empuja.</p>
+<div class="panel sombra">
+<h3>Citas de hoy y próximas</h3>
+<div id="agenda-hoy"></div>
+</div>
+<div class="panel sombra">
+<h3>Recordatorios preparados — listos para copiar</h3>
+<div class="linea" style="color:#667">Si nadie lo entrega y llega la fecha, aparece como <b>escalar</b> en el cierre del día. «Anular entrega» lo devuelve a disponible — el estado se deduce, no se captura.</div>
+<div id="recordatorios"></div>
+</div>
+<div class="panel sombra">
+<h3>«Por recuperar» — control vencido sin cita</h3>
+<div id="recuperar"></div>
+</div>
+<div id="veredicto-host"></div>
+</div></div>
+<script src="config.js"></script><script src="motor.js"></script>
+<script>
+Jornada.nav("06-AGENDA.html");
+var S = Jornada.estado();
+function pinta() {
+  var hoy = S.agenda.filter(function (a) { return a.min >= Jornada.ahoraMin(); }).sort(function (x, y) { return x.min - y.min; });
+  var pasadas = S.agenda.filter(function (a) { return a.min < Jornada.ahoraMin(); });
+  var host = document.getElementById("agenda-hoy");
+  var h = "";
+  if (pasadas.length) {
+    h += "<div class='linea'><span class='chip verde'>" + pasadas.length + " citas ya atendidas hoy</span> " +
+      pasadas.map(function (a) { return Jornada.hm(a.min) + " " + Jornada.nombrePac(a.pid); }).join(" · ") + "</div>";
+  }
+  h += hoy.length
+    ? hoy.map(function (a) {
+        return "<div class='linea'><span class='chip azul'>" + Jornada.hm(a.min) + "</span> <b>" + Jornada.nombrePac(a.pid) + "</b> · " + a.motivo + "</div>";
+      }).join("")
+    : "<div class='vacio'>Sin más citas hoy.</div>";
+  host.innerHTML = h;
+  var rec = Jornada.recordatorios();
+  var rhost = document.getElementById("recordatorios");
+  if (!rec.length) rhost.innerHTML = "<div class='vacio'>Sin recordatorios pendientes.</div>";
+  else {
+    rhost.innerHTML = rec.map(function (r) {
+      var venc = r.fecha < Jornada.hoyISO();
+      return "<div class='aviso " + (r.entregado ? "verde" : venc ? "rojo" : "ambar") + "'><b>" + Jornada.nombrePac(r.pid) + "</b> — " + r.situacion +
+        "<div class='linea' style='margin-top:4px'>«" + r.plantilla + "»</div>" +
+        "<span class='duenio'>Fecha derivada del protocolo: " + Jornada.fechaLarga(r.fecha) + " · " +
+        (r.entregado ? "<b>entregado</b> — ya no está disponible para quien abra la lista" : venc ? "<b>ESCALADO</b> — la ventana pasó sin entrega" : "listo para copiar") + "</span>" +
+        (r.entregado
+          ? " <button class='btn sec chico' data-anular='" + r.rid + "'>Anular entrega</button>"
+          : " <button class='btn chico' data-entregar='" + r.rid + "'>Copiar / entregar</button>") +
+        "</div>";
+    }).join("");
+    rhost.querySelectorAll("button[data-entregar]").forEach(function (b) {
+      b.onclick = function () { Jornada.entregarRecordatorio(b.getAttribute("data-entregar")); Jornada.toast("Entrega registrada — para cualquiera que abra la lista ya no está disponible."); pinta(); };
+    });
+    rhost.querySelectorAll("button[data-anular]").forEach(function (b) {
+      b.onclick = function () { Jornada.anularRecordatorio(b.getAttribute("data-anular")); Jornada.toast("Entrega anulada — vuelve a estar disponible."); pinta(); };
+    });
+  }
+  var recup = S.pacientes.filter(function (p) {
+    if (p.caso.toLowerCase().indexOf("embarazo") < 0 && p.caso.toLowerCase().indexOf("fertilidad") < 0 && p.caso.toLowerCase().indexOf("infección") < 0) return false;
+    var tieneCita = S.agenda.some(function (a) { return a.pid === p.id && a.min > Jornada.ahoraMin(); });
+    return !tieneCita && Jornada.estadoDe(p.id).estado === "atendida";
+  });
+  document.getElementById("recuperar").innerHTML = recup.length
+    ? recup.map(function (p) {
+        var f = Jornada.proximaFechaControl(p);
+        return "<div class='linea'><b>" + p.nombre + "</b> — control derivado para el " + Jornada.fechaLarga(f.fecha) + " y <span class='chip ambar'>sin cita</span> " +
+          "<button class='btn chico' data-agendar='" + p.id + "' data-fecha='" + f.fecha + "'>Crear cita con 1 clic</button></div>";
+      }).join("")
+    : "<div class='vacio'>Todos con control derivado ya tienen su cita.</div>";
+  document.getElementById("recuperar").querySelectorAll("button[data-agendar]").forEach(function (b) {
+    b.onclick = function () {
+      var pid = b.getAttribute("data-agendar");
+      S.agenda.push({ min: 600, pid: pid, motivo: "control derivado — cita creada desde «por recuperar»", fecha: b.getAttribute("data-fecha") });
+      Jornada.agregarEvento("cita_creada", pid, {});
+      Jornada.guardar();
+      Jornada.toast("Cita creada — ya no aparece en «por recuperar».");
+      pinta();
+    };
+  });
+}
+pinta();
+Jornada.bandaVeredicto("agenda", "¿Cómo avisan hoy a sus pacientes? ¿El mensaje listo para copiar les sirve así (nombre y fecha, sin cifras)? ¿La fecha derivada del protocolo es la que ustedes usarían?");
+</script>
+</body></html>

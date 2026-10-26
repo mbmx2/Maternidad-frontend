@@ -1,0 +1,100 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=1024">
+<title>La urgencia — prueba médica</title>
+<link rel="stylesheet" href="estilo.css"></head><body>
+<div class="barra"><span class="marca">Maternidad</span>
+<span class="pantalla">La urgencia — primero la voz, después la pantalla</span>
+<span class="propuesta">PRUEBA REAL · MÉDICA</span>
+<span class="reloj-dia"></span></div>
+<div class="cuerpo"><div class="lateral"></div>
+<div class="zona">
+<h1>La urgencia</h1>
+<p class="subtitulo">El software ordena y registra; <b>llamar al equipo es palabra dicha en alto</b>. La urgencia sube al frente del tablero, no se cierra hasta que se atiende y su cierre queda anclado a la nota firmada.</p>
+<div class="panel sombra">
+<h3>Urgencias abiertas</h3>
+<div id="urg-lista"></div>
+</div>
+<div class="panel sombra">
+<h3>Marcar urgencia por decisión suya</h3>
+<div class="campo"><label>Paciente presente en la sala</label><select id="urg-pac"></select></div>
+<div class="campo"><label>Motivo (sus palabras)</label><input type="text" id="urg-motivo" placeholder="Ej. dolor abdominal agudo con hipotensión"></div>
+<button class="btn peligro" id="u-solo">Marcar urgencia — salta al frente del tablero</button>
+</div>
+<div class="panel sombra">
+<h3>La regla de la sala</h3>
+<div class="linea">1. <b>Usted lo decide en voz</b> con el equipo de la sala.</div>
+<div class="linea">2. El sistema lo registra: la tarjeta salta al frente sola y todos la ven.</div>
+<div class="linea">3. Al resolver: la nota firmada cierra la urgencia — sin escribir el mismo texto dos veces.</div>
+</div>
+<div id="veredicto-host"></div>
+</div></div>
+<script src="config.js"></script><script src="motor.js"></script>
+<script>
+Jornada.nav("04-URGENCIA.html");
+var S = Jornada.estado();
+function pintaLista() {
+  var host = document.getElementById("urg-lista");
+  var pend = S.alertas.filter(function (a) { return a.estado === "pendiente" && a.tipo === 4; });
+  if (!pend.length) {
+    host.innerHTML = "<div class='vacio'>Sin urgencias abiertas. Toda alerta tipo 4 vive aquí hasta su cierre.</div>";
+  } else {
+    host.innerHTML = pend.map(function (a) {
+      return Jornada.avisoHTML(a, true).replace("</div>", "<div style='margin-top:6px'><a class='btn peligro chico' href='02-CONSULTA.html?p=" + a.pid + "'>Abrir consulta y resolver →</a> <button class='btn sec chico' data-cerrar='" + a.id + "' data-pid='" + a.pid + "'>Cerrada — resolver</button></div></div>");
+    }).join("");
+    host.querySelectorAll("button[data-cerrar]").forEach(function (b) {
+      b.onclick = function () {
+        Jornada.modal("Resolver la urgencia", "¿Cómo se resolvió? El cierre queda anclado a la nota firmada si la resolvió allí.", [
+          { txt: "Referida a urgencias hospitalarias", cls: "sec", fn: function () { cierra(b.getAttribute("data-cerrar"), "referida", b.getAttribute("data-pid")); } },
+          { txt: "Atendida aquí — nota firmada", cls: "peligro", fn: function () { cierra(b.getAttribute("data-cerrar"), "anclada a nota", b.getAttribute("data-pid")); } }
+        ]);
+      };
+    });
+  }
+  var hist = S.alertas.filter(function (a) { return a.tipo === 4 && a.estado !== "pendiente"; }).slice(-3).reverse();
+  if (hist.length) {
+    host.innerHTML += "<h3 style='margin-top:12px'>Resueltas</h3>" + hist.map(function (a) {
+      return "<div class='aviso verde'><b>" + Jornada.nombrePac(a.pid) + "</b> — " + a.texto + " <span class='chip verde'>cerrada: " + (a.cierre || "atendida") + "</span></div>";
+    }).join("");
+  }
+}
+function cierra(alertaId, forma, pid) {
+  Jornada.cerrarAlerta(alertaId, forma);
+  Jornada.agregarEvento("atendida", pid, { via: "urgencia-" + forma });
+  var p = Jornada.paciente(pid);
+  if (p) { delete p.marcador; Jornada.guardar(); }
+  Jornada.toast("Urgencia cerrada: " + forma + ". Registrada con su cierre.");
+  pinta();
+}
+function pintaSel() {
+  var sel = document.getElementById("urg-pac");
+  sel.innerHTML = "";
+  S.pacientes.forEach(function (p) {
+    var e = Jornada.estadoDe(p.id).estado;
+    var presente = ["llego", "por_registrar", "espera", "estacion_hecha", "estacion_mitad", "en_atencion", "pausada", "falta_completar"].indexOf(e) >= 0;
+    if (presente && p.marcador !== "urgente") {
+      var o = document.createElement("option");
+      o.value = p.id; o.textContent = p.nombre + " — " + p.caso;
+      sel.appendChild(o);
+    }
+  });
+  if (!sel.innerHTML) sel.innerHTML = "<option value=''>Nadie está presente en la sala ahora</option>";
+}
+function pinta() { pintaLista(); pintaSel(); }
+document.getElementById("u-solo").onclick = function () {
+  var pid = document.getElementById("urg-pac").value;
+  var motivo = document.getElementById("urg-motivo").value.trim();
+  if (!pid) { Jornada.toast("Elija una paciente presente."); return; }
+  if (!motivo) { Jornada.toast("Escriba el motivo — la urgencia lleva sus palabras."); return; }
+  Jornada.nacerAlerta(pid, 4, motivo, "evaluar y resolver hoy", "médica");
+  Jornada.agregarEvento("urgencia", pid, { motivo: motivo });
+  var p = Jornada.paciente(pid);
+  p.marcador = "urgente";
+  Jornada.guardar();
+  Jornada.toast("Urgencia marcada. La tarjeta de " + p.nombre + " ya está al frente — y llame al equipo de VOZ.");
+  document.getElementById("urg-motivo").value = "";
+  pinta();
+};
+pinta();
+Jornada.bandaVeredicto("urgencia", "¿La urgencia debe poder marcarse sin tríada automática (decisión médica)? ¿El cierre debe pedir siempre la nota firmada o basta un motivo? ¿La regla de la sala está bien dicha?");
+</script>
+</body></html>

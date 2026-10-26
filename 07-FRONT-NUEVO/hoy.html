@@ -1,0 +1,65 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=1024">
+<title>NUEVO — Hoy</title>
+<link rel="stylesheet" href="front.css"></head>
+<body data-pag="hoy">
+
+<nav class="riel">
+  <span class="marca">Maternidad</span>
+  <a href="hoy.html" data-pag="hoy">▦ El día</a>
+  <a href="llegada.html" data-pag="llegada">⤷ Llegadas</a>
+  <a href="pendientes.html" data-pag="pendientes">⚑ Pendientes <span class="cuenta" id="cuenta-pend">–</span></a>
+  <a href="documentos.html" data-pag="documentos">✎ Documentos</a>
+  <a href="agenda.html" data-pag="agenda">▤ Agenda</a>
+  <a href="cierre.html" data-pag="cierre">⏻ Cierre</a>
+  <a class="piso" href="sistema.html" data-pag="sistema">⚙ Sistema (dueño)</a>
+</nav>
+
+<div class="principal">
+  <div class="barra">
+    <span class="pantalla">Hoy — jueves 25 de octubre</span>
+    <span class="hora-grande" id="hora-hoy">--:--</span>
+    <div id="contexto"></div>
+  </div>
+
+  <main class="cuerpo">
+    <h1>Hoy</h1>
+    <div class="acciones" style="margin-top:4px">
+      <a class="btn" href="llegada.html">＋ Registrar llegada</a>
+      <a class="btn sec" href="llegada.html#nueva">＋ Paciente nueva</a>
+      <a class="btn peligro" href="emergencia.html">⚠ Urgencia</a>
+      <span class="nota solo-papel">La prioridad la ponen ustedes en cada tarjeta — el software solo informa con los relojes.</span>
+    </div>
+    <div class="chips-respuesta" id="chips-dia" style="margin:12px 0 4px">Pintando el día…</div>
+    <div class="equipo-linea" style="margin-top:2px">
+      <span class="chip ambar" id="equipo-chip">EQUIPO FUERA — la médica está en sala de parto</span>
+      <button class="btn sec" id="btn-equipo" style="padding:3px 12px;font-size:12px">Cambiar estado del equipo</button>
+    </div>
+    <div class="subtitulo" style="margin-top:6px">
+      La espera se explica sola mientras él dura.
+      Las tarjetas amarillas pasan de 30 minutos; las rojas, de 45 — y lo dicen con reloj y con palabra.
+    </div>
+
+    <div class="tablero" id="zona-dia"></div>
+
+    <div class="banda">
+      <span class="rotulo">Pregunta para el equipo — responda con la plantilla de revisión</span>
+      <p><b>¿Así arranca su mañana?</b> ¿La tarjeta, con solo lo esencial, le dice lo
+      suficiente en un segundo? ¿Los tres botones de arriba son los que usarían?
+      ¿Los chips dicen lo justo, o sobra alguno? ¿La marca «★» les sirve para
+      decir quién sigue, o prefieren otra forma? ¿Qué columna falta o sobra? ¿El reloj les
+      sirve o estorba? ¿Quién debe cuidar cada estado? ¿El «no llegó» ofrece reagendar bien?
+      ¿Y el equipo fuera explica la espera como debe?</p>
+      <div class="veredicto"><label>☐ Así está bien, lo apruebo</label>
+        <label>☐ Está bien, pero con cambios</label>
+        <label>☐ Esto no sirve así: rediseñar</label></div>
+    </div>
+
+    <footer class="vuelta">Pantalla 1 de 9 · FL-01, FL-04, FL-10 ·
+      <a href="LEEME.md">cómo se probó esto</a></footer>
+  </main>
+</div>
+
+<div id="aviso"></div>
+<script src="puente.js"></script>
+</body></html>

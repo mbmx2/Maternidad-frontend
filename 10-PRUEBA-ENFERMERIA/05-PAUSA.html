@@ -1,0 +1,149 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=1024">
+<title>Atenciones abiertas — pausa y retorno</title>
+<link rel="stylesheet" href="estilo.css"></head><body>
+<div class="barra"><span class="marca">Maternidad</span>
+<span class="pantalla">Atenciones abiertas — pausa y retorno</span>
+<span class="propuesta">PRUEBA REAL · ENFERMERÍA</span>
+<span class="reloj-dia"></span></div>
+<div class="cuerpo"><div class="lateral"></div>
+<div class="zona">
+<h1>Atenciones abiertas: varias a la vez, ninguna se pisa</h1>
+<p class="subtitulo">La interrupción pausa con todo lo suyo y se retoma campo por campo. Si alguien más toca lo suyo, ve <b>«en uso de X»</b> — la emergencia puede tomarla, pero queda registrado.</p>
+<div class="panel sombra" id="equipo-panel"></div>
+<div class="panel sombra">
+<h3>Lo que está abierto ahora</h3>
+<div id="lista"></div>
+</div>
+<div class="panel sombra">
+<h3>Abrir una atención nueva</h3>
+<div class="fila-form">
+<div class="campo"><label>Paciente</label><select id="p-nueva"></select></div>
+<div class="campo"><label>Tipo</label><select id="p-tipo"><option value="estacion">Estación de constantes</option><option value="consulta">Consulta (si la médica se la pide)</option></select></div>
+</div>
+<div style="margin-top:8px"><button class="btn" id="btn-abrir">Abrir atención</button>
+<button class="btn peligro chico" id="btn-robar">Probar: tomar una «en uso» (emergencia)</button></div>
+</div>
+<div id="veredicto-host"></div>
+</div></div>
+<script src="config.js"></script><script src="motor.js"></script>
+<script>
+Jornada.nav("05-PAUSA.html");
+var S = Jornada.estado();
+var pid = Jornada.contextoPaciente();
+function pintaEquipo() {
+  document.getElementById("equipo-panel").innerHTML = "<h3>El equipo hoy</h3>" +
+    "<div class='linea'><span class='chip " + (S.equipoFuera ? "ambar" : "verde") + "'>" + (S.equipoFuera ? "EQUIPO FUERA — la médica está en sala de parto" : "Equipo completo en el consultorio") + "</span></div>" +
+    "<div style='margin-top:8px'><button class='btn sec chico' id='btn-sala'>" + (S.equipoFuera ? "La médica volvió de sala" : "Simular: la médica sale a sala") + "</button></div>";
+  document.getElementById("btn-sala").onclick = function () {
+    S.equipoFuera = !S.equipoFuera;
+    Jornada.agregarEvento(S.equipoFuera ? "equipo_fuera" : "equipo_vuelve", null, {});
+    Jornada.guardar();
+    pinta();
+  };
+}
+function pintaLista() {
+  var host = document.getElementById("lista");
+  var abiertas = S.atenciones.filter(function (a) { return a.abierta; });
+  var mitad = S.pacientes.filter(function (p) { return Jornada.estadoDe(p.id).estado === "estacion_mitad"; });
+  var pausadasCons = S.pacientes.filter(function (p) { return Jornada.estadoDe(p.id).estado === "pausada"; });
+  var html = "";
+  abiertas.forEach(function (a) {
+    var d = Jornada.estadoDe(a.pid).estado;
+    var yaPausada = a.pausada || d === "estacion_mitad" || d === "pausada";
+    html += "<div class='panel' style='border-left:5px solid " + (yaPausada ? "#d97706" : "#2e9e4f") + "'>" +
+      "<h3>" + Jornada.nombrePac(a.pid) + " — " + (a.tipo === "estacion" ? "estación de constantes" : "consulta") + "</h3>" +
+      "<div class='linea'><span class='chip " + (yaPausada ? "ambar" : "verde") + "'>" + (yaPausada ? "pausada — todo conservado" : "en uso") + "</span> Dueño: <b>" + a.duenio + "</b></div>" +
+      "<div style='margin-top:8px'>" +
+      (yaPausada
+        ? "<button class='btn pri2 chico' data-retomar='" + a.id + "'>▶ Retomar donde quedó</button>"
+        : "<button class='btn sec chico' data-pausar='" + a.id + "'>Pausar y pasar a otra</button>") +
+      " <a class='btn sec chico' href='" + (a.tipo === "estacion" ? "03-ESTACION.html" : "01-TABLERO.html") + "?p=" + a.pid + "'>Ir a su pantalla →</a>" +
+      "</div></div>";
+  });
+  mitad.forEach(function (p) {
+    html += "<div class='panel' style='border-left:5px solid #d97706'><h3>" + p.nombre + " — estación a mitad</h3>" +
+      "<div class='linea'><span class='chip ambar'>todo conservado</span> Dueño: quien captura (enfermería) — la interrumpieron.</div>" +
+      "<div style='margin-top:8px'><a class='btn pri2 chico' href='03-ESTACION.html?p=" + p.id + "'>Retomar estación →</a></div></div>";
+  });
+  pausadasCons.forEach(function (p) {
+    html += "<div class='panel' style='border-left:5px solid #d97706'><h3>" + p.nombre + " — consulta pausada</h3>" +
+      "<div class='linea'><span class='chip ambar'>pausada</span> Dueño: quien la abrió.</div>" +
+      "<div style='margin-top:8px'><a class='btn pri2 chico' href='01-TABLERO.html?p=" + p.id + "'>Ver en el tablero →</a></div></div>";
+  });
+  if (!abiertas.length && !mitad.length && !pausadasCons.length)
+    html = "<div class='vacio'>No hay atenciones abiertas. Puede abrir varias: el sistema las mantiene separadas.</div>";
+  html += "<div class='linea' style='margin-top:8px;color:#667'>" + (abiertas.length + mitad.length + pausadasCons.length) + " abiertas — sin tope fijo: el equipo decide cuántas aguanta.</div>";
+  host.innerHTML = html;
+  host.querySelectorAll("button[data-pausar]").forEach(function (b) {
+    b.onclick = function() {
+      var a = null;
+      S.atenciones.forEach(function (x) { if (x.id === b.getAttribute("data-pausar")) a = x; });
+      if (!a) return;
+      a.pausada = true;
+      if (a.tipo === "estacion") Jornada.agregarEvento("estacion_mitad", a.pid, { borrador: a.borrador, duenio: a.duenio });
+      else Jornada.agregarEvento("pausada", a.pid, { duenio: a.duenio, borrador: a.borrador });
+      Jornada.guardar();
+      Jornada.toast("Pausada. Retómela desde su tarjeta — nada se pierde.");
+      pinta();
+    };
+  });
+  host.querySelectorAll("button[data-retomar]").forEach(function (b) {
+    b.onclick = function () {
+      var a = null;
+      S.atenciones.forEach(function (x) { if (x.id === b.getAttribute("data-retomar")) a = x; });
+      if (!a) return;
+      a.pausada = false;
+      Jornada.agregarEvento(a.tipo === "estacion" ? "estacion_retomada" : "retomada", a.pid, {});
+      Jornada.guardar();
+      location.href = (a.tipo === "estacion" ? "03-ESTACION.html" : "01-TABLERO.html") + "?p=" + a.pid;
+    };
+  });
+}
+function pintaNueva() {
+  var sel = document.getElementById("p-nueva");
+  sel.innerHTML = "";
+  S.pacientes.forEach(function (p) {
+    var e = Jornada.estadoDe(p.id).estado;
+    if (e === "espera" || e === "llego" || e === "estacion_hecha" || e === "estacion_mitad") {
+      var o = document.createElement("option");
+      o.value = p.id; o.textContent = p.nombre;
+      sel.appendChild(o);
+    }
+  });
+  if (!sel.innerHTML) sel.innerHTML = "<option value=''>Sin pacientes en espera</option>";
+}
+document.getElementById("btn-abrir").onclick = function () {
+  var pidN = document.getElementById("p-nueva").value;
+  var tipo = document.getElementById("p-tipo").value;
+  if (!pidN) { Jornada.toast("No hay pacientes en espera."); return; }
+  var ya = null;
+  S.atenciones.forEach(function (a) { if (a.pid === pidN && a.abierta) ya = a; });
+  if (ya) { Jornada.toast("Esa paciente ya tiene una atención abierta — retómensela desde la lista."); return; }
+  var a = { id: Jornada.uid(), pid: pidN, tipo: tipo, abierta: true, pausada: false, duenio: tipo === "estacion" ? "enfermería" : "médica", borrador: null, abiertaEn: Jornada.ahoraMin() };
+  S.atenciones.push(a);
+  if (tipo === "consulta") Jornada.agregarEvento("en_atencion", pidN, { tipoAtencion: tipo, duenio: a.duenio });
+  Jornada.guardar();
+  location.href = (tipo === "estacion" ? "03-ESTACION.html" : "01-TABLERO.html") + "?p=" + pidN;
+};
+document.getElementById("btn-robar").onclick = function () {
+  var abierta = null;
+  S.atenciones.forEach(function (a) { if (a.abierta && !a.pausada && Jornada.estadoDe(a.pid).estado !== "estacion_mitad" && Jornada.estadoDe(a.pid).estado !== "pausada") abierta = a; });
+  if (!abierta) { Jornada.toast("No hay ninguna atención «en uso» para la prueba."); return; }
+  Jornada.modal("Atención en uso de otra persona", "Esta atención la tiene abierta <b>" + abierta.duenio + "</b>. En una emergencia la prioridad puede tomarla — pero <b>queda registrado quién la tomó</b>.", [
+    { txt: "Déjela como está", cls: "sec" },
+    { txt: "Tomarla por emergencia (queda registrado)", cls: "peligro", fn: function () {
+      var viejo = abierta.duenio;
+      abierta.duenio = "emergencia — tomada por enfermería (antes: " + viejo + ")";
+      Jornada.agregarEvento("atencion_tomada", abierta.pid, { antes: viejo, ahora: "emergencia" });
+      Jornada.guardar();
+      Jornada.toast("Tomada. La bitácora guarda quién la tomó y de quién.");
+      pinta();
+    } }
+  ]);
+};
+function pinta() { pintaEquipo(); pintaLista(); pintaNueva(); }
+pinta();
+Jornada.bandaVeredicto("pausa", "¿Así las interrumpen de verdad? ¿Cuántas abiertas aguanta el equipo? ¿La toma por emergencia con registro es la regla correcta?");
+</script>
+</body></html>

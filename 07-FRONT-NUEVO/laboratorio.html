@@ -1,0 +1,84 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=1024">
+<title>NUEVO — Laboratorio en papel</title>
+<link rel="stylesheet" href="front.css"></head>
+<body data-pag="laboratorio">
+
+<nav class="riel">
+  <span class="marca">Maternidad</span>
+  <span class="grupo primera">Jornada</span>
+  <a href="hoy.html" data-pag="hoy">▦ El día</a>
+  <a href="llegada.html" data-pag="llegada">⤷ Llegadas</a>
+  <a href="pendientes.html" data-pag="pendientes">⚑ Pendientes <span class="cuenta" id="cuenta-pend">–</span></a>
+  <a href="laboratorio.html" data-pag="laboratorio">⚕ Laboratorio</a>
+  <a href="atenciones.html" data-pag="atenciones">✂ Atenciones</a>
+  <a href="documentos.html" data-pag="documentos">✎ Documentos</a>
+  <a href="agenda.html" data-pag="agenda">▤ Agenda</a>
+  <a href="cierre.html" data-pag="cierre">⏻ Cierre</a>
+  <span class="grupo">Del consultorio</span>
+  <a href="falla.html" data-pag="falla">⚠ Fallas</a>
+  <a href="respaldo.html" data-pag="respaldo">⛃ Respaldo</a>
+  <a class="piso" href="sistema.html" data-pag="sistema">⚙ Sistema (dueño)</a>
+</nav>
+
+<div class="principal">
+  <div class="barra">
+    <span class="pantalla">Laboratorio — el papel que llega en la mano</span>
+    <a class="volver" href="hoy.html">← Hoy</a>
+    <div id="contexto"></div>
+  </div>
+
+  <main class="cuerpo">
+    <div class="cinta" id="cinta"></div>
+
+    <h1>Captura de laboratorio recibido</h1>
+    <div class="subtitulo">Tres datos en treinta segundos: <b>analito · valor · fecha de la
+      muestra</b>. En este centro gran parte del laboratorio llega impreso — sin este paso, el
+      semáforo de salud se queda gris por diseño. Si el papel llegó viejo, marca
+      «escrito tardío»: la honestidad de la fecha es parte del dato.</div>
+
+    <div class="panel">
+      <h2>Capturar un resultado</h2>
+      <form id="form-lab">
+        <div class="formulario">
+          <div class="campo"><label>Analito</label>
+            <input name="analito" list="lista-analitos" placeholder="p. ej. hemoglobina">
+            <datalist id="lista-analitos">
+              <option>hemoglobina</option><option>glucosa</option><option>orina (proteinuria)</option>
+              <option>hematocrito</option><option>plaquetas</option><option>potasio</option>
+            </datalist></div>
+          <div class="campo"><label>Valor con su unidad</label><input name="valor" type="text" placeholder="11,2 g/dL"></div>
+          <div class="campo"><label>Fecha de la muestra</label><input name="fecha" type="date"></div>
+        </div>
+        <label style="display:flex;gap:8px;align-items:center;margin-top:10px;font-size:13px">
+          <input type="checkbox" name="tarde"> El papel llegó tarde (marcar «escrito tardío»)</label>
+        <div class="acciones">
+          <button class="btn" type="submit">Capturar resultado</button>
+          <span class="nota">La banda (normal/alerta/crítica) la da el catálogo firmado del médico:
+            aquí se captura, no se decide.</span>
+        </div>
+      </form>
+    </div>
+
+    <div class="panel">
+      <h2>Lo capturado hoy</h2>
+      <div id="lista-lab"></div>
+    </div>
+
+    <div class="banda">
+      <span class="rotulo">Pregunta para el equipo — responda con la plantilla de revisión</span>
+      <p><b>¿Qué analitos capturan siempre en papel?</b> ¿Les sirve marcar lo que llegó tarde?
+      ¿Falta la unidad como campo aparte, o va pegada al valor como está?</p>
+      <div class="veredicto"><label>☐ Así está bien, lo apruebo</label>
+        <label>☐ Está bien, pero con cambios</label>
+        <label>☐ No sirve así: rediseñar</label></div>
+    </div>
+
+    <footer class="vuelta">Pantalla de la ronda completa · RF-08 · FL-07 · O8 · RB-08/RB-16
+      (evaluar donde el dato entra)</footer>
+  </main>
+</div>
+
+<div id="aviso"></div>
+<script src="puente.js"></script>
+</body></html>

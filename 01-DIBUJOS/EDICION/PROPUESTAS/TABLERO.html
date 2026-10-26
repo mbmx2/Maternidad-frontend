@@ -1,0 +1,252 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8">
+<title>PROPUESTA — Tablero del día (nueva pantalla de inicio)</title>
+<link rel="stylesheet" href="estilo.css">
+<script src="maqueta.js" defer></script></head><body>
+
+<div class="barra">
+  <span class="marca">Maternidad</span>
+  <span class="pantalla">Inicio — Tablero del día</span>
+  <span class="propuesta">PROPUESTA DE DISEÑO</span>
+  <button class="ayuda">Ayuda</button>
+</div>
+
+<div class="cuerpo">
+  <div class="lateral">
+    <a href="TABLERO.html" class="activo">Inicio (tablero)</a>
+    <a href="EMERGENCIA.html">Nueva paciente</a>
+    <a href="PROTOCOLOS.html">Ficha</a>
+    <a href="CONTROL.html">Control prenatal</a>
+    <a href="INDICE.html">Embarazo</a>
+    <a href="INDICE.html">Calculadoras</a>
+    <a href="INDICE.html">Apoyo clínico</a>
+    <a href="INDICE.html">Historia</a>
+    <a href="INDICE.html">Estado de salud</a>
+    <a href="INDICE.html">Ultrasonido</a>
+    <a href="INDICE.html">Agenda</a>
+    <a href="PAUSA.html">Atenciones abiertas</a>
+    <a href="INDICE.html">Respaldo</a>
+    <a href="INDICE.html">Sistema</a>
+  </div>
+
+  <div class="zona">
+    <div class="pregunta" style="margin-top:0;margin-bottom:16px;max-width:none">
+      <span class="rotulo">PROPUESTA · dibujo 1 de 6 · reemplaza la pantalla de Inicio de hoy</span>
+      El día completo de un vistazo: quién está en la puerta, quién espera, quién se atiende,
+      quién se pausó, quién ya se atendió y quién viene después — con reloj de espera en
+      cada tarjeta. Haga clic en una tarjeta para ver cómo se abriría la consulta.
+    </div>
+
+    <h1>Mañana del jueves 23 de octubre — 18 pacientes</h1>
+    <div class="subtitulo">
+      5 atendidas · 1 en consulta · 1 pausada · 1 estación a medias · 4 en espera ·
+      2 por registrar · <b>1 urgente al frente</b> · <b>1 no llegó</b> ·
+      <b>0 sin estado a las 2 horas de abierta la puerta</b>. Las tarjetas amarillas
+      llevan más de 30 minutos esperando; las rojas, más de 45. Los estados se mueven
+      <b>solos</b> desde los hechos del día — nadie arrastra tarjetas a mano.
+    </div>
+    <div class="subtitulo" style="margin-top:-6px">
+      <span class="chip ambar">EQUIPO FUERA — la médica está en sala de parto</span>
+      La espera se explica sola: mientras ella está fuera, el tablero lo dice, en vez de
+      solo mostrar la fila quieta.
+    </div>
+
+    <div class="tablero">
+
+      <div class="columna urgente">
+        <h4><span>⚠ URGENTE</span><span>1</span></h4>
+        <div class="tarjeta rojo" onclick="location.href='CONSULTA.html'">
+          <span class="reloj min45">ahora</span>
+          <div class="nombre">Peña Sandoval, Gabriela</div>
+          <div class="caso">Embarazo 34 semanas · cefalea + visión borrosa al guardar</div>
+          <div class="fila-extra"><span class="chip rojo">EN ATENCIÓN — la médica decidió</span>
+            <span class="chip rojo">se saltó la fila automáticamente</span></div>
+          <div class="fila-extra"><b>Dueño:</b> la médica (la urgencia la cierra la voz del equipo)</div>
+        </div>
+      </div>
+
+      <div class="columna">
+        <h4><span>No llegó</span><span>1</span></h4>
+        <div class="tarjeta gris">
+          <div class="nombre">Ochoa Trejo, Perla</div>
+          <div class="caso">Cita de las 10:15 · pasó su tiempo sin aparecer — el estado cambió solo</div>
+          <div class="fila-extra"><span class="chip gris">no llegó</span>
+            <a href="AGENDA.html"><b>Reagendar →</b></a></div>
+          <div class="fila-extra"><b>Dueño:</b> recepción (cuida llegadas y ausencias)</div>
+        </div>
+      </div>
+
+      <div class="columna">
+        <h4><span>Por registrar</span><span>2</span></h4>
+        <div class="tarjeta gris">
+          <div class="nombre">Mata Solís, Yolanda</div>
+          <div class="caso">Llegó 12:03 · sin cita · registrada en 1 min con un clic</div>
+          <div class="fila-extra"><a href="EMERGENCIA.html"><b>Registrar ahora →</b></a>
+            <b>Dueño:</b> recepción</div>
+        </div>
+        <div class="tarjeta gris">
+          <div class="nombre">Bernal Cruz, Rocío</div>
+          <div class="caso">Primera visita · derivada por el centro de salud · llegó 12:04</div>
+          <div class="fila-extra"><a href="EMERGENCIA.html"><b>Registrar ahora →</b></a>
+            <b>Dueño:</b> recepción</div>
+        </div>
+      </div>
+
+      <div class="columna">
+        <h4><span>En espera</span><span>4</span></h4>
+        <div class="tarjeta azul">
+          <span class="reloj min45">47 min</span>
+          <div class="nombre">Herrera Luz, Brenda</div>
+          <div class="caso">Fertilidad · día 6 del protocolo de ovulación</div>
+          <div class="fila-extra"><span class="chip rojo">pasó su tiempo</span>
+            <b>Dueño:</b> recepción</div>
+        </div>
+        <div class="tarjeta azul">
+          <span class="reloj min30">34 min</span>
+          <div class="nombre">Torres Vega, Lucía</div>
+          <div class="caso">Tumoración ovárica · esperando su estudio de imagen</div>
+          <div class="fila-extra"><span class="chip ambar">estudio pendiente — reintento</span>
+            <b>Dueño:</b> quien captura</div>
+        </div>
+        <div class="tarjeta morado">
+          <span class="reloj">6 min</span>
+          <div class="nombre">Iturbe Cano, Herminia</div>
+          <div class="caso">40 semanas · inducción confirmada</div>
+          <div class="fila-extra"><span class="chip morado">lista para sala de parto</span>
+            <b>Dueño:</b> quien captura</div>
+        </div>
+        <div class="tarjeta" style="border-left-color:#d97706">
+          <span class="reloj">14 min</span>
+          <div class="nombre">Mendoza Rojas, Carmen</div>
+          <div class="caso">Registrada de urgencia a las 11:02 · parto atendido</div>
+          <div class="fila-extra"><span class="chip ambar">falta completar su ficha</span></div>
+          <div class="fila-extra"><b>Dueño:</b> quien captura (enfermería) — completa la ficha</div>
+        </div>
+      </div>
+
+      <div class="columna">
+        <h4><span>Estación a medias</span><span>1</span></h4>
+        <div class="tarjeta azul">
+          <span class="reloj min30">22 min</span>
+          <div class="nombre">Sandoval Ruiz, Estela</div>
+          <div class="caso">Post-quirúrgica de miomectomía · dia 21 · la estación de
+            constantes se interrumpió a mitad (la enfermera fue a la urgencia)</div>
+          <div class="fila-extra">            <span class="chip ambar">estación a medias — todo conservado</span>
+            <a href="CONTROL.html"><b>Retomar estación →</b></a></div>
+          <div class="fila-extra"><b>Dueño:</b> quien captura (enfermería) — retoma donde fue</div>
+        </div>
+      </div>
+
+      <div class="columna">
+        <h4><span>En atención</span><span>1</span></h4>
+        <div class="tarjeta verde">
+          <div class="nombre">Luna Gómez, Rosa</div>
+          <div class="caso">VPH · aplicación 2 de 4 · con la médica desde 11:58</div>
+          <div class="fila-extra">
+            <button class="btn sec" style="padding:5px 14px;font-size:12px"
+              onclick="pausar(this)">Pausar y pasar a otra</button>
+            <b>Dueño:</b> quien atiende (la médica)
+          </div>
+        </div>
+      </div>
+
+      <div class="columna">
+        <h4><span>Pausada</span><span>1</span></h4>
+        <div class="tarjeta azul">
+          <div class="nombre">García Luna, María</div>
+          <div class="caso">Embarazo 28 semanas · control empezado 11:20 · todo conservado</div>
+          <div class="fila-extra">
+            <button class="btn" style="padding:5px 14px;font-size:12px"
+              onclick="location.href='CONSULTA.html'">▶ Retomar donde quedó</button>
+            <b>Dueño:</b> quien la abrió — «en uso de X» si otra intenta escribir
+          </div>
+        </div>
+      </div>
+
+      <div class="columna">
+        <h4><span>Atendidas hoy</span><span>5</span></h4>
+        <div class="tarjeta verde" style="opacity:.85">
+          <div class="nombre">Díaz Paredes, Carolina</div>
+          <div class="caso">Embarazo 12 semanas · primer control</div>
+        </div>
+        <div class="tarjeta verde" style="opacity:.85">
+          <div class="nombre">Ríos Aguilar, Daniela</div>
+          <div class="caso">Derivada · ultrasonido hecho · falta contacto</div>
+        </div>
+        <div class="tarjeta verde" style="opacity:.85">
+          <div class="nombre">Vega Moreno, Alejandra</div>
+          <div class="caso">Puerperio día 15</div>
+        </div>
+        <div class="tarjeta verde" style="opacity:.85">
+          <div class="nombre">Klein Ortiz, Ivonne</div>
+          <div class="caso">Embarazo 30 semanas · laboratorio de hoy entregado</div>
+        </div>
+        <div class="tarjeta verde" style="opacity:.85">
+          <div class="nombre">Navarrete Sol, Gloria</div>
+          <div class="caso">Infección · control semana 2 · confidencial</div>
+        </div>
+      </div>
+
+      <div class="columna">
+        <h4><span>Con cita después</span><span>2</span></h4>
+        <div class="tarjeta gris">
+          <span class="reloj">12:20</span>
+          <div class="nombre">Leal Fuentes, Julieta</div>
+          <div class="caso">Revisión de duelo obstétrico</div>
+        </div>
+        <div class="tarjeta gris">
+          <span class="reloj">12:30</span>
+          <div class="nombre">Serrano Dávila, Fernanda</div>
+          <div class="caso">Tumoración uterina · revisión programada</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="panel" style="max-width:980px">
+      <h3>Lo que la recepción y la enfermería hacen desde aquí</h3>
+      <div class="linea">· <b>Registrar</b> — un nombre, una fecha, listo (menos de un minuto);
+        lo demás se completa después. <a href="EMERGENCIA.html">Ver el registro rápido →</a></div>
+      <div class="linea">· <b>Cambiar de paciente</b> — solo con clic en su tarjeta;
+        nunca desde dentro de un formulario.</div>
+      <div class="linea">· <b>Pausar y retomar</b> — varias consultas abiertas a la vez sin
+        perder un campo. <a href="PAUSA.html">Ver la pausa en acción →</a></div>
+      <div class="linea">· <b>La urgencia sola se pone al frente</b> — nadie tiene que
+        reclamar prioridad.</div>
+      <div class="linea">· <b>Los estados se mueven solos</b> — la cita creada, la llegada
+        registrada, la estación guardada y la consulta cerrada mueven la tarjeta; lo manual
+        es solo lo que exige juicio (urgencia y pausa). Nadie arrastra tarjetas a mano.</div>
+      <div class="linea">· <b>Cierre del día y traspaso</b> — al final, el tablero entrega
+        «quién quedó, qué venció y qué falta completar» en una hoja imprimible para la
+        tarde. <a href="CIERRE.html">Ver el cierre de día →</a></div>
+    </div>
+
+    <div class="pregunta">
+      <span class="rotulo">PREGUNTA PARA EL EQUIPO — responda con la plantilla de revisión</span>
+      <b>¿Así arrancaría su mañana?</b> Díganos: ¿qué columna falta o sobra? ¿qué necesitan
+      ver en cada tarjeta para decidir en un segundo? ¿el reloj de espera les sirve o
+      estorba? ¿quién debe cuidar cada estado — recepción las llegadas y ausencias, quien
+      atiende lo suyo—? ¿el «no llegó» ofrece reagendar bien? ¿al «estación a medias» le
+      falta algo? ¿y el «equipo fuera» explica la espera como debe? ¿ven completo el
+      cierre y el traspaso de la tarde?
+      <div class="veredicto"><b>Veredicto:</b> ☐ Así está bien, lo apruebo ·
+        ☐ Así está bien, pero con cambios · ☐ Esto no sirve así, hay que rediseñarlo</div>
+    </div>
+
+    <footer>Propuesta 1 de 6 · lógica: pilar 1 (tablero con relojes), pilar 5 (urgencia
+      al frente), pilar 2 (pausa) · flujos 1, 2, 4 ·
+      <a href="INDICE.html">volver al índice de propuestas</a></footer>
+  </div>
+</div>
+
+<div id="aviso"></div>
+<script>
+function pausar(btn) {
+  btn.textContent = "Pausada — datos conservados";
+  btn.disabled = true;
+  const a = document.getElementById("aviso");
+  a.style.display = "block";
+  a.textContent = "Rosa queda PAUSADA con todo lo suyo · retómela desde su tarjeta cuando quiera";
+  setTimeout(() => a.style.display = "none", 3800);
+}
+</script>
+</body></html>

@@ -1,0 +1,163 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=1024">
+<title>ÍNDICE COMPARATIVO — todos los flujos vs las dos rondas de pantallas</title>
+<link rel="stylesheet" href="flujos.css"></head>
+<body><div class="envoltura">
+
+<div class="cabecera">
+  <h1>Todos los flujos, y dónde están cubiertos</h1>
+  <div class="sub">El mapa comparativo que alimenta el siguiente frontend: cada flujo de la
+  documentación con su pantalla en la ronda 1 (las 33), su pantalla en la ronda 2 (las 9) y
+  el hueco que sigue abierto.2026-10-25 · familia <code>08-FLUJOS/</code>.</div>
+  <div class="leyenda">
+    <span class="l-fis">físico — lo que hace el cuerpo</span>
+    <span class="l-dig">digital — lo que hace el software</span>
+    <span class="l-pan">pantalla (enlace)</span>
+    <span class="l-eve">estado o evento registrado</span>
+  </div>
+</div>
+
+<h2>1 · La norma vigente — la jornada (capa D de FLUJOS-TRABAJO)</h2>
+<p class="fuente">Dibujado en <a href="FLUJO-NORMA.html"><b>FLUJO-NORMA.html</b></a> · es la norma que manda sobre todo lo demás.</p>
+
+<div class="bloque rol">
+  <h3>La mañana de la enfermera (9:50 → 13:50)</h3>
+  <div class="cobertura">Ronda 1: <span class="par">parcial</span> — las piezas existían
+  (TABLERO, CONTROL, EMERGENCIA, LABORATORIO, ALERTAS, PAUSA, AGENDA, CIERRE) pero el orden
+  vivía narrado en <a href="../01-DIBUJOS/EDICION/PROPUESTAS/RUTAS/ENFERMERA.html">RUTAS/ENFERMERA</a>,
+  no en las pantallas. · Ronda 2: <span class="par">parcial</span> — hoy · llegada · estacion ·
+  pendientes · agenda · cierre cubren el esqueleto; <span class="no">falta laboratorio, urgencia
+  y ficha</span>.</div>
+</div>
+
+<div class="bloque rol">
+  <h3>La consulta de la médica (elige → cinta → cálculos → nota → agenda)</h3>
+  <div class="cobertura">Ronda 1: <span class="ok">PARCIAL-CUBIERTO</span> — CONSULTA,
+  CALCULADORES, HISTORIA, DOCUMENTOS, ALERTAS. · Ronda 2: <span class="par">parcial</span> —
+  consulta con cinta y nota; <span class="no">falta historia previa, calculadoras,
+  NOM-004</span>.</div>
+</div>
+
+<div class="bloque">
+  <h3>La visita como hecho del día (H-039) · una verdad, muchos equipos (H-041/042)</h3>
+  <div class="cobertura">Ronda 1: <span class="ok">dibujado</span> (REGISTRO con los cinco datos,
+  ALERTAS en paralelo). · Ronda 2: <span class="ok">dibujado</span> (llegada con los cinco
+  datos de visita; aviso en paralelo solo declarado). · <span class="no">Falta en ronda 2: la
+  señal «sin señal — se enviará al volver» del celular.</span></div>
+</div>
+
+<h2>2 · Los ocho cortes de estrés (capa C)</h2>
+<p class="fuente">Dibujados en <a href="FLUJO-CORTES.html"><b>FLUJO-CORTES.html</b></a> · ocurren sobre el día cargado.</p>
+
+<div class="bloque">
+  <div class="mini"><span class="m">Corte1 mañana base</span><span class="f">→</span>
+  <span class="m pant">r1: TABLERO</span><span class="f">→</span>
+  <span class="m pant">r2: hoy</span><span class="f">→</span>
+  <span class="m eve">estado: cubierto</span></div>
+  <div class="mini" style="margin-top:6px"><span class="m">Corte2 cesárea10:30</span><span class="f">→</span>
+  <span class="m pant">r1: PAUSA+PARTO</span><span class="f">→</span>
+  <span class="m falta">r2: parcial — pausa sí, parto no</span></div>
+  <div class="mini" style="margin-top:6px"><span class="m">Corte3 parto en la puerta</span><span class="f">→</span>
+  <span class="m pant">r1: EMERGENCIA</span><span class="f">→</span>
+  <span class="m falta">r2: llegada registra, falta el rojo y completar ficha</span></div>
+  <div class="mini" style="margin-top:6px"><span class="m">Corte4 urgencia obstétrica</span><span class="f">→</span>
+  <span class="m pant">r1: ALERTAS+TABLERO</span><span class="f">→</span>
+  <span class="m falta">r2: pendientes sí, falta marcar urgencia y el salto al frente</span></div>
+  <div class="mini" style="margin-top:6px"><span class="m">Corte5 urgencia sin embarazo</span><span class="f">→</span>
+  <span class="m pant">r1: APOYO</span><span class="f">→</span>
+  <span class="m falta">r2: sin pantalla — expone la carencia (falta protocolo de tumoración)</span></div>
+  <div class="mini" style="margin-top:6px"><span class="m">Corte6 se va la luz12:15</span><span class="f">→</span>
+  <span class="m pant">r1: FALLA</span><span class="f">→</span>
+  <span class="m falta">r2: sin pantalla — FL-14 sin dibujar</span></div>
+  <div class="mini" style="margin-top:6px"><span class="m">Corte7 el equipo falla13:10</span><span class="f">→</span>
+  <span class="m pant">r1: FALLA</span><span class="f">→</span>
+  <span class="m falta">r2: sin pantalla</span></div>
+  <div class="mini" style="margin-top:6px"><span class="m">Corte8 ecógrafo falla13:30</span><span class="f">→</span>
+  <span class="m pant">r1: ULTRASONIDO/INGESTA</span><span class="f">→</span>
+  <span class="m falta">r2: sin pantalla</span></div>
+</div>
+
+<h2>3 · Los diecisiete requerimientos de interacción (FL-01…FL-17)</h2>
+<p class="fuente">Dibujados en <a href="FLUJO-INTERACCION.html"><b>FLUJO-INTERACCION.html</b></a> · casa: <code>06-FUENTE-BACKEND/REQ-FLUJO.md</code>.</p>
+
+<div class="bloque">
+  <div class="cobertura"><b>Estado global:</b> la ronda 2 cubre
+  <span class="ok">FL-01, FL-02, FL-03, FL-04, FL-05, FL-06, FL-09, FL-13 (parcial),
+  FL-15, FL-17</span> · cubre a medias <span class="par">FL-07 (sin pantalla), FL-08 (sin
+  marcador), FL-11 (sin parto), FL-12 (sin rojo/ficha)</span> · <span class="no">sin cubrir
+  FL-10 (equipo fuera solo texto), FL-14 (fallas), FL-16 (paralelo del celular)</span>.
+  La ronda 1 tocaba estos mismos flujos repartidos entre33 piezas sin cadena declarada.</div>
+</div>
+
+<h2>4 · Los circuitos lógicos (la lógica detrás de las pantallas)</h2>
+<p class="fuente">Dibujados en <a href="FLUJO-CIRCUITOS.html"><b>FLUJO-CIRCUITOS.html</b></a>.</p>
+
+<div class="bloque">
+  <div class="mini"><span class="m">Circuito de4 latidos: captura→chip→regla→aviso→continuidad</span>
+  <span class="f">→</span><span class="m pant">r1: ALERTAS/CALCULADORES/AGENDA</span>
+  <span class="f">→</span><span class="m falta">r2: el aviso no nace al guardar (H-062)</span></div>
+  <div class="mini" style="margin-top:6px"><span class="m">Seis tipos + entrega T1/T2/T3 + cierre firmado</span>
+  <span class="f">→</span><span class="m pant">r1: ALERTAS</span>
+  <span class="f">→</span><span class="m pant">r2: pendientes (con B-013)</span></div>
+  <div class="mini" style="margin-top:6px"><span class="m">Recordatorios: prepara la persona entrega</span>
+  <span class="f">→</span><span class="m pant">r1: AGENDA C-25</span>
+  <span class="f">→</span><span class="m pant">r2: agenda (copiar)</span></div>
+  <div class="mini" style="margin-top:6px"><span class="m">Calculadoras: prefill y cálculo solo</span>
+  <span class="f">→</span><span class="m pant">r1: CALCULADORES</span>
+  <span class="f">→</span><span class="m falta">r2: solo2 chips en la estación</span></div>
+</div>
+
+<h2>5 · Recorridos por rol, día de18 y construcción (enlazados, ya dibujados)</h2>
+
+<div class="bloque">
+  <div class="mini"><span class="m pant">RUTAS/ENFERMERA —8 paradas</span><span class="f">·</span>
+  <span class="m pant">RUTAS/MEDICA —7</span><span class="f">·</span>
+  <span class="m pant">RUTAS/DUENO —7</span><span class="f">·</span>
+  <span class="m falta">ronda2 sin recorridos por rol</span></div>
+  <div class="mini" style="margin-top:6px">
+  <span class="m pant">Día de18 en r1: TABLERO.html</span><span class="f">·</span>
+  <span class="m pant">Día en r2: hoy.html (14)</span><span class="f">·</span>
+  <span class="m">Fases I–V: MAPA-DE-IMPLEMENTACION.md</span></div>
+  <div class="mini" style="margin-top:6px">
+  <span class="m">Historia (capa A):3 recorridos imaginados — FLUJOS-TRABAJO</span><span class="f">·</span>
+  <span class="m">Optimizaciones O1–O10 ajustan todos los flujos — capa F</span></div>
+</div>
+
+<h2>6 · El resumen de la comparativa (lo que manda para el siguiente frontend)</h2>
+
+<div class="bloque">
+  <div class="linea-like"><b>Donde las dos rondas ya cubren el flujo:</b> el día, la puerta,
+  la estación, la consulta, los pendientes, la agenda y el cierre.</div>
+  <div class="linea-like" style="margin-top:6px"><b>Donde solo la ronda 1 lo dibujó:</b> los
+  tres cortes técnicos (luz, equipo, ecógrafo), estudios y adjuntos, historia y NOM-004,
+  calculadoras, protocolos, acceso, respaldo, importación — y los recorridos por rol.</div>
+  <div class="linea-like" style="margin-top:6px"><b>Los 13 huecos, cerrados:</b> 1 acceso ·
+  2 ficha · 3 urgencia/emergencia · 4 laboratorio · 5 protocolos · 6 calculadoras ·
+  7 historia/NOM-004 · 8 estudios y adjuntos · 9 falla y puente de papel · 10 respaldo con
+  drill · 11 homónimas en la búsqueda · 12 atenciones abiertas · 13 recorridos por rol
+  (cuentan pantallas, no FL: por eso el número no coincide con el conteo de flujos).</div>
+  <div class="linea-like" style="margin-top:6px"><b>Donde ninguna ronda lo tiene bien:</b> el
+  circuito alerta sin cerrar desde la captura (H-062), la urgencia sin marcador ni salto
+  automático, la ficha de emergencia «completar después», el laboratorio de la ronda 2, la
+  fuente de verdad del celular (FL-16), y el protocolo de tumoración (carencia declarada en
+  el corte5).</div>
+  <div class="linea-like" style="margin-top:6px"><b>Conclusión para el nuevo frontend:</b>
+  construir sobre la costura de la ronda2 (puente, estados derivados, riel), absorbiendo de
+  la ronda1 su cobertura y sus recorridos, y cerrando los huecos anteriores en el orden de
+  los FL.</div>
+  <div class="linea-like" style="margin-top:6px"><b>Dictámenes del 2026-10-25 ya volcados
+  a este dibujo y a `07-FRONT-NUEVO/`:</b> la prioridad humana (B6) · la pantalla llamada
+  **Hoy** con hora · la llegada en cuatro bloques con los datos de la libreta ·
+  «falta registrar» como etiqueta · pendientes con **la paciente en cada aviso** y lenguaje
+  de sala.</div>
+  <div class="linea-like" style="margin-top:6px"><b>Regla de lectura:</b> la ronda 2 es
+  papel (DEC-19) — «construir sobre la costura de la ronda 2» es <b>dibujar y cablear
+  papel</b>; el código del producto solo baja por su pipeline: veredicto → dibujo →
+  contrato → fila de la ley → código.</div>
+</div>
+
+<footer class="pie">Índice de <code>08-FLUJOS/</code> · cada enlace lleva a su cadena dibujada
+· las casas siguen mandando: <code>02-LOGICA-DE-DISENO/FLUJOS-TRABAJO.md</code> y
+<code>06-FUENTE-BACKEND/REQ-FLUJO.md</code> · <a href="../LEEME.md">LEEME de la carpeta</a></footer>
+
+</div></body></html>

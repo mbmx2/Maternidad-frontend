@@ -1,0 +1,156 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8">
+<title>PROPUESTA — Cierre de día y traspaso (la mañana entrega a la tarde)</title>
+<link rel="stylesheet" href="estilo.css"></head><body>
+
+<div class="barra">
+  <span class="marca">Maternidad</span>
+  <span class="pantalla">Cierre de día — traspaso de turno</span>
+  <span class="propuesta">PROPUESTA DE DISEÑO</span>
+  <button class="ayuda">Ayuda</button>
+</div>
+
+<div class="cuerpo">
+  <div class="lateral">
+    <a href="TABLERO.html">Inicio (tablero)</a>
+    <a href="EMERGENCIA.html">Nueva paciente</a>
+    <a href="PROTOCOLOS.html">Ficha</a>
+    <a href="CONTROL.html">Control prenatal</a>
+    <a href="LABORATORIO.html">Laboratorio</a>
+    <a href="CIERRE.html" class="activo">Cierre y traspaso</a>
+    <a href="AGENDA.html">Agenda</a>
+    <a href="INDICE.html">Todas las propuestas</a>
+  </div>
+
+  <div class="zona">
+    <div class="pregunta" style="margin-top:0;margin-bottom:16px;max-width:none">
+      <span class="rotulo">PROPUESTA · EL DÍA TIENE FINAL · cierre y traspaso (optimización O5)</span>
+      Mi flujo anterior terminaba en «16 de 18 atendidas» y se acababa, como si el día no
+      tuviera final. Aquí está lo que falta al final de la mañana: quiénes quedaron y por qué,
+      los plazos vencidos, la ficha de emergencia sin completar y el respaldo de la tarde —
+      todo en una sola hoja imprimible que entrega el turno a quien venga.
+    </div>
+
+    <h1>Cierre de la mañana — jueves 23 de octubre, 13:50</h1>
+    <div class="subtitulo">
+      Esto no es un resumen para la estadística: es el <b>traspaso</b>. Lo que la mañana deja
+      escrito, la tarde lo recibe sin preguntar. Cada renglón lleva su dueño, para que nada
+      se quede sin persona.
+    </div>
+
+    <div class="rejilla">
+      <div class="col1">
+
+        <div class="panel" style="border-top:5px solid #2e9e4f">
+          <h3>Lo que la mañana dejó cerrado</h3>
+          <div class="linea"><span class="chip verde">14 atendidas</span> con su nota y su
+            dueño — no hay nada que hacer con ellas.</div>
+          <div class="linea" style="color:#566">Cerradas = consulta cerrada con nota firmada.
+            La que se atendió sin nota, aquí no cuenta como cerrada.</div>
+        </div>
+
+        <div class="panel" style="border-top:5px solid #e67e22">
+          <h3>Lo que queda — y a quién le toca</h3>
+          <div class="linea"><span class="chip ambar">2 no llegaron</span> Ochoa Trejo (10:15)
+            · un derivado sin aviso — <b>acción:</b> reagendar · <b>dueño:</b> recepción</div>
+          <div class="linea"><span class="chip ambar">1 estación a mitad</span> Sandoval Ruiz —
+            la enfermera fue a la urgencia y no retomó · <b>acción:</b> retomar mañana al abrir
+            · <b>dueño:</b> quien captura</div>
+          <div class="linea"><span class="chip rojo">1 ficha de emergencia sin completar</span>
+            Mendoza Rojas (parto de las 11:02) · <b>acción:</b> completar expediente ·
+            <b>dueño:</b> quien captura · <b>límite:</b> mañana antes de las 12:00</div>
+          <div class="linea"><span class="chip ambar">3 plazos vencidos sin atender</span>
+            tamizaje de diabetes (Díaz Paredes) · 2 chequeos de protocolo ·
+            <b>acción:</b> llamar y agendar · <b>dueño:</b> quien toma constantes</div>
+          <div class="linea"><span class="chip ambar">2 notas sin firmar</span> Luna Gómez ·
+            un interconsulta sin resolver · <b>acción:</b> firmar · <b>dueño:</b> la médica</div>
+        </div>
+
+        <div class="panel" style="border-top:5px solid #1b6ca8">
+          <h3>Lo que la tarde necesita saber</h3>
+          <div class="linea">▸ La médica estuvo <b>en sala de parto</b> de 10:30 a 11:15 —
+            por eso dos esperas pasaron de 30 minutos.</div>
+          <div class="linea">▸ Quedó <b>abierta una atención pausada</b> (García Luna, María):
+            se retoma con todo lo conservado, no se empieza de nuevo.</div>
+          <div class="linea">▸ Hay <b>un estudio de imagen pendiente de reintento</b>
+            (Torres Vega) — la memoria no cargó completa.</div>
+        </div>
+
+      </div>
+
+      <div class="col2">
+        <div class="panel" style="border-left:5px solid #c0392b">
+          <h3>Antes de cerrar: el respaldo de la tarde</h3>
+          <div class="linea"><span class="chip rojo">SIN RESPALDO HOY</span> Último respaldo
+            verificado: ayer 14:02.</div>
+          <div class="linea">El cierre <b>no se completa</b> sin su copia de la tarde — un fallo
+            esta noche no debe costar el día de trabajo.</div>
+          <button class="btn naranja" style="width:100%;margin-top:8px"
+            onclick="respaldar()">Hacer respaldo de la tarde ahora</button>
+          <div id="zona-respaldo"></div>
+        </div>
+
+        <div class="panel">
+          <h3>El traspaso, en 1 clic</h3>
+          <div class="linea">Una hoja, impresa o visible en la tarde, con: lo atendido · lo
+            que no llegó · los plazos vencidos · las fichas sin completar · las atenciones
+            abiertas con su dueño.</div>
+          <button class="btn grande" style="width:100%;margin-top:8px;background:#2e9e4f"
+            onclick="imprimir()">🖨 Imprimir traspaso de la mañana</button>
+          <div id="zona-traspaso"></div>
+          <div class="linea" style="color:#566;margin-top:8px">Nadie tiene que reconstruir el
+            día de la mañana con memoria: el papel lo trae entero.</div>
+        </div>
+
+        <div class="panel">
+          <h3>Qué NO es esta pantalla</h3>
+          <div class="linea">✗ Un número solo («16 de 18») sin decir a quién le falta qué.</div>
+          <div class="linea">✗ Un cierre que se pierde si alguien olvidó mover una tarjeta.</div>
+          <div class="linea">✗ Un resumen sin dueños: aquí todo renglón nombra a quién le toca.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pregunta">
+      <span class="rotulo">PREGUNTA PARA EL EQUIPO — responda con la plantilla de revisión</span>
+      <b>¿Así entrega su turno la mañana a la tarde?</b> ¿Qué le falta anotar para que la
+      tarde no pregunte? ¿El respaldo de la tarde debe frenar el cierre, o solo avisar? ¿Quién
+      firma el traspaso — quien cierra, o quien lo recibe? ¿Los plazos vencidos deben llamar
+      a la paciente ese mismo día o al siguiente?
+      <div class="veredicto"><b>Veredicto:</b> ☐ Así está bien, lo apruebo ·
+        ☐ Así está bien, pero con cambios · ☐ Esto no sirve así, hay que rediseñarlo</div>
+    </div>
+
+    <footer>Propuesta · cierre de día y traspaso (optimización O5) · lógica: pilar 1
+      (estados con dueño), pilar 6 (degradación) · contrato TABLERO, invariante (iv) ·
+      <a href="INDICE.html">índice de las 33</a> ·
+      <a href="TABLERO.html">volver al tablero</a></footer>
+  </div>
+</div>
+
+<div id="aviso"></div>
+<script>
+function aviso(txt) {
+  const a = document.getElementById("aviso");
+  a.style.display = "block";
+  a.textContent = txt;
+  setTimeout(() => a.style.display = "none", 4200);
+}
+function respaldar() {
+  document.getElementById("zona-respaldo").innerHTML =
+    '<div class="resultado ok"><b>✓ Respaldo de la tarde verificado — 13:51</b>' +
+    '<br>Copia íntegra guardada y comprobada fuera de la carpeta de trabajo. Ya se puede ' +
+    'cerrar el día sin miedo a un fallo esta noche.</div>';
+  aviso("Respaldo de la tarde verificado — el día queda protegido");
+}
+function imprimir() {
+  document.getElementById("zona-traspaso").innerHTML =
+    '<div class="resultado" style="border-left-color:#2e9e4f;background:#f4fbf6">' +
+    '<b>🖨 Traspaso de la mañana — listo para imprimir (1 hoja)</b><br>' +
+    'Contiene: 14 atendidas · 2 no llegadas (reagendar) · 1 estación a mitad · ' +
+    '1 ficha de emergencia sin completar (Mendoza Rojas) · 3 plazos vencidos con dueño · ' +
+    '2 notas sin firmar · 1 atención pausada abierta.<br>' +
+    '<span style="color:#566">La tarde recibe el día sin preguntar. Es el traspaso en 1 clic.</span></div>';
+  aviso("Traspaso listo — 1 hoja con lo que la tarde necesita saber");
+}
+</script>
+</body></html>

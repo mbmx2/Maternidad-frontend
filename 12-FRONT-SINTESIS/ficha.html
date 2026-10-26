@@ -1,0 +1,97 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8">
+<meta name="sintesis" content="S1">
+<meta name="viewport" content="width=1024">
+<title>Ficha y fundamentales</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="front.css"></head><body>
+<div class="barra"><span class="marca">Maternidad</span>
+<span class="pantalla">Ficha — datos que salvan</span>
+<span id="contexto-gatillo" class="vacio"></span>
+<span class="propuesta">V4 · S1 · PAPEL CON MOTOR</span>
+<span class="reloj-dia"></span></div>
+<div class="cuerpo"><div class="lateral"></div>
+<div class="zona">
+<h1>Ficha de la paciente</h1>
+<p class="subtitulo">Lo de la paciente se guarda una vez y viaja en la cinta de todas las pantallas. Los <b>datos que salvan</b> —alergias, tipo de sangre, medicación, crónicas— son los que nunca deben pedirse dos veces.</p>
+<div id="cinta"></div>
+<div id="banner-falta" style="display:none"></div>
+<div class="panel sombra">
+<h3>Datos que salvan</h3>
+<div class="fila-form">
+<div class="campo"><label>Alergias</label><input type="text" id="f-alergia" placeholder="Ej. penicilina — o «sin alergias conocidas»"></div>
+<div class="campo"><label>Tipo de sangre / RH</label><input type="text" id="f-rh" placeholder="Ej. O+"></div>
+<div class="campo"><label>Medicación actual</label><input type="text" id="f-medicacion" placeholder="Ej. prenatales"></div>
+<div class="campo"><label>Crónicas</label><input type="text" id="f-cronica" placeholder="Ej. hipertensión controlada"></div>
+</div>
+</div>
+<div class="panel sombra">
+<h3>Contacto y papeles</h3>
+<div class="fila-form">
+<div class="campo"><label>Teléfono</label><input type="text" id="f-tel"></div>
+<div class="campo"><label>Ciudad / procedencia</label><input type="text" id="f-ciudad"></div>
+<div class="campo"><label>CURP o documento</label><input type="text" id="f-curp" placeholder="Si no trae papel: «sin documento»"></div>
+</div>
+</div>
+<div class="acciones">
+<button class="btn" id="btn-guardar">Guardar ficha</button>
+<button class="btn peligro" id="btn-completar" style="display:none">Completar ficha de urgencia (cerrar el plazo)</button>
+</div>
+<div id="ficha-aviso"></div>
+<div id="veredicto-host"></div>
+</div></div>
+<script src="config.js"></script><script src="motor.js"></script>
+<script>
+Jornada.nav("Ficha");
+var S = Jornada.estado();
+var pid = Jornada.leerContexto();
+function pintar() {
+  document.getElementById("cinta").innerHTML = Jornada.cintaHTML(pid);
+  var p = Jornada.paciente(pid);
+  var banner = document.getElementById("banner-falta");
+  var btnComp = document.getElementById("btn-completar");
+  if (p && Jornada.estadoDe(pid).estado === "falta_completar") {
+    banner.style.display = "block";
+    banner.innerHTML = "<div class='aviso rojo'><span class='chip rojo'>falta completar ficha</span> Dueño: quien captura (enfermería) · plazo: antes de apagar — la urgencia no espera a la ficha, pero la ficha tiene fecha límite.</div>";
+    btnComp.style.display = "inline-block";
+  } else {
+    banner.style.display = "none";
+    btnComp.style.display = "none";
+  }
+  if (p) {
+    document.getElementById("f-alergia").value = (p.alergias && p.alergias.length) ? p.alergias.join(", ") : "";
+    document.getElementById("f-rh").value = p.sangre === "sin dato" ? "" : p.sangre;
+    document.getElementById("f-medicacion").value = p.medicacion === "sin dato" ? "" : p.medicacion;
+    document.getElementById("f-cronica").value = p.cronica === "sin dato" ? "" : p.cronica;
+    document.getElementById("f-tel").value = p.tel || "";
+    document.getElementById("f-ciudad").value = p.ciudad || "";
+    document.getElementById("f-curp").value = p.curp || "";
+  }
+}
+document.getElementById("btn-guardar").onclick = function () {
+  if (!pid) { Jornada.toast("Primero elija a la paciente desde Hoy."); return; }
+  var p = Jornada.paciente(pid);
+  var alergia = document.getElementById("f-alergia").value.trim();
+  p.alergias = alergia && alergia.toLowerCase().indexOf("sin alergias") < 0 ? alergia.split(",").map(function (s) { return s.trim(); }).filter(Boolean) : [];
+  p.sangre = document.getElementById("f-rh").value.trim() || "sin dato";
+  p.medicacion = document.getElementById("f-medicacion").value.trim() || "sin dato";
+  p.cronica = document.getElementById("f-cronica").value.trim() || "sin dato";
+  p.tel = document.getElementById("f-tel").value.trim();
+  p.ciudad = document.getElementById("f-ciudad").value.trim();
+  p.curp = document.getElementById("f-curp").value.trim();
+  Jornada.agregarEvento("ficha_guardada", pid, {});
+  Jornada.guardar();
+  document.getElementById("ficha-aviso").innerHTML = "<div class='aviso verde'><b>Ficha guardada</b> — los fundamentales viajan en la cinta de todas las pantallas.</div>";
+  Jornada.toast("Ficha guardada.");
+  pintar(); Jornada.pintarContexto();
+};
+document.getElementById("btn-completar").onclick = function () {
+  if (!pid) return;
+  Jornada.agregarEvento("ficha_completa", pid, {});
+  Jornada.toast("Ficha completada — el plazo se cerró y la marca de la tarjeta se apaga.");
+  Jornada.irA("hoy.html");
+};
+pintar();
+Jornada.pintarContexto();
+Jornada.bandaVeredicto("ficha", "¿Estos son los datos que salvan que ustedes revisan siempre? ¿Falta alguno que haya salvado un caso? ¿El plazo de «falta completar» está bien dicho?");
+</script>
+</body></html>

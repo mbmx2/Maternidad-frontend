@@ -1,0 +1,96 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=1024">
+<title>NUEVO — Estudios e imágenes</title>
+<link rel="stylesheet" href="front.css"></head>
+<body data-pag="estudios">
+
+<nav class="riel">
+  <span class="marca">Maternidad</span>
+  <span class="grupo primera">Jornada</span>
+  <a href="hoy.html" data-pag="hoy">▦ El día</a>
+  <a href="llegada.html" data-pag="llegada">⤷ Llegadas</a>
+  <a href="pendientes.html" data-pag="pendientes">⚑ Pendientes <span class="cuenta" id="cuenta-pend">–</span></a>
+  <a href="laboratorio.html" data-pag="laboratorio">⚕ Laboratorio</a>
+  <a href="atenciones.html" data-pag="atenciones">✂ Atenciones</a>
+  <a href="documentos.html" data-pag="documentos">✎ Documentos</a>
+  <a href="agenda.html" data-pag="agenda">▤ Agenda</a>
+  <a href="cierre.html" data-pag="cierre">⏻ Cierre</a>
+  <span class="grupo">Del consultorio</span>
+  <a href="falla.html" data-pag="falla">⚠ Fallas</a>
+  <a href="respaldo.html" data-pag="respaldo">⛃ Respaldo</a>
+  <a class="piso" href="sistema.html" data-pag="sistema">⚙ Sistema (dueño)</a>
+</nav>
+
+<div class="principal">
+  <div class="barra">
+    <span class="pantalla">Estudios — verificar antes de confiar</span>
+    <a class="volver" href="hoy.html">← Hoy</a>
+    <div id="contexto"></div>
+  </div>
+
+  <main class="cuerpo">
+    <div class="cinta" id="cinta"></div>
+
+    <h1>Estudios: recibir, verificar, rechazar sin romper</h1>
+    <div class="subtitulo">Un estudio que no llega no se vuelve el problema número diecinueve:
+      se <b>verifica con su huella</b>, si no cuadra se rechaza sin escribir nada a medias, y
+      en el día queda «estudio pendiente — reintento». Y la foto solo entra con
+      consentimiento vigente.</div>
+
+    <div class="panel">
+      <h2>Estudio recibido</h2>
+      <div id="estado-estudio" style="margin-bottom:10px"></div>
+      <div class="acciones" style="margin-top:0">
+        <button class="btn" id="btn-verificar">Verificar huella</button>
+        <button class="btn sec" id="btn-rechazar">Rechazar (sin escribir a medias)</button>
+      </div>
+      <div class="nota" style="margin-top:8px">La verificación recalcula la huella del archivo y
+        la compara con la del manifiesto: «intacto» o «alterado» — en palabras, nunca en hex largo.</div>
+    </div>
+
+    <div class="panel">
+      <h2>La foto y su consentimiento</h2>
+      <div class="formulario">
+        <div class="campo"><label>Consentimiento de imagen</label>
+          <select id="select-consent"><option value="vigente">vigente</option>
+            <option value="revocado">revocado</option></select></div>
+      </div>
+      <div class="acciones">
+        <button class="btn sec" id="btn-foto">Intentar adjuntar foto</button>
+        <span class="nota">Revocado ⇒ rechazo con mensaje humano: sin consentimiento, no hay foto.</span>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>Los tipos de estudio en su centro (catálogo por firmar)</h2>
+      <div>
+        <span class="chip azul" style="margin:3px">ginecológico</span>
+        <span class="chip azul" style="margin:3px">gineco-obstétrico</span>
+        <span class="chip azul" style="margin:3px">de embarazo</span>
+        <span class="chip azul" style="margin:3px">pélvico</span>
+      </div>
+      <div class="nota" style="margin-top:8px">Los cuatro que su equipo nombra al describir
+        la mañana — quedan aquí como catálogo **por firmar** (P6): la firma los vuelve
+        oficiales y podrán nacer de un solo lugar.</div>
+    </div>
+
+    <div class="banda">
+      <span class="rotulo">Pregunta para el equipo — responda con la plantilla de revisión</span>
+      <p><b>¿Cómo llegan hoy sus estudios?</b> (USB, red, correo impreso). ¿Quién prepara a
+      la paciente para el ultrasonido y quién marca que está «lista para pasar» — hay un
+      aviso, una nota o solo se dicen? ¿Los cuatro tipos de arriba son todos, o hay otro?
+      ¿La huella de verificación les sirve o prefieren otra forma? ¿El consentimiento debe
+      preguntarse en cada foto o basta uno por episodio?</p>
+      <div class="veredicto"><label>☐ Así está bien, lo apruebo</label>
+        <label>☐ Está bien, pero con cambios</label>
+        <label>☐ No sirve así: rediseñar</label></div>
+    </div>
+
+    <footer class="vuelta">Pantalla de la ronda completa · RF-12 · corte8 · R-31/R-32 · R-09
+      (consentimiento de imagen) · DOC-14/DOC-15</footer>
+  </main>
+</div>
+
+<div id="aviso"></div>
+<script src="puente.js"></script>
+</body></html>

@@ -1,0 +1,123 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8">
+<title>PROPUESTA — Registro de emergencia (paciente sin expediente)</title>
+<link rel="stylesheet" href="estilo.css"></head><body>
+
+<div class="barra">
+  <span class="marca">Maternidad</span>
+  <span class="pantalla">Nueva paciente — registro de emergencia</span>
+  <span class="propuesta">PROPUESTA DE DISEÑO</span>
+  <button class="ayuda">Ayuda</button>
+</div>
+
+<div class="cuerpo">
+  <div class="lateral">
+    <a href="TABLERO.html">Inicio (tablero)</a>
+    <a href="EMERGENCIA.html" class="activo">Nueva paciente</a>
+    <a href="PROTOCOLOS.html">Ficha</a>
+    <a href="CONTROL.html">Control prenatal</a>
+    <a href="INDICE.html">Embarazo</a>
+    <a href="INDICE.html">Calculadoras</a>
+    <a href="INDICE.html">Historia</a>
+    <a href="INDICE.html">Agenda</a>
+    <a href="INDICE.html">Sistema</a>
+  </div>
+
+  <div class="zona">
+    <div class="pregunta" style="margin-top:0;margin-bottom:16px;max-width:none">
+      <span class="rotulo">PROPUESTA · dibujo 4 de 6 · para quien llega sin expediente y sin tiempo</span>
+      Cuatro datos y un botón. La paciente queda en el tablero, en rojo, al frente — el
+      expediente completo se llena después, sobre esta misma ficha, sin duplicar nada.
+    </div>
+
+    <h1>Registro rápido — menos de un minuto</h1>
+    <div class="subtitulo">
+      Para la que llega en trabajo de parto, para la que la mandan de otro centro sin aviso,
+      para cualquiera que entre por la puerta sin cita. <b>Lo mínimo para poder atenderla
+      ya</b>; lo demás viene después.
+    </div>
+
+    <div class="rejilla">
+      <div class="col1">
+        <div class="panel" style="border-top:5px solid #e67e22">
+          <h3>Lo mínimo — 3 campos</h3>
+          <label class="campo">Apellidos <span class="req">(obligatorio)</span></label>
+          <input class="f big" placeholder="MENDOZA ROJAS">
+          <label class="campo">Nombres <span class="req">(obligatorio)</span></label>
+          <input class="f big" placeholder="CARMEN">
+          <label class="campo">Fecha de nacimiento <span class="req">(obligatorio)</span>
+            <span class="pista">con calendario · 15 MAR 1990 o 1990-03-15</span></label>
+          <input class="f big" placeholder="📅 elegir">
+          <div class="linea" style="margin-top:12px;font-size:13.5px;color:#566">
+            <b>Suficiente para atenderla.</b> CURP, teléfono, médico derivador y notas se
+            completan después desde su ficha — aparecerá marcada como
+            <span class="chip ambar">falta completar</span> en el tablero.
+          </div>
+          <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap">
+            <button class="btn naranja grande"
+              onclick="registrar()">⚡ Registrar y atender AHORA</button>
+            <a href="TABLERO.html"><button class="btn sec grande">Cancelar</button></a>
+          </div>
+          <div id="zona-ok"></div>
+        </div>
+
+        <div class="panel">
+          <h3>Antes de guardar — el programa revisa solo</h3>
+          <div class="linea">▸ Si ya existe una paciente parecida, le muestra a cuál se
+            parece <b>antes de escribir nada</b> — para que no nazcan dos fichas de la
+            misma mujer.</div>
+          <div class="linea">▸ Si usted está en modo normal (paciente con cita), este
+            registro es el mismo de siempre, en dos pasos, con todos los campos.</div>
+        </div>
+      </div>
+
+      <div class="col2">
+        <div class="panel">
+          <h3>Lo que pasa al pulsar</h3>
+          <div class="linea">1. Nace su expediente con folio de urgencia.</div>
+          <div class="linea">2. Su tarjeta aparece <b>al frente del tablero, en rojo</b>,
+            con la etiqueta «urgente — sin ficha completa».</div>
+          <div class="linea">3. Puede atenderla de inmediato: controles, parte, historia —
+            todo lo de siempre.</div>
+          <div class="linea">4. Cuando haya calma, usted o recepción completan lo que
+            falte <b>sobre la misma ficha</b>.</div>
+        </div>
+        <div class="panel" style="border-left:5px solid #e67e22">
+          <h3>Ejemplo real de uso</h3>
+          <div class="linea">11:00 — Carmen llega en trabajo de parto, sin expediente.</div>
+          <div class="linea">11:02 — registrada con 3 campos, en rojo, en el tablero.</div>
+          <div class="linea">11:47 — parto atendido, bebé registrado, episodio cerrado.</div>
+          <div class="linea">13:20 — su ficha completa, sin duplicados, con su historia
+            del día.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pregunta">
+      <span class="rotulo">PREGUNTA PARA EL EQUIPO — responda con la plantilla de revisión</span>
+      <b>¿En un minuto la registrarían así?</b> ¿Qué dato mínimo exigen ustedes ANTES de
+      atender a una que llega en trabajo de parto —¿solo estos tres, o falta alguno
+      imprescindible? ¿Lo de «completar después» funciona en su práctica, o se les quedaría
+      sin completar?
+      <div class="veredicto"><b>Veredicto:</b> ☐ Así está bien, lo apruebo ·
+        ☐ Así está bien, pero con cambios · ☐ Esto no sirve así, hay que rediseñarlo</div>
+    </div>
+
+    <footer>Propuesta 4 de 6 · lógica: pilar 5 (registro de emergencia), pilar 1 (rojo al
+      frente) · flujos 3, 5 · <a href="TABLERO.html">← volver al tablero</a></footer>
+  </div>
+</div>
+
+<div id="aviso"></div>
+<script>
+function registrar() {
+  document.getElementById("zona-ok").innerHTML =
+    '<div class="resultado ok"><b>✓ Paciente registrada — expediente nuevo con folio de urgencia</b>' +
+    '<br>Su tarjeta <b>MENDOZA ROJAS, Carmen</b> acaba de aparecer al frente del tablero, ' +
+    'en rojo, con la etiqueta «urgente — falta completar». Ya se puede atender.</div>';
+  const a = document.getElementById("aviso");
+  a.style.display = "block";
+  a.textContent = "Registrada en 3 campos · al frente del tablero · complete la ficha después";
+  setTimeout(() => a.style.display = "none", 3800);
+}
+</script>
+</body></html>

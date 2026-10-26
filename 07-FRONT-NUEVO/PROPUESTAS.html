@@ -1,0 +1,81 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=1024">
+<title>NUEVO — Cuatro propuestas: ¿convienen?</title>
+<link rel="stylesheet" href="front.css"></head>
+<body data-pag="propuestas">
+
+<nav class="riel">
+  <span class="marca">Maternidad</span>
+  <span class="grupo primera">Jornada</span>
+  <a href="hoy.html" data-pag="hoy">▦ Hoy</a>
+  <a href="llegada.html" data-pag="llegada">⤷ Llegadas</a>
+  <a href="pendientes.html" data-pag="pendientes">⚑ Pendientes <span class="cuenta" id="cuenta-pend">–</span></a>
+  <a href="laboratorio.html" data-pag="laboratorio">⚕ Laboratorio</a>
+  <a href="atenciones.html" data-pag="atenciones">✂ Atenciones</a>
+  <a href="documentos.html" data-pag="documentos">✎ Documentos</a>
+  <a href="agenda.html" data-pag="agenda">▤ Agenda</a>
+  <a href="cierre.html" data-pag="cierre">⏻ Cierre</a>
+  <span class="grupo">Del consultorio</span>
+  <a href="respaldo.html" data-pag="respaldo">⛃ Respaldo</a>
+  <a class="piso" href="sistema.html" data-pag="sistema">⚙ Sistema (dueño)</a>
+</nav>
+
+<div class="principal">
+  <div class="barra">
+    <span class="pantalla">Propuestas — ¿convienen?</span>
+    <span class="chip azul">PARTE DEL PAPEL, NO DEL PRODUCTO</span>
+    <a class="volver" href="hoy.html">← Hoy</a>
+    <div id="contexto"></div>
+  </div>
+
+  <main class="cuerpo">
+    <h1>Cuatro propuestas, construidas como flujos completos</h1>
+    <div class="subtitulo">De mis ocho propuestas (B-004), estas cuatro son las que se pueden
+      juzgar como **flujo de trabajo entero** —cada una nacida desde cero sobre el diseño ya
+      optimizado (Hoy, riel, contexto, puente)—. Se evalúan en **versión papel**: la banda de
+      cada una es su veredicto de <b>si conviene</b>. Las otras cuatro (favoritos de
+      documentos, orden de enfermería con catálogo firmado, modo de estreno y tarjeta de
+      atajos) siguen esperando en la bitácora.</div>
+
+    <div class="tarjgrid">
+      <div class="panel m">
+        <h2>P1 · Del aviso a la acción</h2>
+        <div class="nota">Cada pendiente lleva «Ir a resolver» a la pantalla donde se
+          resuelve —informar sin poder actuar se ignora (AHRQ).</div>
+        <div class="linea"><a href="propuesta-aviso.html"><b>Abrir el flujo →</b></a></div>
+      </div>
+      <div class="panel m">
+        <h2>P2 · Antes de sentar a la paciente</h2>
+        <div class="nota">Lo que la médica debe ver antes de empezar la consulta: resultados,
+          vencidos y pendientes ya compilados (previsit).</div>
+        <div class="linea"><a href="propuesta-consulta-preparada.html"><b>Abrir el flujo →</b></a></div>
+      </div>
+      <div class="panel m">
+        <h2>P4 · Copiar del control anterior</h2>
+        <div class="nota">Lo repetido se trae y se marca como copiado — cero captura doble en
+          la estación.</div>
+        <div class="linea"><a href="propuesta-copiar-control.html"><b>Abrir el flujo →</b></a></div>
+      </div>
+      <div class="panel m">
+        <h2>P6 · El cierre con «si–entonces»</h2>
+        <div class="nota">El traspaso añade la contingencia: «si pasa X → haga Y» —
+          el handoff que salva (AHRQ/I-PASS).</div>
+        <div class="linea"><a href="propuesta-traspaso.html"><b>Abrir el flujo →</b></a></div>
+      </div>
+    </div>
+
+    <div class="banda">
+      <span class="rotulo">Pregunta para el dueño</span>
+      <p><b>¿Cuál de las cuatro abre la caja?</b> Recorra cada una, lea su banda y responda
+      con su veredicto: eso decide cuál entra al diseño oficial (y a
+      <code>REQUISITOS-DEL-DISENO.md</code> con su número).</p>
+    </div>
+
+    <footer class="vuelta">Índice de propuestas · candidatas de B-004 · evalúen en versión
+      papel (las bandas son el veredicto)</footer>
+  </main>
+</div>
+
+<div id="aviso"></div>
+<script src="puente.js"></script>
+</body></html>

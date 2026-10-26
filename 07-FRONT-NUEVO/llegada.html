@@ -1,0 +1,117 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=1024">
+<title>NUEVO — Registrar a quien acaba de llegar</title>
+<link rel="stylesheet" href="front.css"></head>
+<body data-pag="llegada">
+
+<nav class="riel">
+  <span class="marca">Maternidad</span>
+  <span class="grupo primera">Jornada</span>
+  <a href="hoy.html" data-pag="hoy">▦ Hoy</a>
+  <a href="llegada.html" data-pag="llegada">⤷ Llegadas</a>
+  <a href="pendientes.html" data-pag="pendientes">⚑ Pendientes <span class="cuenta" id="cuenta-pend">–</span></a>
+  <a href="laboratorio.html" data-pag="laboratorio">⚕ Laboratorio</a>
+  <a href="atenciones.html" data-pag="atenciones">✂ Atenciones</a>
+  <a href="documentos.html" data-pag="documentos">✎ Documentos</a>
+  <a href="agenda.html" data-pag="agenda">▤ Agenda</a>
+  <a href="cierre.html" data-pag="cierre">⏻ Cierre</a>
+  <span class="grupo">Del consultorio</span>
+  <a href="respaldo.html" data-pag="respaldo">⛃ Respaldo</a>
+  <a class="piso" href="sistema.html" data-pag="sistema">⚙ Sistema (dueño)</a>
+</nav>
+
+<div class="principal">
+  <div class="barra">
+    <span class="pantalla">Registrar — la puerta de la mañana</span>
+    <a class="volver" href="hoy.html">← Hoy</a>
+    <div id="contexto"></div>
+  </div>
+
+  <main class="cuerpo">
+    <h1>Registrar a quien acaba de llegar</h1>
+    <div class="subtitulo">Son las 9:00 y llegan tres de Altotonga, Tlapacoyan y Atzlán:
+      aquí se anota <b>lo mismo que en la libreta</b> — apellidos, nombres, nacimiento con
+      calendario, de dónde viene y teléfono (CURP si la trae, es opcional) — en menos de un
+      minuto, y se sigue. Lo demás se completa después.</div>
+
+    <div class="panel" id="buscar">
+      <h2>1 · ¿Ya está registrada? — marque que llegó o abra su visita de hoy</h2>
+      <div class="campo">
+        <label>Nombre de la paciente</label>
+        <input id="buscar" type="text" placeholder="Escriba dos letras y aparezca…" autocomplete="off">
+      </div>
+      <div id="resultados" style="margin-top:8px"></div>
+
+      <div id="paso-visita" class="panel" style="display:none;border-left:5px solid var(--azul, #1d4ed8);margin-top:12px">
+        <h3 style="margin-top:0">Datos de la visita de hoy — <span id="visita-quien" style="color:var(--acento)"></span></h3>
+        <div class="nota" style="margin-bottom:8px">Son de hoy: mañana se borran solos.</div>
+        <form id="form-visita">
+          <div class="formulario">
+            <div class="campo"><label>Procedencia</label><select>
+              <option>del centro</option><option>foránea (horas de camino)</option>
+              <option>derivada por ambulancia</option></select></div>
+            <div class="campo"><label>¿Ya desayunó?</label><select><option>sí</option><option>no</option></select></div>
+            <div class="campo"><label>¿Cómo llegó?</label><select>
+              <option>caminando</option><option>transporte</option><option>acompañada en auto</option></select></div>
+            <div class="campo"><label>Acompañante</label><input type="text" placeholder="nombre o «sola»"></div>
+            <div class="campo"><label>Razón declarada al entrar</label><select>
+              <option>control programado</option><option>recoger estudio</option>
+              <option>entregar laboratorio</option><option>una molestia nueva</option>
+              <option>derivada de otro centro</option><option>urgencia declarada</option></select></div>
+          </div>
+          <div class="acciones">
+            <button class="btn" type="submit">Listo — ir a Hoy</button>
+            <span class="nota">Si la razón cambia a mitad de consulta, se guarda la nueva y la
+              declarada no se borra.</span>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="panel" id="nueva" style="border-left:5px solid var(--verde)">
+      <h2>2 · ¿Es paciente nueva? — los datos de su expediente</h2>
+      <form id="form-registro">
+        <div class="formulario">
+          <div class="campo"><label>Apellido paterno</label><input name="ap_p" type="text" autocomplete="off"></div>
+          <div class="campo"><label>Apellido materno</label><input name="ap_m" type="text" autocomplete="off"></div>
+          <div class="campo"><label>Nombres</label><input name="nombres" type="text" autocomplete="off"></div>
+          <div class="campo"><label>Fecha de nacimiento</label><input name="fecha" type="date"></div>
+          <div class="campo"><label>¿De dónde viene?</label><input name="ciudad" list="ciudades" placeholder="Altotonga, Tlapacoyan…">
+            <datalist id="ciudades">
+              <option>Altotonga</option><option>Tlapacoyan</option><option>Atzlan</option>
+              <option>Zentla</option><option>Otro lugar</option>
+            </datalist></div>
+          <div class="campo"><label>Teléfono (opcional)</label><input name="telefono" inputmode="tel" placeholder="78x…"></div>
+          <div class="campo"><label>CURP (opcional)</label><input name="curp" maxlength="18" placeholder="18 caracteres si la trae"></div>
+        </div>
+        <div class="acciones">
+          <button class="btn" type="submit">Guardar registro</button>
+          <span class="nota">Lo que falte se llena después — la tarjeta queda en «falta
+            registrar» con su plazo.</span>
+        </div>
+      </form>
+      <div id="exito" class="panel" style="display:none;border-left:5px solid var(--verde);margin-top:10px"></div>
+    </div>
+
+    <div class="banda">
+      <span class="rotulo">Pregunta para el equipo — responda con la plantilla de revisión</span>
+      <p><b>¿Así es su puerta a las 9:00?</b> Los campos nuevos —apellidos por separado,
+      calendario de nacimiento, CURP opcional— ¿le sirven o sobra alguno? ¿Los datos de la
+      visita van aquí (tras marcar llegada) o prefieren completarlos en la estación? ¿Al
+      guardar, «llenar más datos» debe ser lo primero, o primero se sigue con lo siguiente?
+      ¿El QR para que la paciente complete sus datos lo quiere ya declarado (requiere la
+      fase con hardware)?</p>
+      <div class="veredicto"><label>☐ Así está bien, lo apruebo</label>
+        <label>☐ Está bien, pero con cambios</label>
+        <label>☐ No sirve así: rediseñar</label></div>
+    </div>
+
+    <footer class="vuelta">Reestructurada por su dictamen (B-029): sin bloque de urgencia
+      aquí (el rojo vive en Emergencia y en Hoy) y con la visita dentro del flujo ·
+      FL-02, FL-03 · R-02 · H-039 · homónimas R-10 siguen vigilando la búsqueda</footer>
+  </main>
+</div>
+
+<div id="aviso"></div>
+<script src="puente.js"></script>
+</body></html>

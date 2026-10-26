@@ -1,0 +1,136 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8">
+<title>PROPUESTA — Atenciones pausadas (varias a la vez, sin perder nada)</title>
+<link rel="stylesheet" href="estilo.css"></head><body>
+
+<div class="barra">
+  <span class="marca">Maternidad</span>
+  <span class="pantalla">Atenciones abiertas — pausa y retorno</span>
+  <span class="propuesta">PROPUESTA DE DISEÑO</span>
+  <button class="ayuda">Ayuda</button>
+</div>
+
+<div class="cuerpo">
+  <div class="lateral">
+    <a href="TABLERO.html">Inicio (tablero)</a>
+    <a href="PROTOCOLOS.html">Ficha</a>
+    <a href="CONTROL.html">Control prenatal</a>
+    <a href="PAUSA.html" class="activo">Atenciones abiertas</a>
+    <a href="INDICE.html">Historia</a>
+    <a href="INDICE.html">Agenda</a>
+    <a href="INDICE.html">Respaldo</a>
+  </div>
+
+  <div class="zona">
+    <div class="pregunta" style="margin-top:0;margin-bottom:16px;max-width:none">
+      <span class="rotulo">PROPUESTA · dibujo 6 de 6 · para cuando atienden 3 o 4 al mismo tiempo</span>
+      Puede haber varias consultas abiertas a la vez. Pausar es un clic; retomar es otro
+      clic; y todo lo escrito en la pausada vuelve exactamente igual. Pruebe los botones.
+    </div>
+
+    <h1>Tres consultas abiertas — 12:05</h1>
+    <div class="subtitulo">
+      La mañana va llena y varias pacientes se atienden al mismo tiempo. Esto es lo que
+      queda «en el aire» en este momento: cada tarjeta abre su consulta con todo lo suyo
+      conservado.
+    </div>
+
+    <div class="rejilla">
+      <div class="col1">
+        <div class="panel" id="ab1" style="border-top:5px solid #2e9e4f">
+          <h3><span class="chip verde">ABIERTA — CON LA MÉDICA</span> Luna Gómez, Rosa ·
+            color verde</h3>
+          <div class="linea">VPH · aplicación 2 de 4 · empezó 11:58</div>
+          <div class="linea"><b>Conservado:</b> motivo escrito · examen físico anotado ·
+            foto de la lesión adjunta · nota en borrador</div>
+          <div class="linea"><b>Falta:</b> guardar la nota y agendar la aplicación 3</div>
+          <button class="btn sec" onclick="pausar('ab1','Rosa')">⏸ Pausar esta consulta</button>
+        </div>
+
+        <div class="panel" id="ab2" style="border-top:5px solid #1b6ca8">
+          <h3><span class="chip azul">ABIERTA — EN PAUSA DESDE 11:20</span>
+            García Luna, María · color azul</h3>
+          <div class="linea">Embarazo 28 semanas · control empezado</div>
+          <div class="linea"><b>Conservado:</b> peso 73,1 kg · tensión 112/70 · altura 27 cm ·
+            148 lpm · sin banderas</div>
+          <div class="linea"><b>Falta:</b> presentación, proteinuria, edema y guardar</div>
+          <a href="CONTROL.html"><button class="btn">▶ Retomar — seguir en su control</button></a>
+        </div>
+
+        <div class="panel" id="ab3" style="border-top:5px solid #7d5bb8">
+          <h3><span class="chip morado">ABIERTA — CON LA ENFERMERA</span> Torres Vega, Lucía
+            · color morado</h3>
+          <div class="linea">Tumoración ovárica · constantes listas · esperando el
+            reingreso de su estudio</div>
+          <div class="linea"><b>Conservado:</b> peso, tensión, talla · motivo de la visita</div>
+          <div class="linea"><b>Falta:</b> ver el estudio cuando llegue y que la médica
+            firme</div>
+          <button class="btn sec" onclick="retomar('ab3','Lucía')">▶ Retomar esta consulta</button>
+        </div>
+      </div>
+
+      <div class="col2">
+        <div class="panel">
+          <h3>Las reglas de este modo</h3>
+          <div class="linea">1. <b>Sin tope de abiertas:</b> el sistema admite las que el
+            equipo abra —el tablero muestra cuáles y de qué color—; cuántas aguantan en la
+            práctica lo dicen ustedes, no el programa.</div>
+          <div class="linea">2. El cambio de paciente ocurre <b>desde el tablero</b> o con
+            estos botones — nunca por error de teclado.</div>
+          <div class="linea">3. Cada paciente conserva <b>su color</b> en toda pantalla:
+            azul, verde, morado…</div>
+          <div class="linea">4. Al retomar, todo vuelve <b>tal cual quedó</b>: ni un campo
+            se pierde.</div>
+          <div class="linea">5. Cerrada una consulta, su tarjeta pasa a «atendida» y abre
+            espacio en el tablero.</div>
+          <div class="linea">6. <b>Cada atención tiene dueño</b> (quien la abrió). Si otra
+            persona intenta escribir en ella, el programa no deja y le dice:
+            «<b>en uso de X desde las 11:58</b>» — nadie escribe a dos manos en el mismo
+            borrador, y la espera se ve, no se traga. Solo la urgencia puede
+            <b>robársela</b>, y queda registrado quién la tomó.</div>
+        </div>
+        <div class="panel">
+          <h3>Qué NO existe en este modo</h3>
+          <div class="linea">✗ Cambiar de paciente escribiendo dentro de un formulario.</div>
+          <div class="linea">✗ Perder lo escrito al apagar la ventana.</div>
+          <div class="linea">✗ Recordar «a cuál iba» sin apoyarse en el tablero.</div>
+        </div>
+        <a href="TABLERO.html"><button class="btn sec" style="width:100%">
+          ← Volver al tablero (de donde salen todas)</button></a>
+      </div>
+    </div>
+
+    <div class="pregunta">
+      <span class="rotulo">PREGUNTA PARA EL EQUIPO — responda con la plantilla de revisión</span>
+      <b>Cuando atienden a dos o tres a la vez, ¿este cambio es como lo hacen de verdad?</b>
+      ¿Qué hacen HOY cuando las interrumpen — cómo guardan «a cuál iban»? ¿Hasta cuántas
+      consultas abiertas aguantan en la práctica? ¿Los colores les ayudan a no confundirse?
+      <div class="veredicto"><b>Veredicto:</b> ☐ Así está bien, lo apruebo ·
+        ☐ Así está bien, pero con cambios · ☐ Esto no sirve así, hay que rediseñarlo</div>
+    </div>
+
+    <footer>Propuesta 6 de 6 · lógica: pilar 2 (concurrencia con pausa y retorno), pilar 3
+      (color por paciente) · escenario de 18 pacientes ·
+      <a href="INDICE.html">← volver al índice</a></footer>
+  </div>
+</div>
+
+<div id="aviso"></div>
+<script>
+function aviso(txt) {
+  const a = document.getElementById("aviso");
+  a.style.display = "block";
+  a.textContent = txt;
+  setTimeout(() => a.style.display = "none", 3600);
+}
+function pausar(id, nombre) {
+  const p = document.getElementById(id);
+  p.style.opacity = ".72";
+  p.querySelector("button").textContent = "⏸ Pausada — todo conservado";
+  p.querySelector("button").disabled = true;
+  aviso(nombre + " queda PAUSADA · retómela desde esta tarjeta cuando quiera — nada se pierde");
+}
+function retomar(id, nombre) {
+  aviso(nombre + " RETOMADA — sus constantes y motivo estaban tal cual los dejó");
+}
+</script>
+</body></html>

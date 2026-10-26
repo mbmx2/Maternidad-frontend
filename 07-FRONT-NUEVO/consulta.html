@@ -1,0 +1,75 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=1024">
+<title>NUEVO — La consulta</title>
+<link rel="stylesheet" href="front.css"></head>
+<body data-pag="consulta">
+
+<nav class="riel">
+  <span class="marca">Maternidad</span>
+  <a href="hoy.html" data-pag="hoy">▦ El día</a>
+  <a href="llegada.html" data-pag="llegada">⤷ Llegadas</a>
+  <a href="pendientes.html" data-pag="pendientes">⚑ Pendientes <span class="cuenta" id="cuenta-pend">–</span></a>
+  <a href="documentos.html" data-pag="documentos">✎ Documentos</a>
+  <a href="agenda.html" data-pag="agenda">▤ Agenda</a>
+  <a href="cierre.html" data-pag="cierre">⏻ Cierre</a>
+  <a class="piso" href="sistema.html" data-pag="sistema">⚙ Sistema (dueño)</a>
+</nav>
+
+<div class="principal">
+  <div class="barra">
+    <span class="pantalla">Consulta — con la paciente enfrente</span>
+    <a class="volver" href="hoy.html">← Hoy</a>
+    <div id="contexto"></div>
+  </div>
+
+  <main class="cuerpo">
+    <div class="cinta" id="cinta"></div>
+
+    <h1>La consulta, con la paciente enfrente</h1>
+    <div class="subtitulo">La pantalla más usada de la médica: aquí lo capturado por la
+      enfermera llega sin re-teclear y la nota cierra la visita.</div>
+
+    <div class="acciones" style="margin-top:0">
+      <button class="btn sec" id="btn-abrir">Empezar atención</button>
+      <a href="documentos.html">✎ Papeles de la paciente →</a>
+      <span class="nota">Cambia de paciente solo desde El día — nunca desde dentro de aquí.</span>
+    </div>
+
+    <div class="panel" style="margin-top:14px">
+      <h2>Lo que ya está capturado (lo de la enfermera, aquí sin volver a teclear)</h2>
+      <div id="ultimos"></div>
+    </div>
+
+    <div class="panel">
+      <h2>La nota de evolución</h2>
+      <form id="form-nota">
+        <div class="campo">
+          <label>Evolución</label>
+          <textarea name="nota" rows="6" placeholder="Motivo, hallazgos, impresión, plan — en sus palabras de siempre."></textarea>
+        </div>
+        <div class="acciones">
+          <button class="btn" type="submit">Firmar nota y cerrar la consulta</button>
+          <span class="nota">Al firmar: salen los avisos pendientes de esta paciente con su dueño,
+          y la agenda le propone la siguiente cita desde su protocolo.</span>
+        </div>
+      </form>
+    </div>
+
+    <div class="banda">
+      <span class="rotulo">Pregunta para el equipo — responda con la plantilla de revisión</span>
+      <p><b>¿Así consulta?</b> ¿Qué le falta ver aquí mientras la paciente está sentada —
+      ¿banderas rojas, últimos estudios, su historial corto? ¿Cerrar con la nota basta como
+      cierre de los avisos, o quiere una pantalla aparte para avisos? ¿La cinta trae lo que
+      necesita?</p>
+      <div class="veredicto"><label>☐ Así está bien, lo apruebo</label>
+        <label>☐ Está bien, pero con cambios</label>
+        <label>☐ No sirve así: rediseñar</label></div>
+    </div>
+
+    <footer class="vuelta">Pantalla 4 de 9 · FL-09, FL-17 · una sola paciente en contexto, cinta siempre presente</footer>
+  </main>
+</div>
+
+<div id="aviso"></div>
+<script src="puente.js"></script>
+</body></html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=1024">
+<title>Propuesta P6 — El cierre con «si–entonces»</title>
+<link rel="stylesheet" href="front.css"></head>
+<body data-pag="prop-traspaso">
+
+<nav class="riel">
+  <span class="marca">Maternidad</span>
+  <span class="grupo primera">Jornada</span>
+  <a href="hoy.html" data-pag="hoy">▦ Hoy</a>
+  <a href="llegada.html" data-pag="llegada">⤷ Llegadas</a>
+  <a href="pendientes.html" data-pag="pendientes">⚑ Pendientes <span class="cuenta" id="cuenta-pend">–</span></a>
+  <a href="laboratorio.html" data-pag="laboratorio">⚕ Laboratorio</a>
+  <a href="atenciones.html" data-pag="atenciones">✂ Atenciones</a>
+  <a href="documentos.html" data-pag="documentos">✎ Documentos</a>
+  <a href="agenda.html" data-pag="agenda">▤ Agenda</a>
+  <a href="cierre.html" data-pag="cierre">⏻ Cierre</a>
+  <span class="grupo">Del consultorio</span>
+  <a href="respaldo.html" data-pag="respaldo">⛃ Respaldo</a>
+  <a class="piso" href="sistema.html" data-pag="sistema">⚙ Sistema (dueño)</a>
+</nav>
+
+<div class="principal">
+  <div class="barra">
+    <span class="pantalla">P6 — El cierre con «si–entonces»</span>
+    <span class="chip azul">PROPUESTA</span>
+    <a class="volver" href="PROPUESTAS.html">← Propuestas</a>
+    <div id="contexto"></div>
+  </div>
+
+  <main class="cuerpo">
+    <h1>El traspaso con contingencia</h1>
+    <div class="subtitulo">El mejor handoff no lista pendientes: añade <b>«si pasa esto →
+      haga esto»</b> (I-PASS, AHRQ) — la tarde no hereda dudas, hereda instrucciones.
+      Imprime con el resto del traspaso.</div>
+
+    <div class="panel">
+      <h2>La hoja de traspaso, con contingencias</h2>
+      <div id="resumen-prop"></div>
+      <div id="contingencias" style="margin-top:8px"></div>
+      <div class="acciones">
+        <button class="btn" id="btn-imprimir-prop">Imprimir traspaso con contingencias</button>
+        <span class="nota">Las reglas «si–entonces» las escribe el equipo: aquí se sugieren,
+          usted las tacha o las cambia.</span>
+      </div>
+    </div>
+
+    <div class="banda">
+      <span class="rotulo">Pregunta para el dueño — ¿conviene?</span>
+      <p><b>¿La línea «si–entonces» le ahorra preguntas de la tarde?</b> ¿O el traspaso
+      simple le basta y esto es ruido?</p>
+      <div class="veredicto"><label>☐ Conviene: constrúyala</label>
+        <label>☐ Conviene, pero así: __________________</label>
+        <label>☐ No conviene para su centro</label></div>
+    </div>
+
+    <footer class="vuelta">Propuesta P6 de B-004 · FL-15 · valor externo: I-PASS/AHRQ</footer>
+  </main>
+</div>
+
+<div id="aviso"></div>
+<script src="puente.js"></script>
+<script>
+  (function () {
+    if (!window.MK) return;
+    var t = MK.puente.obtener_traspaso();
+    var zona = document.getElementById("resumen-prop");
+    var n = function (e) { return (t.porEstado[e] || []).length; };
+    zona.innerHTML =
+      '<div class="linea">Atendidas: <b>' + n("atendida") + "</b> · en atención o pausadas: <b>" +
+      (n("en_consulta") + n("pusada") + n("estacion_a_medias")) + "</b> · no llegó: <b>" + n("no_llego") +
+      "</b> · alertas pendientes: <b>" + t.pendientes + "</b></div>";
+    var pend = MK.puente.listar_alertas().filter(function (a) { return a.estado === "pendiente"; });
+    var sugerencias = {
+      control: "Si la presión sigue alta al cierre → la médica revisa antes de la primera de mañana",
+      laboratorio: "Si nadie capturó el papel → la enfermera lo captura al abrir y avisa",
+      protocolo: "Si el tamizaje sigue vencido → recepción llama hoy mismo y agenda"
+    };
+    var zonaC = document.getElementById("contingencias");
+    if (!pend.length) { zonaC.innerHTML = '<div class="nota">Sin pendientes: no hay contingencias que dejar escritas.</div>'; return; }
+    zonaC.innerHTML = '<div style="font-weight:700;margin:6px 0">Si–entonces para la tarde:</div>' + pend.map(function (a) {
+      return '<div class="linea"><b>' + (a.paciente || "Paciente") + "</b> — " +
+        '<b>Si</b> esto sigue abierto → <b>entonces</b> ' + (sugerencias[a.origen] || "revisarlo al abrir") +
+        ' <span class="chip gris">regla sugerida — el equipo la confirma</span></div>';
+    }).join("");
+    var btn = document.getElementById("btn-imprimir-prop");
+    if (btn) btn.addEventListener("click", function () { window.print(); });
+  })();
+</script>
+</body></html>

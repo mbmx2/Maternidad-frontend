@@ -1,0 +1,174 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=1024">
+<title>Los ocho cortes de estrés — flujos con cortes (capa C)</title>
+<link rel="stylesheet" href="flujos.css"></head>
+<body><div class="envoltura">
+
+<div class="cabecera">
+  <h1>Los ocho flujos con cortes</h1>
+  <div class="sub">Capa C de <code>FLUJOS-TRABAJO.md</code>: las pruebas de estrés que el
+  diseño debe aguantar — ocurren <b>sobre</b> el día cargado, no en un escenario aparte.
+  Cada corte: la secuencia, qué rompe, su pantalla y su cobertura.</div>
+</div>
+
+<div class="bloque rol">
+  <h3>Corte1 · Mañana base9–3 sin cortes</h3>
+  <p class="fuente">Cuatro casos distintos en un mismo día: cada necesidad cabe en su calendario.</p>
+  <div class="cad">
+    <div class="paso dig"><span class="num">1</span><b class="tit">Tablero con los cuatro casos</b>
+      <small>Embarazo28 · VPH2 · tumoración · derivada.</small><span class="donde">hoy.html · r1: TABLERO</span></div>
+    <div class="flecha">→</div>
+    <div class="paso dig"><span class="num">2</span><b class="tit">Registro rápido de la derivada</b>
+      <small>Sin cita, en un minuto.</small><span class="donde">llegada.html</span></div>
+    <div class="flecha">→</div>
+    <div class="paso evento"><span class="num">3</span><b class="tit">Nadie se pierde</b>
+      <small>Cada una, en su estado, con su reloj.</small><span class="estado">valor: pertenencia</span></div>
+  </div>
+  <div class="cobertura">Cobertura: ronda1 <span class="ok">completa</span> · ronda2
+  <span class="ok">completa</span> · hueco: ninguno.</div>
+</div>
+
+<div class="bloque rol">
+  <h3>Corte2 · La cesárea de las10:30 corta una consulta</h3>
+  <p class="fuente">Nada de lo de la paciente interrumpida se pierde y el día no se recompone a mano.</p>
+  <div class="cad">
+    <div class="paso fis"><span class="num">1</span><b class="tit">La médica sale a sala</b>
+      <small>Corte físico real.</small></div>
+    <div class="flecha">→</div>
+    <div class="paso dig"><span class="num">2</span><b class="tit">Pausa con un clic</b>
+      <small>Todo conservado; «en uso de X» para los demás.</small><span class="donde">estacion / hoy (pausar)</span></div>
+    <div class="flecha">→</div>
+    <div class="paso dig"><span class="num">3</span><b class="tit">Parto registrado y episodio cerrado</b>
+      <small>Fecha, vía, bebés, peso.</small><span class="donde ausente">r2: parto.html (nueva)</span></div>
+    <div class="flecha">→</div>
+    <div class="paso evento"><span class="num">4</span><b class="tit">El tablero libera el cupo solo</b>
+      <small>Y el puerperio abre como protocolo nuevo.</small><span class="estado">FL-11</span></div>
+  </div>
+  <div class="cobertura">Cobertura: ronda1 <span class="ok">PAUSA+PARTO</span> · ronda2
+  <span class="ok">cubierto</span> — pausa y <span class="ok">parto: parto.html (nueva)</span>.</div>
+</div>
+
+<div class="bloque rol">
+  <h3>Corte3 · Parto en la puerta sin expediente (11:00)</h3>
+  <p class="fuente">La urgencia no depende de que el registro esté completo.</p>
+  <div class="cad">
+    <div class="paso fis"><span class="num">1</span><b class="tit">Llega en trabajo de parto</b>
+      <small>Sin expediente, sin papeles.</small></div>
+    <div class="flecha">→</div>
+    <div class="paso dig"><span class="num">2</span><b class="tit">Tres campos, menos de1 minuto</b>
+      <small>Identidad mínima + folio.</small><span class="donde">llegada.html (registro rápido)</span></div>
+    <div class="flecha">→</div>
+    <div class="paso evento"><span class="num">3</span><b class="tit">Rojo al frente</b>
+      <small>Alta atómica con «falta completar» y fecha límite.</small>
+      <span class="donde ausente">r2 SIN EL ROJO NI EL PLAZO — r1: EMERGENCIA</span>
+      <span class="estado">FL-12 · pilar5</span></div>
+    <div class="flecha">→</div>
+    <div class="paso dig"><span class="num">4</span><b class="tit">Ficha después, sin duplicar</b>
+      <small>Antiduplicado al completar.</small><span class="donde">r2: ficha.html (nueva)</span></div>
+  </div>
+  <div class="cobertura">Cobertura: ronda1 <span class="ok">EMERGENCIA</span> · ronda2
+  <span class="ok">cubierto</span> — emergencia.html con rojo y plazo; ficha.html completa.</div>
+</div>
+
+<div class="bloque rol">
+  <h3>Corte4 · Urgencia obstétrica con banderas (12:00)</h3>
+  <p class="fuente">Cefalea + visión borrosa + hinchazón al guardar: la alerta mueve al equipo, no solo a la pantalla.</p>
+  <div class="cad">
+    <div class="paso dig"><span class="num">1</span><b class="tit">Guardar con banderas</b>
+      <small>La combinación dispara, no la tensión sola.</small><span class="donde">estacion.html</span></div>
+    <div class="flecha">→</div>
+    <div class="paso evento"><span class="num">2</span><b class="tit">Nace la alerta pendiente</b>
+      <small>Sin duplicar; dueño: la médica.</small>
+      <span class="donde">r2: nace al guardar (H-062 reparado)</span>
+      <span class="estado">circuito cerrado B-013</span></div>
+    <div class="flecha">→</div>
+    <div class="paso dig"><span class="num">3</span><b class="tit">Se salta la fila sola</b>
+      <small>Tarjeta urgente al frente en el mismo segundo.</small>      <span class="donde">r2: marcador ⚠ en Hoy (H-061 reparado)</span></div>
+    <div class="flecha">→</div>
+    <div class="paso fis"><span class="num">4</span><b class="tit">Decisión e interconsulta en voz</b>
+      <small>Y la nota firmada lo cierra.</small></div>
+  </div>
+  <div class="cobertura">Cobertura: ronda1 <span class="ok">demo de alertas</span> · ronda2
+  <span class="ok">cubierto</span> — el disparo nace al guardar y cierra con firma.</div>
+</div>
+
+<div class="bloque rol">
+  <h3>Corte5 · Urgencia ginecológica sin embarazo (13:00)</h3>
+  <p class="fuente">Sangrado de tumoración: aquí se expone la carencia y se convierte en requisito.</p>
+  <div class="cad">
+    <div class="paso dig"><span class="num">1</span><b class="tit">Solo hay ficha, historia y nota</b>
+      <small>El software no pregunta por embarazo — bien — pero no tiene protocolo suyo.</small></div>
+    <div class="flecha">→</div>
+    <div class="paso corte"><span class="num">2</span><b class="tit">Carencia declarada</b>
+      <small>Falta protocolo de tumoración y urgencia que no pregunte por embarazo.</small>
+      <span class="donde ausente">requisito: decisión del equipo</span></div>
+    <div class="flecha">→</div>
+    <div class="paso evento"><span class="num">3</span><b class="tit">Se vuelve fila de requisito</b>
+      <small>El problema dibujado es requisito listo.</small><span class="estado">catálogo de casos: entrevista</span></div>
+  </div>
+  <div class="cobertura">Cobertura: ronda1 <span class="par">APOYO (declara)</span> · ronda2
+  <span class="par">parcial: protocolos.html con tumoración en el catálogo</span> · pendiente: decisión §5.1 combinaciones + catálogo firmado.</div>
+</div>
+
+<div class="bloque rol">
+  <h3>Corte6 · Se va la luz (12:15)</h3>
+  <p class="fuente">La confianza de que un apagón no daña el expediente de nadie.</p>
+  <div class="cad">
+    <div class="paso evento"><span class="num">1</span><b class="tit">Guardados atómicos</b>
+      <small>Temporal y renombrar: reintentar es seguro.</small></div>
+    <div class="flecha">→</div>
+    <div class="paso dig"><span class="num">2</span><b class="tit">Puente de papel</b>
+      <small>Campos mínimos, en humano.</small><span class="donde ausente">r2: falla.html (nueva)</span></div>
+    <div class="flecha">→</div>
+    <div class="paso dig"><span class="num">3</span><b class="tit">Transcripción con la hora del hecho</b>
+      <small>«Escrito tardío» honesto; cero jerga.</small></div>
+    <div class="flecha">→</div>
+    <div class="paso evento"><span class="num">4</span><b class="tit">El tablero muestra «a medias»</b>
+      <small>Quién quedó a mitad, con dueño.</small><span class="estado">FL-14</span></div>
+  </div>
+  <div class="cobertura">Cobertura: ronda1 <span class="ok">FALLA</span> · ronda2
+  <span class="ok">cubierto — falla.html</span>.</div>
+</div>
+
+<div class="bloque rol">
+  <h3>Corte7 · El equipo falla (13:10)</h3>
+  <p class="fuente">Disco lleno o pantalla congelada: la falla no cuesta datos ni confianza.</p>
+  <div class="cad">
+    <div class="paso corte"><span class="num">1</span><b class="tit">Se congela / disco lleno</b>
+      <small>Corte técnico real.</small></div>
+    <div class="flecha">→</div>
+    <div class="paso evento"><span class="num">2</span><b class="tit">Al reabrir: último guardado entero</b>
+      <small>Y la bitácora dice qué se escribió.</small></div>
+    <div class="flecha">→</div>
+    <div class="paso dig"><span class="num">3</span><b class="tit">Mensaje humano + «último guardado HH:MM»</b>
+      <small>Qué pasó, qué conservó, qué falta.</small>
+      <span class="donde ausente">r2: falla.html (nueva)</span></div>
+  </div>
+  <div class="cobertura">Cobertura: ronda1 <span class="ok">FALLA</span> · ronda2
+  <span class="ok">cubierto — falla.html</span> · casa: contrato DEGRADACION.</div>
+</div>
+
+<div class="bloque rol">
+  <h3>Corte8 · Ecógrafo o memoria fallida (13:30)</h3>
+  <p class="fuente">Un estudio que no llega no se vuelve el problema número19.</p>
+  <div class="cad">
+    <div class="paso dig"><span class="num">1</span><b class="tit">Previsualizar y verificar</b>
+      <small>Antes de escribir nada.</small><span class="donde">r2: estudios.html (nueva)</span></div>
+    <div class="flecha">→</div>
+    <div class="paso dig"><span class="num">2</span><b class="tit">Rechazar sin escribir a medias</b>
+      <small>Cero archivos rotos.</small></div>
+    <div class="flecha">→</div>
+    <div class="paso evento"><span class="num">3</span><b class="tit">«Estudio pendiente — reintento»</b>
+      <small>En el tablero, con dueño.</small><span class="estado">reintento visible</span></div>
+  </div>
+  <div class="cobertura">Cobertura: ronda1 <span class="ok">ULTRASONIDO/INGESTA</span> · ronda2
+  <span class="ok">cubierto — estudios.html (verificar, rechazar, consentimiento)</span>.</div>
+</div>
+
+<footer class="pie">Fuente: <code>02-LOGICA-DE-DISENO/FLUJOS-TRABAJO.md</code> capa C (los
+ocho) sobre el escenario cargado (18 pacientes: la urgencia es Gabriela, el parto en la puerta
+es Carmen, la ausente es Perla, el laboratorio es Ivonne, la interrupción es Estela — dibujados
+en <a href="../01-DIBUJOS/EDICION/PROPUESTAS/TABLERO.html">TABLERO.html</a>) ·
+<a href="INDICE.html">volver al índice comparativo</a></footer>
+
+</div></body></html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=1024">
+<title>Flujos de lógica — agenda y mensajes</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="estilo.css">
+<style>
+.flujo { display:flex; flex-wrap:wrap; gap:8px; align-items:stretch; margin:12px 0; }
+.paso { background:#fff; border:1.5px solid #d7dee5; border-radius:6px; padding:10px 12px; min-width:150px; max-width:200px; font-size:12.5px; line-height:1.4; }
+.paso b { display:block; color:#0f4c5c; margin-bottom:3px; font-size:13px; }
+.paso.verde { border-left:5px solid #2e9e4f; }
+.paso.azul { border-left:5px solid #1b6ca8; }
+.paso.ambar { border-left:5px solid #d97706; }
+.paso.rojo { border-left:5px solid #c0392b; }
+.paso.morado { border-left:5px solid #7d5bb8; }
+.flecha { align-self:center; font-size:20px; color:#8a97a3; padding:0 2px; }
+.titulo-flujo { background:#eef4f8; border-left:5px solid #0f4c5c; padding:8px 12px; border-radius:4px; font-weight:bold; margin-top:18px; }
+.prohibido { background:#fdf5f4; border:1.5px dashed #c0392b; border-radius:6px; padding:10px 14px; font-size:13px; margin:10px 0; }
+</style></head><body>
+<div class="barra"><span class="marca">Maternidad</span>
+<span class="pantalla">Flujos de lógica — de la plantilla a la entrega</span>
+<span class="propuesta">CARRERA 12 · DIBUJOS</span></div>
+<div class="cuerpo"><div class="lateral" id="lateral"></div>
+<div class="zona">
+<h1>Los cuatro circuitos, dibujados</h1>
+<p class="subtitulo">Cada flujo en su orden real: qué pasa, quién decide y qué nunca viaja. La lógica completa en lenguaje humano está en <code>LOGICA-DE-MENSAJES.md</code>; aquí se ve el orden.</p>
+
+<div class="titulo-flujo">Flujo 1 · De la plantilla al mensaje entregado</div>
+<div class="flujo">
+  <div class="paso azul"><b>1 · Situación</b>Cita creada · plazo vencido · semana derivada · diagnóstico activo en la ficha. El disparo es dato, no capricho.</div>
+  <div class="flecha">→</div>
+  <div class="paso azul"><b>2 · Plantilla</b>El catálogo elige la fila por familia y situación. Maestra (borrador/firmada) o personalizada del equipo.</div>
+  <div class="flecha">→</div>
+  <div class="paso verde"><b>3 · Resolución</b>Los marcadores se llenan con lo que el expediente ya sabe: nombre, semana derivada, fecha, hora, unidad.</div>
+  <div class="flecha">→</div>
+  <div class="paso ambar"><b>4 · Revisión</b>Si falta un marcador → bloqueado con la lista de faltantes. El examen de inocuidad vigila cifras y diagnósticos.</div>
+  <div class="flecha">→</div>
+  <div class="paso verde"><b>5 · Entrega humana</b>Una persona copia y pega por su canal (WhatsApp, llamada, hoja). Nunca envío automático (DEC-32).</div>
+  <div class="flecha">→</div>
+  <div class="paso verde"><b>6 · Bitácora</b>Queda registrado: plantilla, versión, canal, fecha. Anular devuelve el mensaje a disponible.</div>
+</div>
+
+<div class="titulo-flujo">Flujo 2 · De la sugerencia a la cita (el sistema propone, el equipo dispone)</div>
+<div class="flujo">
+  <div class="paso morado"><b>1 · Dato clínico</b>La semana se deriva de la fecha estimada — jamás se captura a mano. O el diagnóstico activo de la ficha.</div>
+  <div class="flecha">→</div>
+  <div class="paso morado"><b>2 · Patrón</b>Hasta 28 semanas: cada 4 · 29–35: cada 2 · 36+: cada semana. Diagnóstico: su propio intervalo.</div>
+  <div class="flecha">→</div>
+  <div class="paso ambar"><b>3 · Sugerencia</b>Fecha + hora + motivo + la fuente («semana derivada» o «diagnóstico estructurado»). Si la hora está ocupada, el sistema propone el siguiente hueco libre — no llena solito.</div>
+  <div class="flecha">→</div>
+  <div class="paso azul"><b>4 · Disponibilidad</b>El día se pinta con sus huecos reales (ocupados/libres) del catálogo de horario. Nada se agenda pisando otra cita.</div>
+  <div class="flecha">→</div>
+  <div class="paso verde"><b>5 · Intervención</b>El médico o la enfermera cambia fecha, hora y motivo. El sistema no decide: la sugerencia se edita antes de agendar.</div>
+  <div class="flecha">→</div>
+  <div class="paso verde"><b>6 · Cita + mensaje</b>Al agendar, la plantilla de confirmación (L02) queda lista para copiar y entregar.</div>
+</div>
+
+<div class="titulo-flujo">Flujo 5 · Preguntar a la paciente y agendar con su respuesta (disponibilidad pedida)</div>
+<div class="flujo">
+  <div class="paso azul"><b>1 · Pedido</b>«Pedir disponibilidad» crea el registro pendiente y deja la plantilla L03 lista para llamar o escribir.</div>
+  <div class="flecha">→</div>
+  <div class="paso ambar"><b>2 · Espera humana</b>El pedido queda PENDIENTE con su fecha y su autor. El sistema no insiste solo: lo ve quien atiende la recepción.</div>
+  <div class="flecha">→</div>
+  <div class="paso verde"><b>3 · Respuesta</b>Ella dice día y hora; el personal los registra. El motor valida contra los huecos: si está ocupado, sugiere el libre.</div>
+  <div class="flecha">→</div>
+  <div class="paso verde"><b>4 · Cita + bitácora</b>Se agenda, el pedido pasa a respondida y queda el rastro completo: quién pidió, qué contestó, cuándo.</div>
+</div>
+
+<div class="titulo-flujo">Flujo 6 · De plantilla a «mía» (los tres niveles + crear desde cero)</div>
+<div class="flujo">
+  <div class="paso rojo"><b>1 · Maestro clínico</b>El catálogo:92 plantillas + 40 semanas. Todo en BORRADOR hasta la firma del médico (P6). Solo se modifica con firma.</div>
+  <div class="flecha">→</div>
+  <div class="paso azul"><b>2 · Instancia</b>En la vista previa usted edita el mensaje de ESTA paciente (modo «Mensaje listo»): cambia hora, añade una línea. Es de un solo uso.</div>
+  <div class="flecha">→</div>
+  <div class="paso ambar"><b>3 · Personalizada</b>«Guardar como mía»: en modo «Plantilla» conserva marcadores ⇒ sirve para cualquier paciente; guardada resuelta ⇒ se etiqueta TEXTO FIJO. Con autor y fecha.</div>
+  <div class="flecha">→</div>
+  <div class="paso verde"><b>4 · Desde cero</b>«+ Nueva plantilla»: nombre, familia, disparo y texto con marcadores. El motor valida antes de crear: inocuidad, marcadores soportados y {{nombre}}.</div>
+</div>
+
+<div class="titulo-flujo">Flujo 3 · Cancelación por causa imprevista (fuerza mayor)</div>
+<div class="flujo">
+  <div class="paso rojo"><b>1 · Decisión</b>El consultorio no puede atender. El motivo es GENERAL: nunca detalle clínico de nadie.</div>
+  <div class="flecha">→</div>
+  <div class="paso ambar"><b>2 · Opciones</b>Dos fechas concretas de reprogramación, o la invitación a que ella comente sus días disponibles.</div>
+  <div class="flecha">→</div>
+  <div class="paso azul"><b>3 · Composición</b>La plantilla L05 se resuelve con: motivo general + opciones. Sin nombres de enfermedad, sin cifras.</div>
+  <div class="flecha">→</div>
+  <div class="paso verde"><b>4 · Entrega</b>Se copia y se entrega por el canal. La cita queda cancelada o reprogramada con rastro.</div>
+</div>
+
+<div class="titulo-flujo">Flujo 4 · El acompañamiento por semana (el ejemplo de la semana 29)</div>
+<div class="flujo">
+  <div class="paso morado"><b>1 · Semana derivada</b>La fecha estimada entrega la semana por CÁLCULO: (280 − días hasta el parto) ÷ 7. Sin fecha estimada o EG incierta ⇒ sin mensaje semanal (el sistema pide derivar, nunca adivina).</div>
+  <div class="flecha">→</div>
+  <div class="paso azul"><b>2 · Contenido</b>La fila de la semana (40 filas con borrador científico) aporta: línea de desarrollo + cuidado. El equipo puede proponer ediciones — quedan como borrador con autor, la vigencia es la firma.</div>
+  <div class="flecha">→</div>
+  <div class="paso verde"><b>3 · Signos de alarma</b>Siempre al final: cefalea intensa, visión borrosa, hinchazón súbita, sangrado, falta de aire, fiebre, contracciones, movimiento disminuido.</div>
+  <div class="flecha">→</div>
+  <div class="paso ambar"><b>4 · Una vez por semana</b>Deduplicado VERIFICABLE: la entrega guarda la clave «sem-28» y el motor se niega a repetirla para la misma paciente y semana.</div>
+  <div class="flecha">→</div>
+  <div class="paso verde"><b>5 · Entrega</b>La persona entrega; la bitácora registra con clave. La métrica de mensajes se mide aparte de los avisos clínicos.</div>
+</div>
+
+<div class="prohibido">
+<b>Lo que JAMÁS viaja en el mensaje al paciente (frontera DEC-32):</b> valores de laboratorio («hemoglobina 9.2») · cifras de calculadora («HOMA 3.3») · nombres de enfermedad o diagnóstico («preeclampsia», «VPH») · marcadores internos sin resolver ({{interno_*}}). Todo eso vive en la <b>ficha interna del personal</b>, que sí lo muestra. El examen de inocuidad corre en vivo en la pestaña Entregados y bloquea la copia si algo se cuela.
+</div>
+
+<div class="banda">
+<span class="rotulo">PREGUNTA PARA EL EQUIPO</span>
+¿Estos cuatro circuitos reflejan cómo manejan hoy sus citas y sus avisos? ¿Falta un circuito? ¿El de cancelación cubre sus causas reales?
+<div class="veredicto"><b>Veredicto:</b> ☐ Refleja nuestra operación · ☐ Refleja con cambios · ☐ No refleja — hay que rediseñar</div>
+</div>
+<p class="pie-pag">Papel usable · obra propia: FRONTEND/12-AGENDA-Y-MENSAJES · la lógica completa en LOGICA-DE-MENSAJES.md.</p>
+</div></div>
+<script>
+document.getElementById("lateral").innerHTML =
+  "<div class='grupo'>Carrera 12 — Agenda y mensajes</div>" +
+  "<a href='AGENDA.html'>Agenda y plantillas</a>" +
+  "<a href='FLUJOS.html' class='activo'>Flujos de lógica</a>" +
+  "<div class='grupo'>Documentos</div>" +
+  "<a href='LOGICA-DE-MENSAJES.md'>Lógica de mensajes</a>" +
+  "<a href='AUDITORIA-ADVERSARIAL.md'>Auditoría adversarial</a>" +
+  "<a href='LEEME.md'>LEEME de la carrera</a>" +
+    "<a href='MODELO-REPLICABLE.md'>Modelo replicable (manual)</a>" +
+  "<div class='grupo'>El consultorio</div>" +
+  "<a href='../12-FRONT-SINTESIS/hoy.html'>← Front integrado (Hoy)</a>";
+</script>
+</body></html>

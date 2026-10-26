@@ -1,0 +1,51 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=1024">
+<title>NUEVO — Pendientes (circuito cerrado)</title>
+<link rel="stylesheet" href="front.css"></head>
+<body data-pag="pendientes">
+
+<nav class="riel">
+  <span class="marca">Maternidad</span>
+  <a href="hoy.html" data-pag="hoy">▦ El día</a>
+  <a href="llegada.html" data-pag="llegada">⤷ Llegadas</a>
+  <a href="pendientes.html" data-pag="pendientes">⚑ Pendientes <span class="cuenta" id="cuenta-pend">–</span></a>
+  <a href="documentos.html" data-pag="documentos">✎ Documentos</a>
+  <a href="agenda.html" data-pag="agenda">▤ Agenda</a>
+  <a href="cierre.html" data-pag="cierre">⏻ Cierre</a>
+  <a class="piso" href="sistema.html" data-pag="sistema">⚙ Sistema (dueño)</a>
+</nav>
+
+<div class="principal">
+  <div class="barra">
+    <span class="pantalla">Pendientes — el circuito cerrado</span>
+    <a class="volver" href="hoy.html">← Hoy</a>
+    <div id="contexto"></div>
+  </div>
+
+  <main class="cuerpo">
+    <h1>Lo que falta hacer — hoy</h1>
+    <div class="subtitulo">Todo lo que encontró el sistema y **todavía nadie resuelve**: de
+      quién es, qué hay que hacer, **quién le toca** y **cuándo venció** — nada se pierde en
+      la libreta ni depende de que alguien se acuerde. Al cerrarlo, queda quién lo hizo y a
+      qué hora.</div>
+
+    <div id="lista-alertas"></div>
+
+    <div class="banda">
+      <span class="rotulo">Pregunta para el equipo — responda con la plantilla de revisión</span>
+      <p><b>¿Este es el lenguaje de su sala?</b> ¿De quién es, qué hay que hacer, a quién le
+      toca y cuándo vence — está todo en cada pendiente, o falta algo? ¿El cierre con nombre
+      y cédula les pesa o les sirve? ¿Qué otro pendiente real de su mañana no aparece aquí
+      (una llamada, una paciente que no contesta, un estudio que no llega)?</p>
+      <div class="veredicto"><label>☐ Así está bien, lo apruebo</label>
+        <label>☐ Está bien, pero con cambios</label>
+        <label>☐ No sirve así: rediseñar</label></div>
+    </div>
+
+    <footer class="vuelta">Pantalla 5 de 9 · FL-08, FL-13 · decisiones de B-013 aplicadas en el dibujo</footer>
+  </main>
+</div>
+
+<div id="aviso"></div>
+<script src="puente.js"></script>
+</body></html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=1024">
+<title>Propuesta P2 — Antes de sentar a la paciente</title>
+<link rel="stylesheet" href="front.css"></head>
+<body data-pag="prop-prep">
+
+<nav class="riel">
+  <span class="marca">Maternidad</span>
+  <span class="grupo primera">Jornada</span>
+  <a href="hoy.html" data-pag="hoy">▦ Hoy</a>
+  <a href="llegada.html" data-pag="llegada">⤷ Llegadas</a>
+  <a href="pendientes.html" data-pag="pendientes">⚑ Pendientes <span class="cuenta" id="cuenta-pend">–</span></a>
+  <a href="laboratorio.html" data-pag="laboratorio">⚕ Laboratorio</a>
+  <a href="atenciones.html" data-pag="atenciones">✂ Atenciones</a>
+  <a href="documentos.html" data-pag="documentos">✎ Documentos</a>
+  <a href="agenda.html" data-pag="agenda">▤ Agenda</a>
+  <a href="cierre.html" data-pag="cierre">⏻ Cierre</a>
+  <span class="grupo">Del consultorio</span>
+  <a href="respaldo.html" data-pag="respaldo">⛃ Respaldo</a>
+  <a class="piso" href="sistema.html" data-pag="sistema">⚙ Sistema (dueño)</a>
+</nav>
+
+<div class="principal">
+  <div class="barra">
+    <span class="pantalla">P2 — Antes de sentar a la paciente</span>
+    <span class="chip azul">PROPUESTA</span>
+    <a class="volver" href="PROPUESTAS.html">← Propuestas</a>
+    <div id="contexto"></div>
+  </div>
+
+  <main class="cuerpo">
+    <div class="cinta" id="cinta"></div>
+
+    <h1>Antes de sentar a la paciente</h1>
+    <div class="subtitulo">La consulta empieza con lo compilado: lo que llegó, lo que venció y
+      lo que falta — para no gastar los primeros minutos de la paciente buscando datos
+      (previsit: AAFP).</div>
+
+    <div class="panel" id="panel-prep">
+      <h2>Lo que ya está listo para esta consulta</h2>
+      <div id="prep-lista">Cargando…</div>
+      <div class="acciones">
+        <a class="btn" id="btn-empezar" href="consulta.html">Empezar la consulta con esto</a>
+        <span class="nota">Si algo falta de aquí, la consulta lo muestra igual — esto solo
+          evita buscarlo.</span>
+      </div>
+    </div>
+
+    <div class="banda">
+      <span class="rotulo">Pregunta para el dueño — ¿conviene?</span>
+      <p><b>¿Este resumen antes de empezar le ahorra tiempo real?</b> ¿Qué agregaría —
+      estudios anteriores, última nota, su razón de visita de hoy?</p>
+      <div class="veredicto"><label>☐ Conviene: constrúyala</label>
+        <label>☐ Conviene, pero así: __________________</label>
+        <label>☐ No conviene para su centro</label></div>
+    </div>
+
+    <footer class="vuelta">Propuesta P2 de B-004 · FL-09 · valor externo: AAFP previsit</footer>
+  </main>
+</div>
+
+<div id="aviso"></div>
+<script src="puente.js"></script>
+<script>
+  (function () {
+    if (!window.MK) return;
+    if (MK.renderCinta) MK.renderCinta();
+    var zona = document.getElementById("prep-lista");
+    var r = MK.puente.preparacion_consulta();
+    if (!r.paciente) { zona.innerHTML = '<div class="nota">Sin paciente abierta — ábrela desde Hoy y vuelva.</div>'; return; }
+    var filas = [];
+    filas.push(r.laboratorio.length
+      ? '<div class="linea"><b>Resultados que llegaron:</b> ' + r.laboratorio.join(" · ") + "</div>"
+      : '<div class="linea"><b>Resultados que llegaron:</b> ninguno capturado hoy <span class="chip gris">sin datos</span></div>');
+    filas.push(r.vencidos.length
+      ? '<div class="linea"><b>Pasos vencidos del protocolo:</b> ' + r.vencidos.join(" · ") + ' <span class="chip rojo">vencido</span></div>'
+      : '<div class="linea"><b>Pasos vencidos:</b> ninguno <span class="chip verde">al día</span></div>');
+    filas.push(r.pendientes.length
+      ? '<div class="linea"><b>Pendientes de esta paciente:</b> ' + r.pendientes.join(" · ") + "</div>"
+      : '<div class="linea"><b>Pendientes:</b> ninguno</div>');
+    filas.push('<div class="linea"><b>Con cinta y fundamentales siempre arriba</b> — la consulta no los rebusca.</div>');
+    zona.innerHTML = filas.join("");
+  })();
+</script>
+</body></html>

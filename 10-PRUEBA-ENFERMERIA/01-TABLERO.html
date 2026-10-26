@@ -1,0 +1,98 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=1024">
+<title>Tablero del día — prueba de piso</title>
+<link rel="stylesheet" href="estilo.css"></head><body>
+<div class="barra"><span class="marca">Maternidad</span>
+<span class="pantalla">Inicio — Tablero del día</span>
+<span class="propuesta">PRUEBA REAL · ENFERMERÍA</span>
+<span class="reloj-dia"></span></div>
+<div class="cuerpo"><div class="lateral"></div>
+<div class="zona">
+<h1>Mañana del jueves 23 de octubre</h1>
+<p class="subtitulo">El día completo de un vistazo. Los estados se mueven <b>solos</b>: lo que usted haga en las otras pantallas se refleja aquí. Haga clic en una tarjeta para abrir lo que le toca.</p>
+<div class="panel sombra" id="resumen"></div>
+<div class="tablero" id="tablero"></div>
+<div class="panel" style="max-width:900px">
+<h3>Acciones del piso</h3>
+<div class="linea">· <b>Registrar</b> — quien cruza la puerta sin cita. <a href="02-LLEGADA.html">Ir a La puerta →</a></div>
+<div class="linea">· <b>Pausar y retomar</b> — las interrupciones no pierden nada. <a href="05-PAUSA.html">Ir a Atenciones abiertas →</a></div>
+<div class="linea">· <b>Cierre y traspaso</b> — entregar el turno a la tarde. <a href="06-CIERRE.html">Ir al cierre →</a></div>
+<div class="linea" style="margin-top:8px"><button class="btn sec chico" id="btn-sala">Marcar: la médica salió a sala de parto</button>
+<button class="btn sec chico" id="btn-reset">Reiniciar la jornada</button></div>
+</div>
+<div id="veredicto-host"></div>
+</div></div>
+<script src="config.js"></script><script src="motor.js"></script>
+<script>
+Jornada.nav("01-TABLERO.html");
+var S = Jornada.estado();
+function pinta() {
+  var c = Jornada.resumenDia();
+  document.getElementById("resumen").innerHTML =
+    "<b>" + c.atendida + " atendidas</b> · " + c.en_atencion + " en atención · " + c.pausada + " pausada · " +
+    c.estacion_mitad + " estación a mitad · " + c.espera + " en espera · " + c.por_registrar + " por registrar · <b>" +
+    c.urgente + " urgente al frente</b> · <b>" + c.no_llego + " no llegó</b> · " + Jornada.alertasPendientes().length + " aviso(s) sin atender" +
+    (S.equipoFuera ? " · <span class='chip ambar'>EQUIPO FUERA — la médica está en sala</span>" : "");
+  var t = document.getElementById("tablero");
+  var cols = [
+    { t: "⚠ URGENTE", f: function (p) { var e = Jornada.estadoDe(p.id).estado; return e === "urgente" || (e === "en_atencion" && p.marcador === "urgente"); }, urg: true },
+    { t: "No llegó", f: function (p) { return Jornada.estadoDe(p.id).estado === "no_llego"; } },
+    { t: "Por registrar", f: function (p) { return Jornada.estadoDe(p.id).estado === "por_registrar"; } },
+    { t: "En espera", f: function (p) { var e = Jornada.estadoDe(p.id).estado; return e === "espera" || e === "llego" || e === "estacion_hecha"; } },
+    { t: "Estación a mitad", f: function (p) { return Jornada.estadoDe(p.id).estado === "estacion_mitad"; } },
+    { t: "En atención", f: function (p) { var d = Jornada.estadoDe(p.id); return (d.estado === "en_atencion" || d.estado === "pausada") && p.marcador !== "urgente"; } },
+    { t: "Falta completar", f: function (p) { return Jornada.estadoDe(p.id).estado === "falta_completar"; } },
+    { t: "Atendidas hoy", f: function (p) { return Jornada.estadoDe(p.id).estado === "atendida"; } },
+    { t: "Con cita después", f: function (p) { var d = Jornada.estadoDe(p.id); return d.estado === "con_cita" && p.cita != null && p.cita >= Jornada.ahoraMin(); } }
+  ];
+  t.innerHTML = "";
+  cols.forEach(function (col) {
+    var lista = S.pacientes.filter(col.f);
+    if (!lista.length) return;
+    var div = document.createElement("div");
+    div.className = "columna" + (col.urg ? " urgente" : "");
+    var html = "<h4><span>" + col.t + "</span><span>" + lista.length + "</span></h4>";
+    lista.forEach(function (p) {
+      var e = Jornada.estadoDe(p.id).estado;
+      var extra = "";
+      if (col.t === "No llegó") extra = " <a style='display:block;margin-top:4px' href='02-LLEGADA.html?p=" + p.id + "'><b>Reagendar →</b></a>";
+      if (e === "por_registrar") extra = " <a style='display:block;margin-top:4px' href='02-LLEGADA.html?p=" + p.id + "'><b>Falta su visita — completar →</b></a>";
+      if (e === "estacion_mitad") extra = " <a style='display:block;margin-top:4px' href='05-PAUSA.html?p=" + p.id + "'><b>Retomar estación →</b></a>";
+      if (e === "pausada") extra = " <a style='display:block;margin-top:4px' href='05-PAUSA.html?p=" + p.id + "'><b>▶ Retomar donde quedó →</b></a>";
+      if (e === "falta_completar") extra = " <a style='display:block;margin-top:4px' href='02-LLEGADA.html?p=" + p.id + "'><b>Completar su ficha →</b></a>";
+      html += Jornada.tarjetaHTML(p, extra);
+    });
+    div.innerHTML = html;
+    t.appendChild(div);
+  });
+  t.querySelectorAll(".tarjeta").forEach(function (card) {
+    card.onclick = function (ev) {
+      if (ev.target.tagName === "A") return;
+      var pid = card.getAttribute("data-pid");
+      var d = Jornada.estadoDe(pid).estado;
+      if (d === "por_registrar" || d === "falta_completar" || d === "no_llego") Jornada.irA("02-LLEGADA.html", pid);
+      else if (d === "estacion_mitad" || d === "pausada") Jornada.irA("05-PAUSA.html", pid);
+      else if (d === "urgente") Jornada.toast(Jornada.nombrePac(pid) + " está en atención con la médica — la urgencia la cierra la VOZ del equipo.");
+      else if (d === "estacion_hecha" || d === "llego" || d === "espera") Jornada.irA("03-ESTACION.html", pid);
+      else if (d === "con_cita") Jornada.toast(Jornada.nombrePac(pid) + " — cita a las " + Jornada.hm(Jornada.paciente(pid).cita) + ". Cuando cruce la puerta, regístrela en La puerta.");
+      else Jornada.toast(Jornada.nombrePac(pid) + " ya fue atendida.");
+    };
+  });
+}
+document.getElementById("btn-sala").onclick = function () {
+  S.equipoFuera = !S.equipoFuera;
+  Jornada.guardar();
+  Jornada.toast(S.equipoFuera ? "La médica salió: el tablero explica la espera de todas." : "La médica volvió de sala.");
+  pinta(); Jornada.pintarRelojBarra();
+};
+document.getElementById("btn-reset").onclick = function () {
+  Jornada.modal("Reiniciar la jornada", "Se borra todo lo hecho en esta prueba y el día vuelve a empezar con sus 18 pacientes.", [
+    { txt: "Cancelar", cls: "sec" },
+    { txt: "Reiniciar", cls: "peligro", fn: function () { Jornada.reiniciar(); location.reload(); } }
+  ]);
+};
+pinta();
+Jornada.bandaVeredicto("tablero", "¿Así arrancaría su mañana? ¿Qué columna falta o sobra? ¿Qué necesita ver en cada tarjeta para decidir en un segundo? ¿El reloj le sirve o estorba?");
+setInterval(function () { pinta(); Jornada.pintarRelojBarra(); }, 20000);
+</script>
+</body></html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=1024">
+<title>Propuesta P1 — Del aviso a la acción</title>
+<link rel="stylesheet" href="front.css"></head>
+<body data-pag="prop-aviso">
+
+<nav class="riel">
+  <span class="marca">Maternidad</span>
+  <span class="grupo primera">Jornada</span>
+  <a href="hoy.html" data-pag="hoy">▦ Hoy</a>
+  <a href="llegada.html" data-pag="llegada">⤷ Llegadas</a>
+  <a href="pendientes.html" data-pag="pendientes">⚑ Pendientes <span class="cuenta" id="cuenta-pend">–</span></a>
+  <a href="laboratorio.html" data-pag="laboratorio">⚕ Laboratorio</a>
+  <a href="atenciones.html" data-pag="atenciones">✂ Atenciones</a>
+  <a href="documentos.html" data-pag="documentos">✎ Documentos</a>
+  <a href="agenda.html" data-pag="agenda">▤ Agenda</a>
+  <a href="cierre.html" data-pag="cierre">⏻ Cierre</a>
+  <span class="grupo">Del consultorio</span>
+  <a href="respaldo.html" data-pag="respaldo">⛃ Respaldo</a>
+  <a class="piso" href="sistema.html" data-pag="sistema">⚙ Sistema (dueño)</a>
+</nav>
+
+<div class="principal">
+  <div class="barra">
+    <span class="pantalla">P1 — Del aviso a la acción</span>
+    <span class="chip azul">PROPUESTA</span>
+    <a class="volver" href="PROPUESTAS.html">← Propuestas</a>
+    <div id="contexto"></div>
+  </div>
+
+  <main class="cuerpo">
+    <h1>Del aviso a la acción, en un clic</h1>
+    <div class="subtitulo">Un aviso que dice qué pasa pero no lleva a donde se resuelve se
+      ignora (criterio AHRQ: informar <b>y</b> poder actuar en el mismo sitio). Aquí cada
+      pendiente trae su botón <b>«Ir a resolver»</b> a la pantalla exacta donde se cierra.</div>
+
+    <div class="panel" style="border-left:5px solid var(--acento)">
+      <h2>Los pendientes, con su camino</h2>
+      <div id="lista-resuelve"></div>
+    </div>
+
+    <div class="panel">
+      <h2>El contraste</h2>
+      <div class="linea"><b>Sin P1 (hoy):</b> el aviso describe el problema y usted recuerda
+        en qué pantalla se resuelve.</div>
+      <div class="linea"><b>Con P1:</b> un clic y está en la estación, en laboratorio o en
+        protocolos, con la paciente ya abierta.</div>
+    </div>
+
+    <div class="banda">
+      <span class="rotulo">Pregunta para el dueño — ¿conviene?</span>
+      <p><b>¿Este botón le ahorra el paso de buscar dónde se resuelve?</b> ¿O prefiere que
+      el pendiente tenga su acción directa («marcar hecho», «llamar») sin salir de aquí?</p>
+      <div class="veredicto"><label>☐ Conviene: constrúyala</label>
+        <label>☐ Conviene, pero así: __________________</label>
+        <label>☐ No conviene para su centro</label></div>
+    </div>
+
+    <footer class="vuelta">Propuesta P1 de B-004 · FL-13/FL-08 · valor externo: AHRQ
+      «actionability»</footer>
+  </main>
+</div>
+
+<div id="aviso"></div>
+<script src="puente.js"></script>
+<script>
+  (function () {
+    var zona = document.getElementById("lista-resuelve");
+    if (!zona || !window.MK) return;
+    var destinos = { control: "estacion.html", laboratorio: "laboratorio.html", protocolo: "protocolos.html", banderas: "consulta.html" };
+    var pend = MK.puente.listar_alertas().filter(function (a) { return a.estado === "pendiente"; });
+    if (!pend.length) { zona.innerHTML = '<div class="nota">Sin pendientes hoy — el botón se muestra cuando hay algo que resolver.</div>'; return; }
+    zona.innerHTML = pend.map(function (a) {
+      var destino = destinos[a.origen] || "pendientes.html";
+      var quien = a.paciente ? "paciente=" + encodeURIComponent(a.paciente) : "";
+      return '<div class="linea"><b>' + (a.paciente || "Paciente sin nombre") + "</b> — " + a.texto +
+        '<div class="nota">Le toca a: ' + a.dueño + '</div>' +
+        '<div class="acciones" style="margin-top:6px"><a class="btn" style="padding:4px 14px;font-size:12px" href="' +
+        destino + (quien ? "?" + quien : "") + '">Ir a resolver →</a>' +
+        '<a class="btn sec" style="padding:4px 12px;font-size:12px" href="pendientes.html">Cerrar con firma aquí</a></div></div>';
+    }).join("");
+  })();
+</script>
+</body></html>

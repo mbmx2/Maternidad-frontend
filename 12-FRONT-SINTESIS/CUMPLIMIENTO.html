@@ -1,0 +1,63 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8">
+<meta name="sintesis" content="S1">
+<meta name="viewport" content="width=1024">
+<title>Cumplimiento — RF por RF</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="front.css"></head><body>
+<div class="barra"><span class="marca">Maternidad</span>
+<span class="pantalla">Cumplimiento — qué cubre este papel, RF por RF</span>
+<span id="contexto-gatillo" class="vacio"></span>
+<span class="propuesta">V4 · S1 · PAPEL CON MOTOR</span>
+<span class="reloj-dia"></span></div>
+<div class="cuerpo"><div class="lateral"></div>
+<div class="zona">
+<h1>Mapa de cumplimiento</h1>
+<p class="subtitulo">Cada requerimiento de pantalla (RF) con la página que lo ejercita y su estado honesto. <b>CUBIERTO</b> = se puede tocar y probar aquí · <b>PARCIAL</b> = la regla está dibujada y cableada, le falta su filo · <b>DECLARADO</b> = la regla se dice pero esta sesión no la ejercita.</p>
+<div class="panel sombra" id="mapa"></div>
+<div class="panel sombra">
+<h3>Los tres honestos de este papel</h3>
+<div class="linea">1. <b>No hay disco ni red</b>: el estado vive en este navegador; «Reiniciar la jornada» lo devuelve al día precargado.</div>
+<div class="linea">2. <b>Los catálogos clínicos son demostración</b>: sembrados como si firmados. Los reales los firma el médico (P6 de la ley).</div>
+<div class="linea">3. <b>Nada se vuelve software sin doble veredicto</b> (DEC-19): cada pantalla trae su pregunta y esta hoja su casilla.</div>
+</div>
+<p class="pie-pag">Las casas de cada RF: <b>05-LEY/ACTA_FRONTEND.md</b> (la ley manda) · <b>06-FUENTE-BACKEND/REQUISITOS-FRONT-BACK.md</b> (26 RF + 22 RB) · <b>06-FUENTE-BACKEND/REQ-FLUJO.md</b> (FL-01…FL-17).</p>
+<div id="veredicto-host"></div>
+</div></div>
+<script src="config.js"></script><script src="motor.js"></script>
+<script>
+Jornada.nav("Cumplimiento");
+var filas = [
+  ["RF-01/02", "Registro rápido de paciente y visita de hoy", "llegada.html", "CUBIERTO", "3 campos + 6 de visita; homónimas preguntan y nunca fusionan"],
+  ["RF-03", "Fundamentales editables y viajan en cinta", "ficha.html", "CUBIERTO", "alergias/RH/medicación/crónicas + plazo de falta-completar"],
+  ["RF-05", "Estación: exactamente 10 campos y 9 banderas", "estacion.html", "CUBIERTO", "10/9 reales; guardar nunca bloquea; alertas después de guardar"],
+  ["RF-06", "Guardar nunca bloquea; chips de interpretación", "estacion.html", "CUBIERTO", "chips al llenar y panel de avisos post-guardado"],
+  ["RF-07", "Laboratorio: captura en 30 s, banda, escrito tardío", "laboratorio.html", "PARCIAL", "9 analitos del mínimo de R-38; el resto espera catálogo"],
+  ["RF-13", "Pendientes con dueño, reloj y cierre firmado", "pendientes.html", "CUBIERTO", "nombre y cédula, o anclado a nota; urgencias primero"],
+  ["RF-14/15", "Datos fundamentales siempre visibles", "consulta.html", "CUBIERTO", "cinta con alergia en rojo antes de escribir"],
+  ["RF-16", "Atenciones concurrentes con dueño y «en uso de X»", "atenciones.html", "CUBIERTO", "pausa con borrador, toma por emergencia registrada, sin tope"],
+  ["RF-17/36", "Nota firmada e inmutable con autor y cédula", "consulta.html · historia.html", "CUBIERTO", "firma obligatoria; NOM-004 como asistente dentro de la nota"],
+  ["RF-19/43", "Calculadoras: lista cerrada de 18 con prefill", "calculadoras.html", "PARCIAL", "HOMA-IR e IMC activas con prefill; 16 esperan su tabla firmada"],
+  ["RF-20", "Métrica de fatiga del sistema (<2 avisos/visita)", "hoy.html · pendientes.html", "CUBIERTO", "se mide al sistema, nunca a la persona"],
+  ["RF-26", "Acceso con PIN (R-26)", "sistema.html", "DECLARADO", "la sesión no pide PIN; su lugar en el flujo está declarado"],
+  ["RF-41", "Próximo control derivado del catálogo", "agenda.html", "CUBIERTO", "nunca se captura a mano; «por recuperar» con cita 1 clic"],
+  ["RF-48", "Recordatorios sin cifras, entrega humana, escalado", "agenda.html · cierre.html", "CUBIERTO", "copiar/entregar/anular; ESCALADO vivo al vencer la ventana"],
+  ["FL-04", "«No llegó» se enciende solo al vencer la cita", "hoy.html", "CUBIERTO", "derivado de eventos: nadie lo marca a mano"],
+  ["FL-08", "La urgencia sube al frente en el mismo segundo", "urgencia.html", "CUBIERTO", "manual o nacida de dato crítico; tres salidas legales firmadas"],
+  ["FL-14", "Guiones de falla en humano + drill de respaldo", "falla.html", "CUBIERTO", "6 guiones + ensayo que el cierre marca verificado"],
+  ["FL-15", "Traspaso imprimible en 1 clic", "cierre.html", "CUBIERTO", "calculado desde los hechos; impresión real"],
+  ["FL-17", "Documentos con paciente en contexto", "documentos.html", "PARCIAL", "plantillas y reglas dibujadas; la apertura real es fase de producto"],
+  ["B-013", "Cierre de alerta con firma; dedupe solo pendiente", "pendientes.html · consulta.html", "CUBIERTO", "nombre+cédula o ancla a nota; recaída tras cerrar = aviso nuevo"],
+  ["DEC-32/33", "El software prepara; la persona entrega; estado deducido", "agenda.html", "CUBIERTO", "cero envío automático; el estado se deduce, no se captura"],
+  ["DEC-27", "Semáforo informativo, nunca dictamina", "laboratorio.html · consulta.html", "CUBIERTO", "normal/alerta/crítica/sin dato; sin catálogo, gris"]
+];
+var cls = { CUBIERTO: "verde", PARCIAL: "ambar", DECLARADO: "gris" };
+document.getElementById("mapa").innerHTML =
+  "<div class='linea'><span class='chip verde'>CUBIERTO</span> se toca y se prueba · <span class='chip ambar'>PARCIAL</span> falta su filo · <span class='chip gris'>DECLARADO</span> la regla se dice, la sesión no la ejercita</div>" +
+  filas.map(function (f) {
+    return "<div class='linea'><b>" + f[0] + "</b> <span class='chip " + cls[f[3]] + "'>" + f[3] + "</span> — " + f[1] +
+      "<div class='nota'>→ <a href='" + f[2].split(" · ")[0] + "'>" + f[2] + "</a> · " + f[4] + "</div></div>";
+  }).join("");
+Jornada.pintarContexto();
+Jornada.bandaVeredicto("cumplimiento", "¿Alguno de estos RF no corresponde a lo que usted vive? ¿Falta un RF de su operación diaria en esta lista?");
+</script>
+</body></html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=1024">
+<title>NUEVO — Cierre y traspaso</title>
+<link rel="stylesheet" href="front.css"></head>
+<body data-pag="cierre">
+
+<nav class="riel">
+  <span class="marca">Maternidad</span>
+  <a href="hoy.html" data-pag="hoy">▦ El día</a>
+  <a href="llegada.html" data-pag="llegada">⤷ Llegadas</a>
+  <a href="pendientes.html" data-pag="pendientes">⚑ Pendientes <span class="cuenta" id="cuenta-pend">–</span></a>
+  <a href="documentos.html" data-pag="documentos">✎ Documentos</a>
+  <a href="agenda.html" data-pag="agenda">▤ Agenda</a>
+  <a href="cierre.html" data-pag="cierre">⏻ Cierre</a>
+  <a class="piso" href="sistema.html" data-pag="sistema">⚙ Sistema (dueño)</a>
+</nav>
+
+<div class="principal">
+  <div class="barra">
+    <span class="pantalla">Cierre del día — traspaso a la tarde</span>
+    <a class="volver" href="hoy.html">← Hoy</a>
+    <div id="contexto"></div>
+  </div>
+
+  <main class="cuerpo">
+    <h1>El día tiene final</h1>
+    <div class="subtitulo">Nada de «16 de 18 atendidas» y hasta mañana: esto es lo que se
+      entrega a quien viene — se calcula solo, de los hechos del día, sin capturar nada nuevo.</div>
+
+    <div class="panel">
+      <h3>Hoja de traspaso</h3>
+      <div id="resumen"></div>
+      <div class="linea">· ¿Algo se rompió hoy? <a href="falla.html"><b>Fallas y puente de papel →</b></a></div>
+      <div class="acciones">
+        <button class="btn" id="btn-imprimir">Imprimir traspaso</button>
+        <span class="nota">Una página, para la mano de la tarde.</span>
+      </div>
+    </div>
+
+    <div class="banda">
+      <span class="rotulo">Pregunta para el equipo — responda con la plantilla de revisión</span>
+      <p><b>¿Así cierra su día?</b> ¿Qué le falta en la hoja de traspaso — ¿dónde quedó cada
+      una por nombre, ¿los laboratorios de mañana, algo del equipo? ¿Imprimir es suficiente o
+      quieren que también se quede visible al encender mañana?</p>
+      <div class="veredicto"><label>☐ Así está bien, lo apruebo</label>
+        <label>☐ Está bien, pero con cambios</label>
+        <label>☐ No sirve así: rediseñar</label></div>
+    </div>
+
+    <footer class="vuelta">Pantalla 8 de 9 · FL-15 · traspaso en 1 clic y respaldo de la tarde</footer>
+  </main>
+</div>
+
+<div id="aviso"></div>
+<script src="puente.js"></script>
+</body></html>

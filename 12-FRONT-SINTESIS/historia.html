@@ -1,0 +1,89 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8">
+<meta name="sintesis" content="S1">
+<meta name="viewport" content="width=1024">
+<title>Historia y notas</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="front.css"></head><body>
+<div class="barra"><span class="marca">Maternidad</span>
+<span class="pantalla">Historia — la nota como cierre de consulta</span>
+<span id="contexto-gatillo" class="vacio"></span>
+<span class="propuesta">V4 · S1 · PAPEL CON MOTOR</span>
+<span class="reloj-dia"></span></div>
+<div class="cuerpo"><div class="lateral"></div>
+<div class="zona">
+<h1>Historia y notas</h1>
+<p class="subtitulo">Las notas se firman con autor y cédula, son inmutables y viven con su paciente. El NOM-004 es un asistente <b>dentro</b> de la nota — nunca una pantalla aparte que se olvida.</p>
+<div id="cinta"></div>
+<div class="panel sombra">
+<h3>Notas de esta paciente</h3>
+<div id="lista-notas"></div>
+</div>
+<div class="panel sombra">
+<h3>Firmar una nota nueva</h3>
+<div class="fila-form">
+<div class="campo"><label>Tipo de nota</label><select id="n-tipo"><option>Evolución</option><option>Control prenatal</option><option>Primera atención</option><option>Interconsulta</option><option>Cierre de urgencia</option></select></div>
+<div class="campo"><label>Quién firma (nombre)</label><input type="text" id="n-autor" placeholder="Dra. / Enf."></div>
+<div class="campo"><label>Cédula</label><input type="text" id="n-cedula" inputmode="numeric" placeholder="solo dígitos"></div>
+</div>
+<div class="campo" style="max-width:640px;margin-top:8px"><label>Evolución</label><textarea id="n-texto" rows="5" placeholder="Sus palabras de consulta…"></textarea></div>
+<div class="acciones">
+<button class="btn" id="n-guardar">Firmar nota</button>
+<button class="btn sec" id="btn-nom004">Insertar asistente NOM-004</button>
+<button class="btn sec" id="btn-interconsulta">Firmar como interconsulta</button>
+</div>
+<div id="nota-aviso"></div>
+</div>
+<div id="veredicto-host"></div>
+</div></div>
+<script src="config.js"></script><script src="motor.js"></script>
+<script>
+Jornada.nav("Historia");
+var S = Jornada.estado();
+var pid = Jornada.leerContexto();
+function pinta() {
+  document.getElementById("cinta").innerHTML = Jornada.cintaHTML(pid);
+  var zona = document.getElementById("lista-notas");
+  var notas = S.notas.filter(function (n) { return n.pid === pid; });
+  zona.innerHTML = notas.length
+    ? notas.map(function (n) {
+        return "<div class='linea'><b>" + n.fecha + " · " + Jornada.esc(n.tipo) + "</b> — " + Jornada.esc(n.autor) + " (céd. " + Jornada.esc(n.cedula) + ") · " + n.hora +
+          "<div class='nota'>" + Jornada.esc(n.texto) + "</div></div>";
+      }).join("")
+    : "<div class='vacio'>Sin notas firmadas todavía para esta paciente.</div>";
+}
+document.getElementById("btn-nom004").onclick = function () {
+  var ta = document.getElementById("n-texto");
+  ta.value += (ta.value ? "\n" : "") +
+    "Identificación y motivo de consulta:\nAntecedentes relevantes:\nExploración física:\nDiagnósticos presuntivos:\nPlan y estudios solicitados:\nIndicaciones y seguimiento:\n";
+  Jornada.toast("Asistente NOM-004 insertado en la nota — el formato oficial vive dentro de su nota, no en una pantalla aparte.");
+  ta.focus();
+};
+document.getElementById("btn-interconsulta").onclick = function () {
+  document.getElementById("n-tipo").value = "Interconsulta";
+  document.getElementById("n-texto").focus();
+  Jornada.toast("Tipo puesto en Interconsulta: al firmarla, nace un pendiente con dueño y plazo de 7 días.");
+};
+document.getElementById("n-guardar").onclick = function () {
+  if (!pid) { Jornada.toast("Primero elija a la paciente desde Hoy."); return; }
+  var texto = document.getElementById("n-texto").value.trim();
+  var autor = document.getElementById("n-autor").value.trim();
+  var cedula = document.getElementById("n-cedula").value.trim();
+  if (!texto) { Jornada.toast("La nota está vacía: nada que firmar."); return; }
+  if (!autor || !cedula) { Jornada.toast("Falta la firma: nombre y cédula. Sin firma no se señala."); return; }
+  var tipo = document.getElementById("n-tipo").value;
+  var nota = { id: Jornada.uid(), pid: pid, tipo: tipo, texto: texto, autor: autor, cedula: cedula, fecha: Jornada.hoyISO(), hora: Jornada.hm(Jornada.ahoraMin()) };
+  S.notas.unshift(nota);
+  Jornada.agregarEvento("nota_firmada", pid, { tipo: tipo, notaId: nota.id });
+  if (tipo === "Interconsulta")
+    Jornada.nacerAlerta(pid, 2, "interconsulta pendiente de respuesta", "dar seguimiento a la respuesta en 7 días", "la médica");
+  Jornada.guardar();
+  document.getElementById("n-texto").value = "";
+  document.getElementById("nota-aviso").innerHTML = "<div class='aviso verde'><b>Nota firmada e inmutable</b> — autor y cédula quedaron dentro. No hay forma de editarla desde aquí: se enmienda con una nota nueva.<span class='duenio'>" + Jornada.esc(autor) + " (céd. " + Jornada.esc(cedula) + ") · " + nota.fecha + " " + nota.hora + "</span></div>";
+  Jornada.toast("Nota firmada.");
+  pinta();
+};
+pinta();
+Jornada.pintarContexto();
+Jornada.bandaVeredicto("historia", "¿La nota firmada con autor y cédula es lo que necesitan? ¿El asistente NOM-004 dentro de la nota sirve o estorba? ¿Falta algún tipo de nota?");
+</script>
+</body></html>

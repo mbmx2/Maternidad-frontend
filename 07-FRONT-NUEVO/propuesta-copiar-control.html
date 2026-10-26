@@ -1,0 +1,102 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=1024">
+<title>Propuesta P4 — Copiar del control anterior</title>
+<link rel="stylesheet" href="front.css"></head>
+<body data-pag="prop-copiar">
+
+<nav class="riel">
+  <span class="marca">Maternidad</span>
+  <span class="grupo primera">Jornada</span>
+  <a href="hoy.html" data-pag="hoy">▦ Hoy</a>
+  <a href="llegada.html" data-pag="llegada">⤷ Llegadas</a>
+  <a href="pendientes.html" data-pag="pendientes">⚑ Pendientes <span class="cuenta" id="cuenta-pend">–</span></a>
+  <a href="laboratorio.html" data-pag="laboratorio">⚕ Laboratorio</a>
+  <a href="atenciones.html" data-pag="atenciones">✂ Atenciones</a>
+  <a href="documentos.html" data-pag="documentos">✎ Documentos</a>
+  <a href="agenda.html" data-pag="agenda">▤ Agenda</a>
+  <a href="cierre.html" data-pag="cierre">⏻ Cierre</a>
+  <span class="grupo">Del consultorio</span>
+  <a href="respaldo.html" data-pag="respaldo">⛃ Respaldo</a>
+  <a class="piso" href="sistema.html" data-pag="sistema">⚙ Sistema (dueño)</a>
+</nav>
+
+<div class="principal">
+  <div class="barra">
+    <span class="pantalla">P4 — Copiar del control anterior</span>
+    <span class="chip azul">PROPUESTA</span>
+    <a class="volver" href="PROPUESTAS.html">← Propuestas</a>
+    <div id="contexto"></div>
+  </div>
+
+  <main class="cuerpo">
+    <div class="cinta" id="cinta"></div>
+
+    <h1>Copiar del control anterior</h1>
+    <div class="subtitulo">Lo repetido se trae de un clic y queda <b>marcado como copiado</b>
+      —nunca se hace pasar por medido hoy—: cero captura doble, el pecado que más cansa al
+      personal (encuesta AMIA: documentación repetida = jornadas largas).</div>
+
+    <div class="panel">
+      <h2>La estación, con el botón nuevo</h2>
+      <div class="acciones" style="margin-top:0">
+        <button class="btn sec" id="btn-copiar">📋 Copiar del control anterior</button>
+        <span class="nota" id="marca-copia">Sin copiar todavía — lo copiado aparecerá marcado.</span>
+      </div>
+      <form id="form-mini" style="margin-top:12px">
+        <div class="formulario">
+          <div class="campo"><label>Peso (kg)</label><input name="peso" inputmode="decimal"></div>
+          <div class="campo"><label>TA sistólica</label><input name="ta_s" inputmode="numeric"></div>
+          <div class="campo"><label>TA diastólica</label><input name="ta_d" inputmode="numeric"></div>
+          <div class="campo"><label>FC fetal (lpm)</label><input name="fcf" inputmode="numeric"></div>
+        </div>
+        <div class="acciones">
+          <button class="btn" type="submit">Guardar control</button>
+          <span class="nota">Demo con4 campos; la estación completa (los10 de R-14) vive en
+            <a href="estacion.html">estacion.html</a>.</span>
+        </div>
+      </form>
+      <div class="chips-respuesta" id="chips-mini"></div>
+    </div>
+
+    <div class="banda">
+      <span class="rotulo">Pregunta para el dueño — ¿conviene?</span>
+      <p><b>¿Lo usarían o prefieren teclear siempre?</b> ¿La marca «copiado» les sirve o
+      prefieren otra forma de distinguirlo?</p>
+      <div class="veredicto"><label>☐ Conviene: constrúyala</label>
+        <label>☐ Conviene, pero así: __________________</label>
+        <label>☐ No conviene para su centro</label></div>
+    </div>
+
+    <footer class="vuelta">Propuesta P4 de B-004 · FL-05 · valor externo: anti doble captura</footer>
+  </main>
+</div>
+
+<div id="aviso"></div>
+<script src="puente.js"></script>
+<script>
+  (function () {
+    if (!window.MK) return;
+    if (MK.renderCinta) MK.renderCinta();
+    var marca = document.getElementById("marca-copia");
+    var form = document.getElementById("form-mini");
+    var sal = document.getElementById("chips-mini");
+    var btn = document.getElementById("btn-copiar");
+    if (btn) btn.addEventListener("click", function () {
+      var r = MK.puente.copiar_control_anterior();
+      if (!r.ok) { MK.aviso(r.mensaje); return; }
+      ["peso", "ta_s", "ta_d", "fcf"].forEach(function (k) { if (form[k]) form[k].value = r.control[k] || ""; });
+      marca.innerHTML = '<span class="chip ambar">copiado — edítelo si cambió</span> ' + r.nota;
+      MK.aviso("Traído del control anterior: lo copiado queda marcado, nunca se hace pasar por medido hoy.");
+    });
+    if (form) form.addEventListener("submit", function (ev) {
+      ev.preventDefault();
+      var datos = {};
+      ["peso", "ta_s", "ta_d", "fcf"].forEach(function (k) { datos[k] = form[k].value; });
+      var r = MK.puente.guardar_control(datos);
+      if (!r.ok) { MK.aviso(r.mensaje); return; }
+      sal.innerHTML = r.chips.map(function (c) { return '<span class="chip ' + c.c + '">' + c.t + "</span>"; }).join(" ");
+      MK.aviso("Control guardado — guardar nunca bloquea.");
+    });
+  })();
+</script>
+</body></html>

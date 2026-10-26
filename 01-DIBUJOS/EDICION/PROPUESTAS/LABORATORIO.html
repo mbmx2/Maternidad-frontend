@@ -1,0 +1,160 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8">
+<title>PROPUESTA — Laboratorio recibido en papel (captura de 30 segundos)</title>
+<link rel="stylesheet" href="estilo.css"></head><body>
+
+<div class="barra">
+  <span class="marca">Maternidad</span>
+  <span class="pantalla">Laboratorio recibido — captura rápida</span>
+  <span class="propuesta">PROPUESTA DE DISEÑO</span>
+  <button class="ayuda">Ayuda</button>
+</div>
+
+<div class="cuerpo">
+  <div class="lateral">
+    <a href="TABLERO.html">Inicio (tablero)</a>
+    <a href="EMERGENCIA.html">Nueva paciente</a>
+    <a href="PROTOCOLOS.html">Ficha</a>
+    <a href="CONTROL.html">Control prenatal</a>
+    <a href="LABORATORIO.html" class="activo">Laboratorio</a>
+    <a href="CIERRE.html">Cierre y traspaso</a>
+    <a href="AGENDA.html">Agenda</a>
+    <a href="INDICE.html">Todas las propuestas</a>
+  </div>
+
+  <div class="zona">
+    <div class="pregunta" style="margin-top:0;margin-bottom:16px;max-width:none">
+      <span class="rotulo">PROPUESTA · EL PAPEL TAMBIÉN CUENTA · captura de laboratorio (optimización O8)</span>
+      En el centro real gran parte del laboratorio llega en papel. Sin este paso, el semáforo
+      de la paciente se queda gris por diseño — no porque no haya datos, sino porque nadie los
+      teclea. Aquí son <b>tres datos en treinta segundos</b>, con la bandera honesta de
+      «escrito tardío» cuando el papel llegó después.
+    </div>
+
+    <h1>Laboratorio recibido — Klein Ortiz, Ivonne</h1>
+    <div class="subtitulo">
+      Trae en mano su resultado impreso del laboratorio. Usted teclea el analito, el valor y
+      la fecha del estudio; el programa pone el rango, la interpretación y alimenta el
+      semáforo. <b>Sin esto, su semáforo vive gris.</b>
+    </div>
+
+    <!-- CINTA DE IDENTIDAD -->
+    <div class="cinta verde">
+      <span class="fuerte">KLEIN ORTIZ, Ivonne</span>
+      <span class="datos">12/08/1988 · 38 años · expediente 000142</span>
+      <span class="homónima" style="background:#fdecea;color:#8a1c1c">⚠ ALERGIA: ninguna conocida</span>
+      <span class="homónima" style="background:#eaf3fa;color:#1b4f72">🩸 B positivo (RH+)</span>
+      <span class="homónima" style="background:#fdf7ec;color:#8a6d1a">💊 hierro 1/día</span>
+      <span style="margin-left:auto"><span class="chip azul">EMBARAZO 30 SEMANAS</span></span>
+    </div>
+
+    <div class="rejilla">
+      <div class="col1">
+        <div class="panel" style="border-top:5px solid #1b6ca8">
+          <h3>Lo mínimo — 3 datos en 30 segundos</h3>
+          <label class="campo">Analito <span class="req">(obligatorio)</span>
+            <span class="pista">de la lista firmada — no se teclea a mano</span></label>
+          <select class="f big">
+            <option>— elegir de la lista —</option>
+            <option selected>Hemoglobina</option>
+            <option>Glucosa</option>
+            <option>Proteinuria</option>
+            <option>Hematocrito</option>
+            <option>Urocultivo</option>
+          </select>
+          <div style="display:flex;gap:12px;flex-wrap:wrap">
+            <div style="flex:1;min-width:160px">
+              <label class="campo">Valor <span class="req">(obligatorio)</span></label>
+              <input class="f big" placeholder="10,8">
+            </div>
+            <div style="flex:1;min-width:180px">
+              <label class="campo">Fecha del estudio <span class="req">(obligatorio)</span>
+                <span class="pista">📅 con calendario — la del papel, no la de hoy</span></label>
+              <input class="f big" placeholder="📅 22/10/2026">
+            </div>
+          </div>
+
+          <div class="panel" style="border-left:5px solid #e67e22;margin-top:14px;background:#fdf7ec">
+            <h3>¿El papel llegó tarde? Dígalo — es honesto, no es error</h3>
+            <label style="font-size:13.5px;display:flex;gap:8px;align-items:center">
+              <input type="checkbox"> El resultado es de antes y lo estoy capturando hoy
+              (escrito tardío)</label>
+            <label class="campo">Motivo del tardío (si lo marcó)</label>
+            <input class="f" placeholder="el laboratorio lo entregó al día siguiente">
+            <div class="linea" style="color:#566;font-size:12.5px;margin-top:6px">El sistema
+              guarda la <b>fecha del hecho</b>, no la del tecleo, y lo anota como «escrito
+              tardío» en su bitácora — para que la gráfica no mienta sobre cuándo pasó.</div>
+          </div>
+
+          <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap">
+            <button class="btn grande" style="background:#1b6ca8;font-size:15px"
+              onclick="guardar()">Guardar resultado de
+              <u>IVONNE KLEIN ORTIZ (12/08/1988)</u></button>
+            <a href="TABLERO.html"><button class="btn sec grande">Cancelar</button></a>
+          </div>
+          <div id="zona-ok"></div>
+        </div>
+      </div>
+
+      <div class="col2">
+        <div class="panel">
+          <h3>Lo que pasa al guardar</h3>
+          <div class="linea">1. El valor entra a su expediente con hora y autor.</div>
+          <div class="linea">2. El semáforo se enciende solo: <b>verde</b> normal ·
+            <b>ámbar</b> alerta · <b>rojo</b> crítico · <b>gris</b> aún sin dato.</div>
+          <div class="linea">3. Si queda fuera de rango, nace un <b>aviso de problema con su
+            acción y su dueño</b> (quien captura lo revisa; si es grave, la médica).</div>
+          <div class="linea">4. Un plazo («repetir en 7 días») se vuelve <b>pendiente con
+            fecha</b> — no un aviso que se olvida.</div>
+        </div>
+
+        <div class="panel">
+          <h3>Su semáforo, antes y después</h3>
+          <div class="semisemaforo">
+            <span class="chip gris">hierro SIN DATO antes</span>
+            <span class="chip rojo">hierro BAJO ahora — 10,8</span>
+          </div>
+          <div class="linea" style="color:#566;margin-top:8px">El gris no era falta de cuidado:
+            era falta de captura. Este paso lo cierra.</div>
+        </div>
+
+        <div class="panel">
+          <h3>Qué NO hace esta pantalla</h3>
+          <div class="linea">✗ No inventa rangos: los pone el catálogo firmado.</div>
+          <div class="linea">✗ No adivina la fecha del estudio: la pone el papel.</div>
+          <div class="linea">✗ No esconde el tardío: lo nombra y lo registra.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pregunta">
+      <span class="rotulo">PREGUNTA PARA EL EQUIPO — responda con la plantilla de revisión</span>
+      <b>¿Así capturarían un resultado que llega en papel?</b> ¿Qué analitos piden capturar
+      siempre, y cuáles no valen la pena? ¿La fecha del estudio debe obligarse, o hay casos en
+      que no viene en el papel? ¿El «escrito tardío» les sirve o prefieren otra forma de
+      marcar lo que llegó después?
+      <div class="veredicto"><b>Veredicto:</b> ☐ Así está bien, lo apruebo ·
+        ☐ Así está bien, pero con cambios · ☐ Esto no sirve así, hay que rediseñarlo</div>
+    </div>
+
+    <footer>Propuesta · captura de laboratorio en papel (optimización O8) · lógica: pilar 10
+      (el aviso nace del dato), pilar 6 (escrito tardío honesto) · contrato ALERTAS ·
+      <a href="INDICE.html">índice de las 33</a> ·
+      <a href="TABLERO.html">volver al tablero</a></footer>
+  </div>
+</div>
+
+<div id="aviso"></div>
+<script>
+function guardar() {
+  document.getElementById("zona-ok").innerHTML =
+    '<div class="resultado ok"><b>✓ Hemoglobina 10,8 guardada — de IVONNE KLEIN ORTIZ</b>' +
+    '<br>Su semáforo de hierro pasó de <b>gris (sin dato)</b> a <b>rojo (bajo)</b>. ' +
+    'Nació un aviso con acción: «repetir hemoglobina en 2 semanas — dueño: quien captura», ' +
+    'y su plazo ya está en la agenda como pendiente con fecha.</div>';
+  const a = document.getElementById("aviso");
+  a.style.display = "block";
+  a.textContent = "Resultado guardado · semáforo al día · plazo puesto en la agenda";
+  setTimeout(() => a.style.display = "none", 4200);
+}
+</script>
+</body></html>

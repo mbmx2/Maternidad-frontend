@@ -1,0 +1,144 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=1024">
+<title>Índice y cumplimiento — la ronda completa</title>
+<link rel="stylesheet" href="front.css"></head>
+<body data-pag="cumplimiento">
+
+<nav class="riel">
+  <span class="marca">Maternidad</span>
+  <span class="grupo primera">Jornada</span>
+  <a href="hoy.html" data-pag="hoy">▦ El día</a>
+  <a href="llegada.html" data-pag="llegada">⤷ Llegadas</a>
+  <a href="pendientes.html" data-pag="pendientes">⚑ Pendientes <span class="cuenta" id="cuenta-pend">–</span></a>
+  <a href="laboratorio.html" data-pag="laboratorio">⚕ Laboratorio</a>
+  <a href="atenciones.html" data-pag="atenciones">✂ Atenciones</a>
+  <a href="documentos.html" data-pag="documentos">✎ Documentos</a>
+  <a href="agenda.html" data-pag="agenda">▤ Agenda</a>
+  <a href="cierre.html" data-pag="cierre">⏻ Cierre</a>
+  <span class="grupo">Del consultorio</span>
+  <a href="falla.html" data-pag="falla">⚠ Fallas</a>
+  <a href="respaldo.html" data-pag="respaldo">⛃ Respaldo</a>
+  <a class="piso" href="sistema.html" data-pag="sistema">⚙ Sistema (dueño)</a>
+</nav>
+
+<div class="principal">
+  <div class="barra">
+    <span class="pantalla">Índice y cumplimiento — la ronda completa</span>
+    <a class="volver" href="hoy.html">← Hoy</a>
+    <div id="contexto"></div>
+  </div>
+
+  <main class="cuerpo">
+    <h1>Las pantallas, y qué requisito cumple cada una</h1>
+    <div class="subtitulo">El mapa de esta ronda: cada RF con su pantalla, su estado y su casa.
+      <span class="chip verde">CUBIERTO</span> = su pantalla existe y su circuito corre en el
+      papel · <span class="chip ambar">PARCIAL</span> = existe pero algo espera ·
+      <span class="chip rojo">SIN PANTALLA</span> = hueco ·
+      <span class="chip azul">CANDIDATO/SUPUESTO</span> = espera su frase en la
+      <a href="../BANDEJA-DECISIONES.md">bandeja</a>.</div>
+
+    <div class="panel">
+      <h2>El día, de punta a punta</h2>
+      <div class="linea"><span class="chip verde">CUBIERTO</span> <b>RF-01</b> inicio = tablero
+        → <a href="hoy.html">hoy.html</a> · FL-01 · pilar1</div>
+      <div class="linea"><span class="chip azul">CANDIDATO</span> <b>RF-02</b> riel de buscar +
+        contexto en la barra (aquí con «Jornada» y «Del consultorio», y el menú del contexto con
+        las pantallas de la paciente) → propuesta concreta en la bandeja, decisión 3</div>
+      <div class="linea"><span class="chip verde">CUBIERTO</span> <b>RF-03</b> estados con
+        palabra y color → <a href="hoy.html">hoy</a> (H-060 reparado)</div>
+      <div class="linea"><span class="chip verde">CUBIERTO</span> <b>RF-04</b> cinta en toda
+        escritura → en todas las pantallas con paciente · pilar3 · (excepción: las pantallas
+        que <b>crean</b> pacientes: llegada bloque2 y emergencia)</div>
+      <div class="linea"><span class="chip verde">CUBIERTO</span> <b>RF-26</b> la prioridad
+        se marca en la tarjeta y flota; el software nunca ordena →
+        <a href="hoy.html">hoy</a> (★ Prioritaria) · decisión <b>B6</b> (su dictamen)</div>
+      <div class="linea"><span class="chip verde">CUBIERTO</span> <b>RF-05</b> estación de10
+        campos y9 banderas, nunca bloquea → <a href="estacion.html">estacion</a> (H-063
+        reparado con C-16) · R-14</div>
+      <div class="linea"><span class="chip verde">CUBIERTO</span> <b>RF-06</b> la alerta nace al
+        guardar → <a href="estacion.html">estacion</a> → <a href="pendientes.html">pendientes</a>
+        (H-062 reparado: pruebe160+ o3 banderas)</div>
+      <div class="linea"><span class="chip verde">CUBIERTO</span> <b>RF-07</b> marcador de
+        urgencia + salto al frente → botón en <a href="hoy.html">hoy</a> (H-061 reparado)</div>
+      <div class="linea"><span class="chip verde">CUBIERTO</span> <b>RF-21</b> atenciones
+        abiertas con «en uso de X» → <a href="atenciones.html">atenciones</a> · FL-06</div>
+    </div>
+
+    <div class="panel">
+      <h2>Los casos del día y sus cortes</h2>
+      <div class="linea"><span class="chip verde">CUBIERTO</span> <b>RF-08</b> laboratorio en
+        papel → <a href="laboratorio.html">laboratorio</a> · FL-07 · O8</div>
+      <div class="linea"><span class="chip verde">CUBIERTO</span> <b>RF-09</b> emergencia en un
+        minuto con plazo de ficha → <a href="emergencia.html">emergencia</a> +
+        <a href="ficha.html">ficha</a> · FL-12</div>
+      <div class="linea"><span class="chip verde">CUBIERTO</span> <b>RF-10</b> parto que cierra
+        episodio → <a href="parto.html">parto</a> · FL-11 · R-35</div>
+      <div class="linea"><span class="chip verde">CUBIERTO</span> <b>RF-11</b> fallas y puente
+        de papel → <a href="falla.html">falla</a> · FL-14 · cortes6/7</div>
+      <div class="linea"><span class="chip verde">CUBIERTO</span> <b>RF-12</b> estudios:
+        verificar / rechazar / consentimiento → <a href="estudios.html">estudios</a> · corte8</div>
+      <div class="linea"><span class="chip verde">CUBIERTO</span> <b>RF-13</b> pendientes con
+        dueño, reloj y tres cierres firmados → <a href="pendientes.html">pendientes</a> ·
+        B-013 · RB-05 <span class="chip azul">el anclaje a nota es candidato</span></div>
+      <div class="linea"><span class="chip verde">CUBIERTO</span> <b>RF-22</b> recordatorios con
+        escalado → <a href="agenda.html">agenda</a> (chip ESCALADO) · R-48</div>
+      <div class="linea"><span class="chip verde">CUBIERTO</span> <b>RF-19</b> traspaso +
+        respaldo → <a href="cierre.html">cierre</a> · <a href="respaldo.html">respaldo</a> ·
+        O5 · R-12</div>
+    </div>
+
+    <div class="panel">
+      <h2>Lo que busca la paciente y su historia</h2>
+      <div class="linea"><span class="chip verde">CUBIERTO</span> <b>RF-15</b> homónimas en la
+        búsqueda → <a href="llegada.html">llegadas</a> (aviso «parecidas») · R-10</div>
+      <div class="linea"><span class="chip verde">CUBIERTO</span> <b>RF-14</b> fundamentales
+        editables + completar ficha → <a href="ficha.html">ficha</a> · R-03</div>
+      <div class="linea"><span class="chip verde">CUBIERTO</span> <b>RF-17</b> historia, notas
+        firmadas, NOM-004 → <a href="historia.html">historia</a> · R-17/18/36/41</div>
+      <div class="linea"><span class="chip verde">CUBIERTO</span> <b>RF-16</b> las18
+        calculadoras con prefill → <a href="calculadoras.html">calculadoras</a> (2 cableadas en
+        el papel,16 con su nombre y catálogo) · Anexo E · R-43</div>
+      <div class="linea"><span class="chip verde">CUBIERTO</span> protocolos múltiples y catálogo
+        → <a href="protocolos.html">protocolos</a> · FL-13 · R-04/R-40</div>
+      <div class="linea"><span class="chip verde">CUBIERTO</span> <b>RF-23</b> dos rótulos de
+        salida → <a href="documentos.html">documentos</a> · R-23 <span class="chip azul">hogar
+        del export: decisión en la bandeja</span></div>
+      <div class="linea"><span class="chip verde">CUBIERTO</span> <b>RF-18</b> acceso con PIN y
+        recuperación sin red → <a href="acceso.html">acceso</a> · R-26/51</div>
+    </div>
+
+    <div class="panel">
+      <h2>Lo que aún espera fuera del papel</h2>
+      <div class="linea"><span class="chip azul">CANDIDATO</span> <b>RF-24</b> métricas del
+        sistema → están en el <a href="cierre.html">cierre</a> (pulso + alertas) — su regla y su
+        aprobación: bandeja decisión17</div>
+      <div class="linea"><span class="chip azul">SUPUESTO</span> <b>RF-25</b> señal «sin señal —
+        se enviará al volver» → fase con hardware · G3 · no bloquea el papel</div>
+      <div class="linea"><span class="chip verde">CUBIERTO</span> <b>RF-20</b> recorridos por
+        rol para el veredicto → <a href="RUTAS/ENFERMERA.html">enfermera8</a> ·
+        <a href="RUTAS/MEDICA.html">médica7</a> · <a href="RUTAS/DUENO.html">dueño7</a></div>
+      <div class="linea"><span class="chip ambar">H-064</span> aplanado de niveles de
+        encabezados en la ronda2 anterior — esta ronda nace con jerarquía correcta</div>
+      <div class="linea"><span class="chip rojo">NO APLICA AL PAPEL</span> FL-16 (alertas en
+        paralelo al celular) vive en la decisión de hardware — <a href="../FLUJO-CIRCUITOS.html">su
+        circuito</a> queda dibujado en <code>08-FLUJOS/</code></div>
+    </div>
+
+    <div class="banda">
+      <span class="rotulo">Pregunta para el equipo</span>
+      <p><b>¿Les falta una pantalla en este mapa?</b> Este índice es también la prueba de
+      cumplimiento: si un requisito no tiene su casilla verde, es un hueco declarado, no un
+      olvido.</p>
+      <div class="veredicto"><label>☐ El mapa está completo</label>
+        <label>☐ Falta algo — lo digo</label></div>
+    </div>
+
+    <footer class="vuelta">Índice de la ronda completa · mapa contra
+      <code>06-FUENTE-BACKEND/REQUISITOS-FRONT-BACK.md</code> · papelería:
+      <a href="../LEEME.md">LEEME de la familia</a></footer>
+  </main>
+</div>
+
+<div id="aviso"></div>
+<script src="puente.js"></script>
+</body></html>

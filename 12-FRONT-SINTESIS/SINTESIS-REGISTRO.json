@@ -1,0 +1,181 @@
+{
+  "version": 2,
+  "sintesis_version": "S1",
+  "fecha": "2026-10-25",
+  "sintesis": "SINTESIS-SUMATORIA.md",
+  "protocolo": "SINTESIS-SUMATORIA.md §3",
+  "nota": "v2: `huella` = sha256 del archivo; si el disco y el registro no cuadran, pruebas-registro falla con «modificada sin registrar» (G-01 automático). v2 añade `componentes[]` (motor/config/css): el código que TODAS usan también se registra. Estados: pendiente → aplicado → verificado → auditado. `auditoria` obligatorio si auditado. Si la síntesis sube a S2, las filas con versión anterior quedan DESACTUALIZADAS.",
+  "pantallas": [
+    {
+      "archivo": "atenciones.html",
+      "estado": "verificado",
+      "sintesis": "S1",
+      "fecha": "2026-10-25",
+      "pruebas": [
+        "pruebas-motor.js",
+        "pruebas-atenciones.js",
+        "pruebas-e2e.js",
+        "pruebas-e2e-atenciones.js"
+      ],
+      "checks": {
+        "motor": 32,
+        "unidad": 33,
+        "e2e_paginas": 95,
+        "ruptura": 19
+      },
+      "evidencia": "ANALISIS-ATENCIONES.md#7",
+      "patrones_aplicados": [
+        "ML-05",
+        "ML-09",
+        "ML-12",
+        "MT-01",
+        "MT-02",
+        "MT-03",
+        "MT-05",
+        "MT-06",
+        "MT-07",
+        "MT-09",
+        "MT-10",
+        "MT-12"
+      ],
+      "huella": "520e9b92ec47935d582cc7a47b6a2944e16982639caa7f774412d314166cb183"
+    },
+    {
+      "archivo": "hoy.html",
+      "estado": "pendiente",
+      "huella": "5c21cd2beca70b1b7f0985038bd113ed0f76e9182498d57e05a45bc02a861870"
+    },
+    {
+      "archivo": "estacion.html",
+      "estado": "aplicado",
+      "sintesis": "S1",
+      "fecha": "2026-10-25",
+      "pruebas": [
+        "pruebas-e2e.js",
+        "pruebas-atenciones.js"
+      ],
+      "checks": {
+        "e2e_paginas": 95
+      },
+      "evidencia": "ANALISIS-ATENCIONES.md#7",
+      "patrones_aplicados": [
+        "MT-05"
+      ],
+      "nota": "Tocada por el piloto (M5: autosave del borrador en la estación); su ruptura dedicada queda para su pasada de verificado.",
+      "huella": "b8d2b32089a533fcc5853e2ef1dcd0689604a0068cc23860965483dee9570bc6"
+    },
+    {
+      "archivo": "consulta.html",
+      "estado": "pendiente",
+      "huella": "464a02af42361f662e2c7c5e48ddcbaa50764fd4ce9acbbac052898a1800cb84"
+    },
+    {
+      "archivo": "pendientes.html",
+      "estado": "pendiente",
+      "huella": "63817e7b612daf6520b427f24956672a99fe44deeea11870e043e4198c374e7e"
+    },
+    {
+      "archivo": "laboratorio.html",
+      "estado": "pendiente",
+      "huella": "20cc8cec5ca762b0413f176b66c99dc33e2868721e010c0262d09a8b362cc8d9"
+    },
+    {
+      "archivo": "llegada.html",
+      "estado": "pendiente",
+      "huella": "79437fa8764505a4e2c573c175228d29d7fcebaf991de0d36435fd98efdc21ec"
+    },
+    {
+      "archivo": "urgencia.html",
+      "estado": "pendiente",
+      "huella": "e91d22a492c0683eeeaad5b11e9c6fe1b5999ba01163bdcc14179fdd21ec6ea6"
+    },
+    {
+      "archivo": "agenda.html",
+      "estado": "pendiente",
+      "huella": "11416ba7a56b7fcd1fe7e2dac93d3e8bb93e975c61f10af53afafd70890bca71"
+    },
+    {
+      "archivo": "calculadoras.html",
+      "estado": "pendiente",
+      "huella": "8aee53b1936fb050d9731c4e800ee0d1d72a806506e8087d27ff54e2677834cb"
+    },
+    {
+      "archivo": "cierre.html",
+      "estado": "pendiente",
+      "huella": "7cfec4b9e016dec13cdcd5cbda7fbc60c2de52ea515b209c9fd1d2bf8f0d1bd3"
+    },
+    {
+      "archivo": "historia.html",
+      "estado": "pendiente",
+      "huella": "1eefb49228e785a5f7d2cbcbcc2af2916a3499213d221f0410a5dc9911273c9e"
+    },
+    {
+      "archivo": "ficha.html",
+      "estado": "pendiente",
+      "huella": "bccc2c096b6e8a7588abbdb7b4fe0ae08188118a86ca27be3578b00735064f9b"
+    },
+    {
+      "archivo": "documentos.html",
+      "estado": "pendiente",
+      "huella": "22acb0cbe9875951d784e979cad8c6baa4efc888c9f115caa4aaab0ea2595b12"
+    },
+    {
+      "archivo": "falla.html",
+      "estado": "pendiente",
+      "huella": "aeeb6bbf03ed35ba1c1bfacd9dcc19e7940f0c3458d8f0953317d05f0f174690"
+    },
+    {
+      "archivo": "sistema.html",
+      "estado": "pendiente",
+      "huella": "a71bd70feba4a4f109dd4d7c942ea8ace8d718e7b1853a07ec8b9e44790f6551"
+    },
+    {
+      "archivo": "CUMPLIMIENTO.html",
+      "estado": "pendiente",
+      "huella": "e131fda512b0068524c82bb9042a04f5820a3af6b5ad983a0f4cb43e07078a17"
+    },
+    {
+      "archivo": "HOJA-DE-VEREDICTO.html",
+      "estado": "pendiente",
+      "huella": "df8b0641495de1f2968ebe4ff83001c01f85bc2830747616aa335c38959bd52a"
+    }
+  ],
+  "componentes": [
+    {
+      "archivo": "motor.js",
+      "estado": "aplicado",
+      "sintesis": "S1",
+      "fecha": "2026-10-25",
+      "huella": "3bff1940485c9de1d91336e2cb7c7f4c1f74372901a01b81251fe1bac8204482",
+      "pruebas": [
+        "pruebas-motor.js",
+        "pruebas-atenciones.js"
+      ],
+      "checks": {
+        "motor": 32,
+        "unidad": 33
+      },
+      "evidencia": "AUDITORIA-SINTESIS.md",
+      "patrones_aplicados": [
+        "MT-01",
+        "MT-02",
+        "MT-03",
+        "MT-05",
+        "MT-06",
+        "MT-07"
+      ],
+      "nota": "Única puerta: alternarEquipo, conciliación, guard C1, cierre de urgencia — ver G-02/CV1/CV2."
+    },
+    {
+      "archivo": "config.js",
+      "estado": "pendiente",
+      "huella": "a965121d340051247959655d9ef48a9ac32dd080478c1afae5cb072bd50d5a4d"
+    },
+    {
+      "archivo": "front.css",
+      "estado": "pendiente",
+      "huella": "5f4a2483b54c056cb75c89c783921d84d24e230b3777e8450a7270a339b45a7c"
+    }
+  ],
+  "frontend_version": "V4"
+}

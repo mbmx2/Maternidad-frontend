@@ -1,0 +1,117 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=1024">
+<title>Los circuitos lógicos — cálculo, alerta y continuidad</title>
+<link rel="stylesheet" href="flujos.css"></head>
+<body><div class="envoltura">
+
+<div class="cabecera">
+  <h1>Los circuitos lógicos de detrás de las pantallas</h1>
+  <div class="sub">La lógica ya guardada en la documentación, dibujada: el circuito de cuatro
+  latidos que gobierna todo, el sistema de alertas (los seis tipos y su entrega), los
+  recordatorios de continuidad y las calculadoras con prefill. Casas:
+  <code>SISTEMA-DE-ALERTAS.md</code> · <code>PRESENTACION-DE-CONTENIDO.md</code> · R-48 ·
+  Anexo E.</div>
+</div>
+
+<div class="bloque rol">
+  <h3>Circuito1 · Los cuatro latidos (captura → chip → regla → aviso → continuidad)</h3>
+  <p class="fuente">Un solo latido con cuatro nombres: cálculo → regla → aviso → continuidad.</p>
+  <div class="cad">
+    <div class="paso dig"><span class="num">1</span><b class="tit">Captura</b>
+      <small>La enfermera teclea la tensión (o entra laboratorio).</small>
+      <span class="donde">estacion.html</span></div>
+    <div class="flecha">→</div>
+    <div class="paso evento"><span class="num">2</span><b class="tit">Chip al llenar</b>
+      <small>«160 — fuera de rango»: el cálculo corre cuando el dato existe.</small>
+      <span class="estado">E1 · sin abrir calculadoras</span></div>
+    <div class="flecha">→</div>
+    <div class="paso dig"><span class="num">3</span><b class="tit">Regla en catálogo firmado</b>
+      <small>0 umbrales en el código; sin firma, gris honesto.</small></div>
+    <div class="flecha">→</div>
+    <div class="paso evento"><span class="num">4</span><b class="tit">Aviso con acción, dueño y plazo</b>
+      <small>Después de guardar, en todos los equipos a la par.</small>
+      <span class="donde">pendientes.html</span></div>
+    <div class="flecha">→</div>
+    <div class="paso dig"><span class="num">5</span><b class="tit">Continuidad</b>
+      <small>Si generó plazo: pendiente → recordatorio para la próxima.</small>
+      <span class="donde">agenda.html</span></div>
+  </div>
+  <div class="cobertura">Cobertura: ronda1 <span class="ok">dibujada por piezas</span> · ronda2
+  <span class="no">Roto en el paso4 — guardar no dispara la alerta (H-062)</span>. Cerrar ese
+  paso es lo primero.</div>
+</div>
+
+<div class="bloque rol">
+  <h3>Circuito2 · Las alertas — seis tipos, entrega T1–T3, cierre firmado</h3>
+  <div class="cad">
+    <div class="paso dig"><span class="num">1</span><b class="tit">Seis tipos, cerrados</b>
+      <small>verde · plazo · problema · urgencia · permanente · interacción.</small></div>
+    <div class="flecha">→</div>
+    <div class="paso evento"><span class="num">2</span><b class="tit">Nacen sin duplicar</b>
+      <small>Cada una con su paciente · dedupe mientras pendiente · recaída = alerta nueva · la mayor sustituye a la menor.</small>
+      <span class="estado">B-013 · H-065</span></div>
+    <div class="flecha">→</div>
+    <div class="paso dig"><span class="num">3</span><b class="tit">Entrega T1–T3</b>
+      <small>No roba pantalla · espera el corte de captura · dos registros (superficie calmada / clínico).</small></div>
+    <div class="flecha">→</div>
+    <div class="paso dig"><span class="num">4</span><b class="tit">Visibilidad</b>
+      <small>Panel del día · tarjeta roja · hoja de traslado · historia sellada.</small>
+      <span class="donde">pendientes.html · hoy.html</span></div>
+    <div class="flecha">→</div>
+    <div class="paso evento"><span class="num">5</span><b class="tit">Cierre con firma</b>
+      <small>atendida · referida · motivo — nombre y cédula, o anclado a la nota.</small>
+      <span class="donde">pendientes.html</span></div>
+  </div>
+  <div class="cobertura">Cobertura: ronda1 <span class="ok">demo de los seis con interacción
+  que detiene</span> · ronda2 <span class="par">cierre y firma — falta el disparo (H-062) y el
+  escalamiento por reloj</span>. Meta: &lt;2 avisos por visita, medidos.</div>
+</div>
+
+<div class="bloque rol">
+  <h3>Circuito3 · Los recordatorios (prepara el sistema, entrega una persona)</h3>
+  <div class="cad">
+    <div class="paso dig"><span class="num">1</span><b class="tit">Espacio disponible</b>
+      <small>Situación + ventana + plantilla; estado no se guarda: se deduce.</small>
+      <span class="estado">R-48 · DEC-32/33</span></div>
+    <div class="flecha">→</div>
+    <div class="paso dig"><span class="num">2</span><b class="tit">Personalizado solo</b>
+      <small>Nombre, EG derivada, señales de alarma — nunca cifras ni diagnósticos.</small>
+      <span class="donde">agenda.html (copiar)</span></div>
+    <div class="flecha">→</div>
+    <div class="paso fis"><span class="num">3</span><b class="tit">Lo entrega una persona</b>
+      <small>Copiar, llamar u hoja impresa; cero envío automático.</small></div>
+    <div class="flecha">→</div>
+    <div class="paso evento"><span class="num">4</span><b class="tit">Si se cierra la ventana sin entregar</b>
+      <small>Escala a la vista; nadie lo pierde de memoria.</small></div>
+  </div>
+  <div class="cobertura">Cobertura: ronda1 <span class="ok">C-25 diálogo con copiar/entregar</span> ·
+  ronda2 <span class="par">lista con copiar — sin escalado ni ventanas</span>.</div>
+</div>
+
+<div class="bloque rol">
+  <h3>Circuito4 · Las calculadoras — prefill y cálculo solo (Anexo E:18 cerradas)</h3>
+  <div class="cad">
+    <div class="paso dig"><span class="num">1</span><b class="tit">Prefill doble</b>
+      <small>Último control + últimos resultados — lo que ya existe no se teclea.</small>
+      <span class="estado">R-43 · HOMA con0 tecleos</span></div>
+    <div class="flecha">→</div>
+    <div class="paso evento"><span class="num">2</span><b class="tit">Cálculo solo cuando hay datos</b>
+      <small>Sin datos: «sin cálculo por falta de datos» — nunca inventar.</small></div>
+    <div class="flecha">→</div>
+    <div class="paso dig"><span class="num">3</span><b class="tit">Banda + interpretación</b>
+      <small>Número, rango, qué significa y su acción — informar, no dictaminar.</small>
+      <span class="donde ausente">r2 SIN PANTALLA — r1: CALCULADORES</span></div>
+    <div class="flecha">→</div>
+    <div class="paso dig"><span class="num">4</span><b class="tit">Del panel a la calculadora en1 clic</b>
+      <small>Y de la calculadora al aviso si sale de rango.</small></div>
+  </div>
+  <div class="cobertura">Cobertura: ronda1 <span class="ok">CALCULADORES con resultado
+  interpretado</span> · ronda2 <span class="par">solo2 chips en la estación</span> · regla:18
+  exactas, informativas, sin fármacos.</div>
+</div>
+
+<footer class="pie">Fuentes: <code>02-LOGICA-DE-DISENO/SISTEMA-DE-ALERTAS.md</code> ·
+<code>PRESENTACION-DE-CONTENIDO.md</code> · ley R-43/R-48 (Anexo E) · correcciones B-013 ·
+<a href="INDICE.html">volver al índice comparativo</a></footer>
+
+</div></body></html>

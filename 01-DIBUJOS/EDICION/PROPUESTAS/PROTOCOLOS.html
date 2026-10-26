@@ -1,0 +1,135 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8">
+<title>PROPUESTA — Seguimiento por protocolos (paciente con dos seguimientos)</title>
+<link rel="stylesheet" href="estilo.css"></head><body>
+
+<div class="barra">
+  <span class="marca">Maternidad</span>
+  <span class="pantalla">Ficha — Solís Vega, Adriana (seguimiento)</span>
+  <span class="propuesta">PROPUESTA DE DISEÑO</span>
+  <button class="ayuda">Ayuda</button>
+</div>
+
+<div class="cuerpo">
+  <div class="lateral">
+    <a href="TABLERO.html">Inicio (tablero)</a>
+    <a href="EMERGENCIA.html">Nueva paciente</a>
+    <a href="PROTOCOLOS.html" class="activo">Ficha</a>
+    <a href="CONTROL.html">Control prenatal</a>
+    <a href="INDICE.html">Embarazo</a>
+    <a href="INDICE.html">Calculadoras</a>
+    <a href="INDICE.html">Apoyo clínico</a>
+    <a href="INDICE.html">Historia</a>
+    <a href="CONSULTA.html">Estado de salud</a>
+    <a href="INDICE.html">Ultrasonido</a>
+    <a href="INDICE.html">Agenda</a>
+  </div>
+
+  <div class="zona">
+    <div class="pregunta" style="margin-top:0;margin-bottom:16px;max-width:none">
+      <span class="rotulo">PROPUESTA · dibujo 5 de 6 · la paciente con dos cosas a la vez — y todas las demás</span>
+      Una mujer con embarazo Y con un tratamiento de infección en curso: dos calendarios
+      juntos, cada uno con su ritmo. Aquí también empieza su catálogo de casos: díganos si
+      faltan.
+    </div>
+
+    <!-- CINTA DE IDENTIDAD — con los datos que salvan -->
+    <div class="cinta verde">
+      <span class="fuerte">SOLÍS VEGA, Adriana</span>
+      <span class="datos">07/11/1996 · 29 años · expediente 000207</span>
+      <span class="homónima" style="background:#fdecea;color:#8a1c1c">⚠ ALERGIA: ninguna conocida</span>
+      <span class="homónima" style="background:#eaf3fa;color:#1b4f72">🩸 O positivo (RH+)</span>
+      <span class="homónima" style="background:#fdf7ec;color:#8a6d1a">💊 antibiótico del tratamiento</span>
+      <span style="margin-left:auto"><span class="chip verde">EMBARAZO 20 SEMANAS</span>
+        <span class="chip rojo">INFECCIÓN — semana 2</span></span>
+    </div>
+
+    <h1>Su seguimiento — dos protocolos activos</h1>
+    <div class="subtitulo">
+      Adriana no es «una paciente de embarazo»: es una mujer con dos cosas en marcha, y
+      cada cosa tiene su propio calendario. Esto es lo que ve la médica al abrir su ficha.
+    </div>
+
+    <div class="rejilla">
+      <div class="protocolo">
+        <h3>Protocolo 1 · Embarazo — semana 20 de 40</h3>
+        <div class="meta">Próximo control: 30 oct (semana 22) · 1 tamizaje vencido</div>
+        <div class="paso hecho"><span class="marca">✓</span> 12 sep · primera consulta — FUM registrada</div>
+        <div class="paso hecho"><span class="marca">✓</span> 26 sep · control semana 16 — sin banderas</div>
+        <div class="paso hecho"><span class="marca">✓</span> 10 oct · ultrasonido del primer trimestre</div>
+        <div class="paso" style="background:#fdecea"><span class="marca" style="background:#c0392b;color:#fff">!</span>
+          <b>VENCIDO 21 oct · tamizaje de diabetes gestacional — sin aviso atendido</b>
+          <span style="margin-left:auto"><span class="chip rojo">chip ámbar en el tablero · dueño: quien captura</span></span></div>
+        <div class="paso proximo"><span class="marca">→</span> 30 oct · control semana 22 + tamizaje de anemia</div>
+        <div class="paso"><span class="marca">3</span> dic · control semana 26 · empezar lactancia</div>
+        <div class="paso"><span class="marca">4</span> feb · control semana 34 · plan de parto</div>
+        <div style="margin-top:12px">
+          <a href="CONTROL.html"><button class="btn">Registrar control de este protocolo</button></a>
+          <button class="btn sec" style="margin-left:6px">Cerrar protocolo con motivo</button>
+        </div>
+        <div class="linea" style="color:#566;margin-top:8px;font-size:12.5px">
+          Un paso vencido <b>siempre</b> genera su aviso con dueño y sube al tablero — nunca
+          se pierde en silencio. Cerrar un protocolo es un hecho clínico registrado con su
+          motivo (parto, alta, cambio de diagnóstico); nunca se borra.
+        </div>
+      </div>
+
+      <div class="protocolo infeccion">
+        <h3>Protocolo 2 · Infección urinaria — tratamiento semana 2</h3>
+        <div class="meta">5 días de antibiótico · próxima revisión de síntomas: 26 oct ·
+          <b>compatible con su embarazo — revisado</b></div>
+        <div class="paso hecho"><span class="marca">✓</span> 16 oct · diagnóstico y inicio de tratamiento</div>
+        <div class="paso hecho"><span class="marca">✓</span> 19 oct · control de síntomas — mejoría</div>
+        <div class="paso proximo"><span class="marca">→</span> 26 oct · revisar que la infección cerró · urocultivo
+          <span style="margin-left:auto"><span class="chip ambar">plazo — crea su pendiente</span></span></div>
+        <div class="paso" style="opacity:.75"><span class="marca">3</span> 09 nov · cierre del tratamiento si el cultivo está limpio</div>
+        <div style="margin-top:12px">
+          <button class="btn rojo">Registrar visita de este protocolo</button>
+          <button class="btn sec" style="margin-left:6px">Cerrar protocolo con motivo</button>
+        </div>
+        <div class="linea" style="color:#566;margin-top:8px;font-size:12.5px">
+          Dos protocolos con paso el mismo día son <b>dos pendientes independientes</b> — nunca
+          se fusionan, porque son decisiones clínicas distintas. Cada uno se cierra con su
+          motivo; nada se borra.
+        </div>
+      </div>
+    </div>
+
+    <div class="panel" style="max-width:980px;margin-top:16px">
+      <h3>Y el resto del centro no embarazada — el catálogo de casos que su centro necesita</h3>
+      <div class="linea">Estas son las etiquetas de protocolo con las que hoy se piensa el
+        software. <b>Falta la lista real de su centro</b> — las que ustedes vean cada
+        semana. Díganos cuáles añadir, cambiar o quitar:</div>
+      <div class="linea" style="margin-top:8px">
+        <span class="chip azul">Embarazo</span>
+        <span class="chip rojo">Infecciones (VPH, ITS…)</span>
+        <span class="chip morado">Tumoraciones</span>
+        <span class="chip ambar">Fertilidad</span>
+        <span class="chip verde">Puerperio</span>
+        <span class="chip gris">Planificación familiar</span>
+        <span class="chip gris">Menopausia</span>
+        <span class="chip gris">Post-quirúrgico</span>
+        <span class="chip gris">Duelo obstétrico</span>
+        <span class="chip gris">Adolescente (confidencial)</span>
+        <span class="chip gris">+ …los SUYOS</span>
+      </div>
+      <div class="linea" style="margin-top:8px;color:#566">Cada caso con su propio
+        calendario — como el del VPH (aplicación cada 3 semanas), como el de fertilidad
+        (día por día del ciclo), como el embarazo (semana por semana).</div>
+    </div>
+
+    <div class="pregunta">
+      <span class="rotulo">PREGUNTA PARA EL EQUIPO — responda con la plantilla de revisión</span>
+      <b>¿Así vería usted a una paciente con dos cosas a la vez?</b> ¿Los nombres de los
+        protocolos son los que ustedes usarían? ¿Y cuáles SON los casos de consulta de su
+        centro — escriba todos los que recuerde de esta semana? ¿Alguna pantalla de
+        seguimiento que ya existe debería moverse aquí?
+      <div class="veredicto"><b>Veredicto:</b> ☐ Así está bien, lo apruebo ·
+        ☐ Así está bien, pero con cambios · ☐ Esto no sirve así, hay que rediseñarlo</div>
+    </div>
+
+    <footer>Propuesta 5 de 6 · lógica: pilar 4 (protocolos por diagnóstico) · flujos 1, 5 ·
+      declaración clínica del dueño (H-014) ·
+      <a href="INDICE.html">← volver al índice</a></footer>
+  </div>
+</div>
+</body></html>

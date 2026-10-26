@@ -1,0 +1,40 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=1024">
+<title>NUEVO — Acceso</title>
+<link rel="stylesheet" href="front.css">
+<style>
+  body.acc { display: block; background: #111827; }
+  .tarjeta-acceso { max-width: 380px; margin: 9vh auto; background: #fff; border-radius: 12px; padding: 28px; box-shadow: 0 10px 40px rgba(0,0,0,.4); }
+  .tarjeta-acceso h1 { margin: 0 0 4px; font-size: 20px; }
+  .tarjeta-acceso .marca2 { color: var(--acento); font-weight: 700; letter-spacing: .5px; margin-bottom: 16px; display: block; }
+</style></head>
+<body class="acc" data-pag="acceso">
+
+<div class="tarjeta-acceso">
+  <span class="marca2">MATERNIDAD — software de consultorio</span>
+  <h1>Entrar con su PIN</h1>
+  <div class="nota" style="margin-bottom:14px">El día empieza aquí: su PIN abre su sesión con su rol.
+    Nadie entra sin PIN, y nadie se queda fuera del equipo.</div>
+  <form id="form-acceso">
+    <div class="campo">
+      <label>PIN de 4 dígitos</label>
+      <input name="pin" inputmode="numeric" maxlength="4" placeholder="••••" autofocus>
+    </div>
+    <div class="acciones">
+          <button class="btn" type="submit">Entrar</button>
+      <button class="btn sec" type="button" id="btn-recuperar">No recuerdo mi PIN</button>
+    </div>
+  </form>
+  <div class="banda" style="margin-top:18px">
+    <span class="rotulo">Pregunta para el equipo</span>
+    <p><b>¿Así se entra?</b> ¿Cuántos PINs distintos necesita el centro (una por persona, o
+    roles compartidos)? ¿Quién puede recuperar accesos: solo el dueño?</p>
+    <div class="veredicto"><label>☐ Así está bien</label><label>☐ Con cambios</label>
+      <label>☐ Rediseñar</label></div>
+  </div>
+  <footer class="vuelta">RF-18 · R-26/R-51 · pantalla previa al riel (sin navegación hasta entrar)</footer>
+</div>
+
+<div id="aviso"></div>
+<script src="puente.js"></script>
+</body></html>

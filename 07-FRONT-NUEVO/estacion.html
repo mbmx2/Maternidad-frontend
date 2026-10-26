@@ -1,0 +1,109 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=1024">
+<title>NUEVO — Estación de constantes</title>
+<link rel="stylesheet" href="front.css"></head>
+<body data-pag="estacion">
+
+<nav class="riel">
+  <span class="marca">Maternidad</span>
+  <a href="hoy.html" data-pag="hoy">▦ El día</a>
+  <a href="llegada.html" data-pag="llegada">⤷ Llegadas</a>
+  <a href="pendientes.html" data-pag="pendientes">⚑ Pendientes <span class="cuenta" id="cuenta-pend">–</span></a>
+  <a href="documentos.html" data-pag="documentos">✎ Documentos</a>
+  <a href="agenda.html" data-pag="agenda">▤ Agenda</a>
+  <a href="cierre.html" data-pag="cierre">⏻ Cierre</a>
+  <a class="piso" href="sistema.html" data-pag="sistema">⚙ Sistema (dueño)</a>
+</nav>
+
+<div class="principal">
+  <div class="barra">
+    <span class="pantalla">Estación de constantes — tres minutos</span>
+    <a class="volver" href="hoy.html">← Hoy</a>
+    <div id="contexto"></div>
+  </div>
+
+  <main class="cuerpo">
+    <div class="cinta" id="cinta"></div>
+
+    <h1>Constantes de la visita</h1>
+    <div class="subtitulo">Se capturan una sola vez. <b>Guardar nunca bloquea</b>: si algo falta,
+      se guarda igual y lo que falta queda como «sin dato», nunca inventado. Las respuestas salen
+      <b>después</b> de guardado, al terminar de escribir.</div>
+
+    <div class="panel">
+      <form id="form-control">
+        <div class="formulario">
+          <div class="campo"><label>Fecha del control</label><input name="fecha" type="date"></div>
+          <div class="campo"><label>Peso (kg)</label><input name="peso" inputmode="decimal" placeholder="64,5"></div>
+          <div class="campo"><label>TA sistólica</label><input name="ta_s" inputmode="numeric" placeholder="120"></div>
+          <div class="campo"><label>TA diastólica</label><input name="ta_d" inputmode="numeric" placeholder="75"></div>
+          <div class="campo"><label>Altura uterina (cm)</label><input name="altura_uterina" inputmode="numeric" placeholder="28"></div>
+          <div class="campo"><label>FC fetal (lpm)</label><input name="fcf" inputmode="numeric" placeholder="145"></div>
+          <div class="campo"><label>Presentación (catálogo)</label><select name="presentacion">
+            <option value="">— elegir —</option><option>céfala</option><option>pélvica</option>
+            <option>transversa</option><option>peligroso (prolapso)</option></select></div>
+          <div class="campo"><label>Proteinuria (catálogo)</label><select name="proteina">
+            <option value="negativa">negativa</option><option value="traza">traza</option>
+            <option value="1">grado 1</option><option value="2">grado 2</option>
+            <option value="3">grado 3</option></select></div>
+          <div class="campo"><label>Edema (catálogo)</label><select name="edema">
+            <option value="ninguno">ninguno</option><option value="tobillos">tobillos</option>
+            <option value="manos">manos</option><option value="cara">cara</option></select></div>
+          <div class="campo"><label>Síntoma</label><input name="sintoma" type="text" placeholder="lo que refiere hoy"></div>
+        </div>
+        <div class="campo" style="margin-top:12px">
+          <label>Banderas rojas (marque lo que presente)</label>
+          <div style="display:flex;flex-wrap:wrap;gap:8px 16px;font-size:13px">
+            <label style="font-weight:400;text-transform:none;letter-spacing:0"><input type="checkbox" name="bandera" value="Cefalea intensa"> Cefalea intensa</label>
+            <label style="font-weight:400;text-transform:none;letter-spacing:0"><input type="checkbox" name="bandera" value="Epigastralgia"> Epigastralgia</label>
+            <label style="font-weight:400;text-transform:none;letter-spacing:0"><input type="checkbox" name="bandera" value="Visión borrosa"> Visión borrosa</label>
+            <label style="font-weight:400;text-transform:none;letter-spacing:0"><input type="checkbox" name="bandera" value="Hinchazón súbita"> Hinchazón súbita</label>
+            <label style="font-weight:400;text-transform:none;letter-spacing:0"><input type="checkbox" name="bandera" value="Sangrado genital"> Sangrado genital</label>
+            <label style="font-weight:400;text-transform:none;letter-spacing:0"><input type="checkbox" name="bandera" value="Disnea"> Disnea</label>
+            <label style="font-weight:400;text-transform:none;letter-spacing:0"><input type="checkbox" name="bandera" value="Fiebre"> Fiebre</label>
+            <label style="font-weight:400;text-transform:none;letter-spacing:0"><input type="checkbox" name="bandera" value="Contracciones"> Contracciones</label>
+            <label style="font-weight:400;text-transform:none;letter-spacing:0"><input type="checkbox" name="bandera" value="Movimiento fetal disminuido"> Movimiento fetal disminuido</label>
+          </div>
+        </div>
+        <div class="acciones">
+          <button class="btn" type="submit">Guardar control</button>
+          <button class="btn sec" type="button" id="btn-pausar">Pausar la estación</button>
+          <span class="nota">10 campos y 9 banderas — el control real (R-14). La pausa conserva todo.</span>
+        </div>
+      </form>
+      <div class="chips-respuesta" id="respuesta"></div>
+      <div class="nota" id="detalle-chips" style="margin-top:6px"></div>
+    </div>
+
+    <div class="panel">
+      <h2>Lo que la paciente trae en mano</h2>
+      <div class="linea">· <b>Estudios y laboratorio en papel</b> — se revisan aquí mismo:
+        <a href="estudios.html">verificar estudios →</a> ·
+        <a href="laboratorio.html">capturar laboratorio →</a></div>
+      <div class="linea">· <b>¿Le toca ultrasonido?</b> la preparación y el tipo de estudio
+        se definen con ella: <a href="estudios.html">estudios y tipos →</a></div>
+      <div class="linea">· <b>¿Quién sigue con la médica?</b> la prioridad se marca en
+        <a href="hoy.html">El día</a> — la ponen ustedes, no el software.</div>
+    </div>
+
+    <div class="banda">
+      <span class="rotulo">Pregunta para el equipo — responda con la plantilla de revisión</span>
+      <p><b>¿Así es su estación?</b> ¿Los 10 campos y las 9 banderas son los suyos —falta o
+      sobra alguno? ¿Los chips aparecen donde esperan, al terminar de guardar? ¿La pausa les
+      devuelve exactamente a donde estaban? ¿Y el «puede ser esperado en embarazo» calma o
+      confunde? ¿Revisan aquí los estudios que traen o en otra parte? ¿Cómo se prepara para
+      el ultrasonido y quién marca que la paciente está lista? Al guardar con presión alta o
+      banderas, prueben que la alerta nazca en Pendientes.</p>
+      <div class="veredicto"><label>☐ Así está bien, lo apruebo</label>
+        <label>☐ Está bien, pero con cambios</label>
+        <label>☐ No sirve así: rediseñar</label></div>
+    </div>
+
+    <footer class="vuelta">Pantalla 3 de 9 · FL-05, FL-06 · el carril de 3 minutos con los
+      10 campos y 9 banderas del control real (R-14 · réplica C-16)</footer>
+  </main>
+</div>
+
+<div id="aviso"></div>
+<script src="puente.js"></script>
+</body></html>

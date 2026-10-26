@@ -1,0 +1,84 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=1024">
+<title>Tablero del día — prueba médica</title>
+<link rel="stylesheet" href="estilo.css"></head><body>
+<div class="barra"><span class="marca">Maternidad</span>
+<span class="pantalla">Inicio — Tablero del día</span>
+<span class="propuesta">PRUEBA REAL · MÉDICA</span>
+<span class="reloj-dia"></span></div>
+<div class="cuerpo"><div class="lateral"></div>
+<div class="zona">
+<h1>Mañana del jueves 23 de octubre</h1>
+<p class="subtitulo">Su primera mirada: urgente al frente, relojes, quién está listo para consulta. Haga clic en una tarjeta para abrir lo que le toca.</p>
+<div class="panel sombra" id="resumen"></div>
+<div class="tablero" id="tablero"></div>
+<div class="panel" style="max-width:900px">
+<h3>Sus accesos</h3>
+<div class="linea">· <a href="03-ALERTAS.html"><b>Avisos de la jornada</b></a> — todos con acción y dueño, con su métrica de fatiga.</div>
+<div class="linea">· <a href="05-CALCULADORES.html"><b>Calculadoras</b></a> — las 18, con prefill: abren solas con sus datos.</div>
+<div class="linea">· <a href="06-AGENDA.html"><b>Agenda y recordatorios</b></a> — la próxima cita derivada y el mensaje listo para copiar.</div>
+<div class="linea" style="margin-top:8px"><button class="btn sec chico" id="btn-reset">Reiniciar la jornada</button></div>
+</div>
+<div id="veredicto-host"></div>
+</div></div>
+<script src="config.js"></script><script src="motor.js"></script>
+<script>
+Jornada.nav("01-TABLERO.html");
+var S = Jornada.estado();
+function pinta() {
+  var c = Jornada.resumenDia();
+  var fatiga = Jornada.metricaFatiga();
+  document.getElementById("resumen").innerHTML =
+    "<b>" + c.atendida + " atendidas</b> · " + c.en_atencion + " en atención · " + c.pausada + " pausada · " +
+    c.espera + " en espera · <b>" + c.urgente + " urgente al frente</b> · <b>" + c.no_llego + " no llegó</b> · " +
+    "<span class='chip " + (fatiga.media > fatiga.meta ? "rojo" : "verde") + "'>avisos: " + fatiga.avisos + " en " + fatiga.visitas + " visitas (meta: menos de " + fatiga.meta + " por visita)</span>" +
+    (S.equipoFuera ? " · <span class='chip ambar'>EQUIPO FUERA — usted está en sala</span>" : "");
+  var t = document.getElementById("tablero");
+  var cols = [
+    { t: "⚠ URGENTE", f: function (p) { var e = Jornada.estadoDe(p.id).estado; return e === "urgente" || (e === "en_atencion" && p.marcador === "urgente"); }, urg: true },
+    { t: "Lista para consulta", f: function (p) { var e = Jornada.estadoDe(p.id).estado; return e === "estacion_hecha" || e === "llego"; } },
+    { t: "En espera", f: function (p) { var e = Jornada.estadoDe(p.id).estado; return e === "espera" || e === "estacion_mitad" || e === "por_registrar"; } },
+    { t: "No llegó", f: function (p) { return Jornada.estadoDe(p.id).estado === "no_llego"; } },
+    { t: "En su consulta", f: function (p) { var d = Jornada.estadoDe(p.id); return (d.estado === "en_atencion" || d.estado === "pausada") && p.marcador !== "urgente"; } },
+    { t: "Atendidas hoy", f: function (p) { return Jornada.estadoDe(p.id).estado === "atendida"; } },
+    { t: "Con cita después", f: function (p) { var d = Jornada.estadoDe(p.id); return d.estado === "con_cita" && p.cita != null && p.cita >= Jornada.ahoraMin(); } }
+  ];
+  t.innerHTML = "";
+  cols.forEach(function (col) {
+    var lista = S.pacientes.filter(col.f);
+    if (!lista.length) return;
+    var div = document.createElement("div");
+    div.className = "columna" + (col.urg ? " urgente" : "");
+    var html = "<h4><span>" + col.t + "</span><span>" + lista.length + "</span></h4>";
+    lista.forEach(function (p) {
+      var als = Jornada.alertasDe(p.id).filter(function (a) { return a.estado === "pendiente"; });
+      var extra = "";
+      if (als.length) extra = " <span class='chip rojo'>" + als.length + " aviso(s) sin atender</span>";
+      html += Jornada.tarjetaHTML(p, extra);
+    });
+    div.innerHTML = html;
+    t.appendChild(div);
+  });
+  t.querySelectorAll(".tarjeta").forEach(function (card) {
+    card.onclick = function (ev) {
+      if (ev.target.tagName === "A") return;
+      var pid = card.getAttribute("data-pid");
+      var d = Jornada.estadoDe(pid).estado;
+      if (d === "urgente") Jornada.irA("04-URGENCIA.html", pid);
+      else if (d === "en_atencion" || d === "pausada" || d === "estacion_hecha" || d === "llego" || d === "espera" || d === "estacion_mitad" || d === "por_registrar") Jornada.irA("02-CONSULTA.html", pid);
+      else if (d === "no_llego") Jornada.toast(Jornada.nombrePac(pid) + " no llegó — recepción la reagenda desde la puerta.");
+      else Jornada.toast(Jornada.nombrePac(pid) + " ya fue atendida. Sus avisos siguen en la bitácora.");
+    };
+  });
+}
+document.getElementById("btn-reset").onclick = function () {
+  Jornada.modal("Reiniciar la jornada", "Se borra todo lo hecho en esta prueba y el día vuelve a empezar.", [
+    { txt: "Cancelar", cls: "sec" },
+    { txt: "Reiniciar", cls: "peligro", fn: function () { Jornada.reiniciar(); location.reload(); } }
+  ]);
+};
+pinta();
+Jornada.bandaVeredicto("tablero", "¿Con esto decide en un segundo a quién sigue? ¿Los avisos pendientes en la tarjeta le sirven? ¿Falta algo para decidir sin abrir la ficha?");
+setInterval(function () { pinta(); Jornada.pintarRelojBarra(); }, 20000);
+</script>
+</body></html>

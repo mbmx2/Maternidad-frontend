@@ -1,0 +1,102 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=1024">
+<title>NUEVO — Respaldo (guardar, verificar, ensayar)</title>
+<link rel="stylesheet" href="front.css">
+<style>
+  .paso-resp { display:flex; gap:10px; align-items:flex-start; padding:9px 0; border-bottom:1px dashed var(--linea); }
+  .paso-resp:last-child { border-bottom:0; }
+  .paso-resp .num { background: var(--tinta); color:#fff; border-radius:10px; font-size:11px; font-weight:700; padding:1px 8px; }
+  #sal-resp { margin-top:10px; display:flex; gap:8px; flex-wrap:wrap; }
+</style></head>
+<body data-pag="respaldo">
+
+<nav class="riel">
+  <span class="marca">Maternidad</span>
+  <span class="grupo primera">Jornada</span>
+  <a href="hoy.html" data-pag="hoy">▦ El día</a>
+  <a href="llegada.html" data-pag="llegada">⤷ Llegadas</a>
+  <a href="pendientes.html" data-pag="pendientes">⚑ Pendientes <span class="cuenta" id="cuenta-pend">–</span></a>
+  <a href="laboratorio.html" data-pag="laboratorio">⚕ Laboratorio</a>
+  <a href="atenciones.html" data-pag="atenciones">✂ Atenciones</a>
+  <a href="documentos.html" data-pag="documentos">✎ Documentos</a>
+  <a href="agenda.html" data-pag="agenda">▤ Agenda</a>
+  <a href="cierre.html" data-pag="cierre">⏻ Cierre</a>
+  <span class="grupo">Del consultorio</span>
+  <a href="falla.html" data-pag="falla">⚠ Fallas</a>
+  <a href="respaldo.html" data-pag="respaldo">⛃ Respaldo</a>
+  <a class="piso" href="sistema.html" data-pag="sistema">⚙ Sistema (dueño)</a>
+</nav>
+
+<div class="principal">
+  <div class="barra">
+    <span class="pantalla">Respaldo — la copia que se ensaya</span>
+    <a class="volver" href="hoy.html">← Hoy</a>
+    <div id="contexto"></div>
+  </div>
+
+  <main class="cuerpo">
+    <h1>Guardar · Verificar · Ensayar</h1>
+    <div class="subtitulo">Un respaldo que nunca se probó es una promesa. Este es un
+      <b>ensayo</b>: guarda, verifica la huella y restaura en un lugar de prueba
+      <b>sin tocar lo vivo</b>. El respaldo de la tarde corre con el
+      <a href="cierre.html">cierre del día</a>.</div>
+
+    <div class="panel">
+      <h2>Los tres pasos</h2>
+      <div class="paso-resp"><span class="num">1</span><div><b>Guardar la copia</b>
+        <div class="nota">Copia completa del expediente a la unidad de destino.</div></div></div>
+      <div class="paso-resp"><span class="num">2</span><div><b>Verificar</b>
+        <div class="nota">Recalcula las huellas y las compara: «coinciden» o nombra el archivo
+        que no cuadra.</div></div></div>
+      <div class="paso-resp"><span class="num">3</span><div><b>Ensayar recuperación</b>
+        <div class="nota">Restaura en una carpeta de prueba y abre un paciente de mentiras de esa
+        copia — si abre, la copia sirve. Lo vivo jamás se toca.</div></div></div>
+      <div class="acciones">
+        <button class="btn" id="btn-ensayo"><span class="solo-papel">Ensayar ahora (demo)</span><span class="solo-verdadero">Ensayar ahora</span></button>
+      </div>
+      <div id="sal-resp"></div>
+    </div>
+
+    <div class="panel">
+      <h2>Cadencia</h2>
+      <div class="linea">· <b>Automática:</b> al cerrar el día, con el respaldo de la tarde
+        (R-12) — el cierre lo ofrece.</div>
+      <div class="linea">· <b>Manual:</b> cuando usted quiera — el botón de arriba.</div>
+      <div class="linea">· <b>La sentinela:</b> si un respaldo no se verifica, lo dice en rojo
+        la próxima vez que se encienda el sistema.</div>
+    </div>
+
+    <div class="banda">
+      <span class="rotulo">Pregunta para el dueño — responda con la plantilla de revisión</span>
+      <p><b>¿Con qué cadencia real lo haría?</b> ¿El respaldo de la tarde debe frenar el cierre
+      o solo avisar? ¿A qué unidad guardan hoy (USB, disco externo, red del consultorio)?</p>
+      <div class="veredicto"><label>☐ Así está bien, lo apruebo</label>
+        <label>☐ Está bien, pero con cambios</label>
+        <label>☐ No sirve así: rediseñar</label></div>
+    </div>
+
+    <footer class="vuelta">Pantalla de la ronda completa · RF-19 · R-12 (drill con sentinela) ·
+      O5 · participa en el <a href="cierre.html">cierre</a></footer>
+  </main>
+</div>
+
+<div id="aviso"></div>
+<script src="puente.js"></script>
+<script>
+  (function () {
+    var b = document.getElementById("btn-ensayo");
+    var s = document.getElementById("sal-resp");
+    if (!b) return;
+    var pasos = ["Copiando…", "Verificando huellas…  coinciden", "Restaurando en carpeta de prueba…", "Ensayo OK: la copia abre — lo vivo intacto"];
+    var i = 0;
+    b.addEventListener("click", function () {
+      i = 0; s.innerHTML = ""; b.disabled = true;
+      var t = setInterval(function () {
+        s.innerHTML += '<span class="chip ' + (i === pasos.length - 1 ? "verde" : "azul") + '">' + pasos[i] + "</span>";
+        i++;
+        if (i >= pasos.length) { clearInterval(t); b.disabled = false; }
+      }, 700);
+    });
+  })();
+</script>
+</body></html>

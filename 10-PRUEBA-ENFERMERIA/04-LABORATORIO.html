@@ -1,0 +1,110 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=1024">
+<title>Laboratorio en papel — prueba de piso</title>
+<link rel="stylesheet" href="estilo.css"></head><body>
+<div class="barra"><span class="marca">Maternidad</span>
+<span class="pantalla">Laboratorio recibido en papel — tres datos en 30 segundos</span>
+<span class="propuesta">PRUEBA REAL · ENFERMERÍA</span>
+<span class="reloj-dia"></span></div>
+<div class="cuerpo"><div class="lateral"></div>
+<div class="zona">
+<h1>Laboratorio en papel</h1>
+<p class="subtitulo">Tres datos y el semáforo deja de estar gris. Lo que llega viejo se marca <b>«escrito tardío»</b> — honesto, sin regaños.</p>
+<div class="panel sombra">
+<div class="fila-form">
+<div class="campo"><label>Paciente presente o atendida hoy</label><select id="lab-pac"></select></div>
+<div class="campo"><label>Analito (catálogo firmado)</label><select id="lab-analito"></select></div>
+<div class="campo"><label>Valor del papel</label><input type="number" step="0.1" id="lab-valor"></div>
+<div class="campo"><label>Fecha del resultado</label><input type="date" id="lab-fecha"></div>
+</div>
+<div id="tardio-hint"></div>
+<div style="margin-top:10px"><button class="btn pri2" id="lab-guardar">Guardar resultado</button></div>
+</div>
+<div id="lab-avisos"></div>
+<div class="panel sombra">
+<h3>Estado de salud — el semáforo</h3>
+<div class="semaforo" id="sema"></div>
+<div class="linea" style="margin-top:8px;color:#667">Semáforo informativo: informa, nunca dictamina. Sin catálogo firmado, el analito queda en gris.</div>
+</div>
+<div id="veredicto-host"></div>
+</div></div>
+<script src="config.js"></script><script src="motor.js"></script>
+<script>
+Jornada.nav("04-LABORATORIO.html");
+var S = Jornada.estado();
+var pid = Jornada.contextoPaciente();
+function pintaSel() {
+  var sp = document.getElementById("lab-pac");
+  sp.innerHTML = "";
+  S.pacientes.forEach(function (p) {
+    var e = Jornada.estadoDe(p.id).estado;
+    if (e === "no_llego" || e === "con_cita") return;
+    var o = document.createElement("option");
+    o.value = p.id; o.textContent = p.nombre;
+    sp.appendChild(o);
+  });
+  if (pid) sp.value = pid;
+  var sa = document.getElementById("lab-analito");
+  sa.innerHTML = "";
+  Object.keys(Jornada.LAB_RANGOS).forEach(function (k) {
+    var o = document.createElement("option");
+    o.value = k; o.textContent = Jornada.LAB_RANGOS[k].nombre + " (" + Jornada.LAB_RANGOS[k].unidad + ")";
+    sa.appendChild(o);
+  });
+}
+function pintaSema() {
+  var p = Jornada.paciente(document.getElementById("lab-pac").value);
+  var host = document.getElementById("sema");
+  if (!p) { host.innerHTML = ""; return; }
+  var vistos = {};
+  Jornada.labDe(p.id).forEach(function (l) { vistos[l.analito] = l; });
+  var html = "";
+  Object.keys(Jornada.LAB_RANGOS).forEach(function (k) {
+    var r = Jornada.LAB_RANGOS[k];
+    if (vistos[k]) {
+      var b = Jornada.evaluarBandaLab(k, vistos[k].valor);
+      html += "<div class='sema-item " + b.nivel + "'><b>" + r.nombre + "</b>" + vistos[k].valor + " " + r.unidad +
+        "<div class='nivel'>" + (b.nivel === "normal" ? "EN RANGO" : b.nivel === "alerta" ? "ALERTA" : b.nivel === "critica" ? "CRÍTICA" : "SIN DATO") + " — " + b.texto + "</div>" +
+        (vistos[k].escritaTardio ? "<span class='chip ambar'>escrito tardío</span>" : "") +
+        "<div style='color:#667;font-size:11px'>Fecha: " + vistos[k].fecha + "</div></div>";
+    } else html += "<div class='sema-item sin_dato'><b>" + r.nombre + "</b>sin resultado<div class='nivel'>SIN DATO</div></div>";
+  });
+  host.innerHTML = html || "<div class='vacio'>Sin datos todavía.</div>";
+}
+document.getElementById("lab-fecha").value = Jornada.hoyISO();
+document.getElementById("lab-fecha").onchange = function () {
+  var v = this.value;
+  document.getElementById("tardio-hint").innerHTML = (v && v < Jornada.hoyISO())
+    ? "<div class='aviso ambar'>Ese resultado es de días anteriores: se guardará con la bandera honesta <b>«escrito tardío»</b>.<span class='accion'>Acción: anotar por qué llegó el papel después.</span></div>" : "";
+};
+document.getElementById("lab-pac").onchange = pintaSema;
+document.getElementById("lab-guardar").onclick = function () {
+  var p = Jornada.paciente(document.getElementById("lab-pac").value);
+  var analito = document.getElementById("lab-analito").value;
+  var valor = parseFloat(document.getElementById("lab-valor").value);
+  var fecha = document.getElementById("lab-fecha").value;
+  if (!p || isNaN(valor)) { Jornada.toast("Falta el valor del papel."); return; }
+  var tardio = fecha && fecha < Jornada.hoyISO();
+  S.laboratorio.push({ pid: p.id, analito: analito, valor: valor, fecha: fecha, escritaTardio: !!tardio });
+  Jornada.agregarEvento("lab", p.id, { analito: analito, valor: valor });
+  var b = Jornada.evaluarBandaLab(analito, valor);
+  var cls = b.nivel === "normal" ? "verde" : b.nivel === "alerta" ? "ambar" : b.nivel === "critica" ? "rojo" : "gris";
+  var accion = "";
+  if (b.nivel === "critica") {
+    Jornada.nacerAlerta(p.id, 4, Jornada.LAB_RANGOS[analito].nombre + " " + valor + " — " + b.texto, "avisar a la médica ahora y no dejar pasar", "médica");
+    accion = " Acción: avisar a la médica de VOZ. La alerta ya está en pendientes y en el tablero.";
+  } else if (b.nivel === "alerta") {
+    Jornada.nacerAlerta(p.id, 3, Jornada.LAB_RANGOS[analito].nombre + " " + valor + " — " + b.texto, "anotar en la nota y comparar con el próximo control", "médica");
+    accion = " Acción: anotar en la nota y comparar con el próximo control.";
+  }
+  document.getElementById("lab-avisos").innerHTML = "<div class='aviso " + cls + "'><b>" + Jornada.LAB_RANGOS[analito].nombre + ": " + valor + " " + Jornada.LAB_RANGOS[analito].unidad + "</b> — " + b.texto +
+    (tardio ? " <span class='chip ambar'>escrito tardío</span>" : "") + "<span class='accion'>" + (accion || "Sin acción: todo en rango.") + "</span></div>";
+  Jornada.guardar();
+  Jornada.toast("Resultado guardado" + (tardio ? " con bandera de escrito tardío" : "") + ".");
+  pintaSema();
+};
+pintaSel();
+pintaSema();
+Jornada.bandaVeredicto("laboratorio", "¿Qué analitos capturan siempre en papel? ¿Les sirve marcar lo que llegó tarde? ¿El semáforo se entiende de un vistazo?");
+</script>
+</body></html>

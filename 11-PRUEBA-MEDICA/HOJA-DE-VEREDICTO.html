@@ -1,0 +1,67 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=1024">
+<title>Hoja de veredicto — prueba médica</title>
+<link rel="stylesheet" href="estilo.css">
+<style>
+@media print {
+  body { min-width:0; overflow:visible; display:block; }
+  .barra, .lateral, .pie, .no-imprimir { display:none !important; }
+  .zona { overflow:visible; padding:0; }
+  .campo input { border:none; border-bottom:1px solid #333; }
+  .tabla-fila { display:flex; gap:8px; align-items:center; margin:6px 0; }
+}
+</style></head><body>
+<div class="barra"><span class="marca">Maternidad</span>
+<span class="pantalla">Hoja de veredicto — prueba de consulta</span>
+<span class="propuesta">IMPRIMIBLE · 1 PÁGINA</span></div>
+<div class="cuerpo"><div class="lateral"></div>
+<div class="zona">
+<h1>Hoja de veredicto — prueba de consulta: médica</h1>
+<p class="subtitulo">Llénela durante el recorrido o después. Con esto y su firma, el diseño queda veredictado por el oficio.</p>
+<div class="panel">
+<div class="fila-form">
+<div class="campo"><label>Nombre de quien prueba</label><input type="text"></div>
+<div class="campo"><label>Rol</label><input type="text" value="Médica / médico" readonly></div>
+<div class="campo"><label>Fecha</label><input type="date"></div>
+<div class="campo"><label>Especialidad</label><input type="text"></div>
+</div>
+</div>
+<div class="panel">
+<h3>Recorrido — marque en cada pantalla</h3>
+<div class="tabla-fila"><b style="width:220px">1 · Tablero del día</b> ☐ Apruebo · ☐ Con cambios · ☐ No sirve</div>
+<div class="tabla-fila" style="padding-left:224px"><input type="text" style="width:100%" placeholder="Cambios o comentarios"></div>
+<div class="tabla-fila"><b style="width:220px">2 · Modo consulta</b> ☐ Apruebo · ☐ Con cambios · ☐ No sirve</div>
+<div class="tabla-fila" style="padding-left:224px"><input type="text" style="width:100%" placeholder="Cambios o comentarios"></div>
+<div class="tabla-fila"><b style="width:220px">3 · Avisos de la jornada</b> ☐ Apruebo · ☐ Con cambios · ☐ No sirve</div>
+<div class="tabla-fila" style="padding-left:224px"><input type="text" style="width:100%" placeholder="Cambios o comentarios"></div>
+<div class="tabla-fila"><b style="width:220px">4 · La urgencia</b> ☐ Apruebo · ☐ Con cambios · ☐ No sirve</div>
+<div class="tabla-fila" style="padding-left:224px"><input type="text" style="width:100%" placeholder="Cambios o comentarios"></div>
+<div class="tabla-fila"><b style="width:220px">5 · Calculadoras</b> ☐ Apruebo · ☐ Con cambios · ☐ No sirve</div>
+<div class="tabla-fila" style="padding-left:224px"><input type="text" style="width:100%" placeholder="Cambios o comentarios"></div>
+<div class="tabla-fila"><b style="width:220px">6 · Agenda y recordatorios</b> ☐ Apruebo · ☐ Con cambios · ☐ No sirve</div>
+<div class="tabla-fila" style="padding-left:224px"><input type="text" style="width:100%" placeholder="Cambios o comentarios"></div>
+</div>
+<div class="panel">
+<h3>Preguntas del recorrido completo</h3>
+<div class="campo"><label>1 · Con ella enfrente, ¿la consulta le entrega todo lo que necesita? ¿Qué sobra o falta?</label><textarea rows="2" style="width:100%"></textarea></div>
+<div class="campo"><label>2 · ¿Los avisos al guardar llegan en el momento bueno? ¿Cuántos por visita es demasiado?</label><textarea rows="2" style="width:100%"></textarea></div>
+<div class="campo"><label>3 · ¿La prescripción que se niega explica el riesgo como usted lo diría?</label><textarea rows="2" style="width:100%"></textarea></div>
+<div class="campo"><label>4 · ¿El cierre de avisos anclado a la nota firmada hace lo que usted haría a mano? ¿Qué quedaría distinto?</label><textarea rows="2" style="width:100%"></textarea></div>
+<div class="campo"><label>5 · ¿Las calculadoras con prefill le ahorran de verdad? ¿Qué calculan a mano que debería salir sola? ¿Falta alguna (Anexo E)?</label><textarea rows="2" style="width:100%"></textarea></div>
+<div class="campo"><label>6 · ¿El recordatorio listo para copiar con nombre y fecha es como avisan hoy? ¿Qué mensaje necesita que no trae?</label><textarea rows="2" style="width:100%"></textarea></div>
+</div>
+<div class="panel">
+<h3>Veredicto global del recorrido</h3>
+<div class="veredicto">
+☐ Esto refleja mi día · ☐ Refleja mi día con cambios · ☐ No refleja mi día — hay que rediseñarlo
+</div>
+<div class="fila-form" style="margin-top:10px">
+<div class="campo"><label>Firma</label><input type="text"></div>
+<div class="campo"><label>Hora de cierre</label><input type="text"></div>
+</div>
+</div>
+<p class="pie-pag no-imprimir">Hoja de la sesión · kit de entrevista de GUIAS/KIT-ENTREVISTA.md · esta prueba es papel: nada se construye hasta el doble veredicto del oficio.</p>
+</div></div>
+<script src="config.js"></script><script src="motor.js"></script>
+<script>Jornada.nav("HOJA-DE-VEREDICTO.html");</script>
+</body></html>

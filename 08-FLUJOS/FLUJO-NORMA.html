@@ -1,0 +1,239 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=1024">
+<title>Flujo norma — la jornada (capa D)</title>
+<link rel="stylesheet" href="flujos.css"></head>
+<body><div class="envoltura">
+
+<div class="cabecera">
+  <h1>El flujo norma — la jornada, físico primero</h1>
+  <div class="sub">Capa D de <code>FLUJOS-TRABAJO.md</code>: el día replanteado con todo
+  integrado. Cada paso: lo que hace el cuerpo → lo que hace el software → su pantalla → el
+  estado que queda. Es la norma sobre la que se exige todo diseño.</div>
+  <div class="leyenda">
+    <span class="l-fis">físico</span><span class="l-dig">digital</span>
+    <span class="l-pan">pantalla</span><span class="l-eve">estado/evento</span>
+  </div>
+</div>
+
+<h2>A · La mañana de la enfermera</h2>
+
+<div class="tira">
+  <div class="titulo">9:50 — Abrir (las llamadas pasan antes de encender)</div>
+  <div class="nota">Orden real: llamadas → agenda de hoy → encender. El software hereda el
+  conocimiento de quien contestó el teléfono; no lo inventa.</div>
+  <div class="cad">
+    <div class="paso fis"><span class="num">1</span><b class="tit">Revisar quiénes llamaron</b>
+      <small>Acomodar la sala; la que contestó ya sabe quién viene.</small></div>
+    <div class="flecha">→</div>
+    <div class="paso dig"><span class="num">2</span><b class="tit">Recordatorios preparados ayer</b>
+      <small>Lista «a quién llamar y con qué frase».</small>
+      <span class="donde">agenda.html · r1: AGENDA</span></div>
+    <div class="flecha">→</div>
+    <div class="paso dig"><span class="num">3</span><b class="tit">Abrir: ya es el tablero de hoy</b>
+      <small>Estado heredado de ayer, sin navegar.</small>
+      <span class="donde">hoy.html · r1: TABLERO</span>
+      <span class="estado">FL-01 · inicio = tablero</span></div>
+  </div>
+</div>
+
+<div class="tira">
+  <div class="titulo">10:00 — La puerta</div>
+  <div class="nota">«Buenos días, ¿con cita?» — un gesto si tenía cita; si no, sus cuatro
+  datos de la libreta (apellidos por separado, nacimiento con calendario, ciudad y teléfono
+  — CURP opcional) y, si son varias seguidas, el registro **encadena** con «¿siguiente?».
+  Y la que pasó y no vino: su tarjeta se apaga sola.</div>
+  <div class="cad">
+    <div class="paso fis"><span class="num">1</span><b class="tit">Preguntar «¿con cita?»</b>
+      <small>Solo voz, sin teclado.</small></div>
+    <div class="flecha">→</div>
+    <div class="paso dig"><span class="num">2</span><b class="tit">Llegada registrada</b>
+      <small>Tarjeta: con cita → llegó; reloj nace de la hora real.</small>
+      <span class="donde">llegada.html</span><span class="estado">evento: llegada_registrada</span></div>
+    <div class="flecha">→</div>
+    <div class="paso dig"><span class="num">3</span><b class="tit">O registro rápido sin cita</b>
+      <small>Apellidos · nombres · nacimiento con calendario · ciudad · teléfono; «falta completar ficha» con dueño.</small>
+      <span class="donde">llegada.html</span></div>
+    <div class="flecha">→</div>
+    <div class="paso evento"><span class="num">4</span><b class="tit">La cita vencida sin aparecer</b>
+      <small>Sola, al vencer: no llegó + reagendar.</small>
+      <span class="estado">FL-04 · estado por hecho</span></div>
+  </div>
+</div>
+
+<div class="tira">
+  <div class="titulo">La visita — un hecho del día, no un dato de la paciente (H-039)</div>
+  <div class="nota">La paciente es quien es (se guarda una vez); la visita es lo que pasó hoy
+  (se borra sola mañana). Y su razón tiene dos capas.</div>
+  <div class="cad">
+    <div class="paso dig"><span class="num">1</span><b class="tit">Cinco datos de llegada</b>
+      <small>Hora · procedencia · ayuno · cómo llegó · acompañante.</small>
+      <span class="donde">llegada.html</span></div>
+    <div class="flecha">→</div>
+    <div class="paso dig"><span class="num">2</span><b class="tit">Razón declarada al entrar</b>
+      <small>Lista firmada: control · recoger · entregar · molestia · derivada · urgencia.</small></div>
+    <div class="flecha">→</div>
+    <div class="paso evento"><span class="num">3</span><b class="tit">Si cambia a mitad: resultante</b>
+      <small>La declarada no se borra — debajo. Cambiar la razón es dato clínico.</small>
+      <span class="estado">dos capas visibles en su ficha</span></div>
+  </div>
+</div>
+
+<div class="tira">
+  <div class="titulo">10:10 — El carril de constantes</div>
+  <div class="nota">Silla, tensiómetro, tres minutos — y la paciente que pregunta diez. Ahí
+  también se **revisan los estudios que trae en mano** y se **prepara a la de ultrasonido**,
+  según el tipo.</div>
+  <div class="cad">
+    <div class="paso dig"><span class="num">1</span><b class="tit">Cinta de identidad arriba</b>
+      <small>Alergia, sangre, medicación a la vista antes de tocar.</small>
+      <span class="donde">estacion.html · cinta</span></div>
+    <div class="flecha">→</div>
+    <div class="paso dig"><span class="num">2</span><b class="tit">Captura: guardar nunca bloquea</b>
+      <small>Los 10 campos y 9 banderas del control (R-14); si falta algo, se guarda igual y queda «sin dato» — nunca inventado.</small>
+      <span class="donde">estacion.html</span></div>
+    <div class="flecha">→</div>
+    <div class="paso evento"><span class="num">3</span><b class="tit">Chips después de guardar</b>
+      <small>Presión con 3 niveles · combinación con orina · FC fetal · banderas marcadas.</small>
+      <span class="estado">FL-05 · entrega en el corte</span></div>
+    <div class="flecha">→</div>
+    <div class="paso corte"><span class="num">4</span><b class="tit">Interrumpen: pausa</b>
+      <small>Teléfono o la médica: la estación se pausa con todo y se retoma campo por campo.</small>
+      <span class="donde">estacion (pausar) · r1: PAUSA</span>
+      <span class="estado">estación a medias</span></div>
+  </div>
+</div>
+
+<div class="tira">
+  <div class="titulo">10:40 — Quien llegó con papel</div>
+  <div class="nota">Gran parte del laboratorio del centro llega impreso en la mano.</div>
+  <div class="cad">
+    <div class="paso fis"><span class="num">1</span><b class="tit">Entrega su resultado</b>
+      <small>Papel en mano.</small></div>
+    <div class="flecha">→</div>
+    <div class="paso dig"><span class="num">2</span><b class="tit">Tres datos en30 segundos</b>
+      <small>Analito · valor · fecha; bandera «escrito tardío» si llegó viejo.</small>
+      <span class="donde ausente">FL-07 — SIN PANTALLA EN RONDA 2</span>
+      <span class="estado">r1: LABORATORIO</span></div>
+    <div class="flecha">→</div>
+    <div class="paso evento"><span class="num">3</span><b class="tit">El semáforo deja de estar gris</b>
+      <small>Banda contra catálogo firmado.</small></div>
+  </div>
+</div>
+
+<div class="tira">
+  <div class="titulo">11:00 — La urgencia: primero la voz</div>
+  <div class="nota">El software ordena; no sustituye el grito.</div>
+  <div class="cad">
+    <div class="paso fis"><span class="num">1</span><b class="tit">Gritar / llamar al equipo</b>
+      <small>La resolución real es acústica.</small></div>
+    <div class="flecha">→</div>
+    <div class="paso dig"><span class="num">2</span><b class="tit">La tarjeta sube al frente sola</b>
+      <small>Mismo segundo, en rojo; no se cierra sin resolverse.</small>
+      <span class="donde ausente">FL-08 — SIN MARCADOR EN RONDA 2</span>
+      <span class="estado">r1: ALERTAS+TABLERO</span></div>
+    <div class="flecha">→</div>
+    <div class="paso evento"><span class="num">3</span><b class="tit">Cierre: atendida · referida · motivo</b>
+      <small>Con nombre y cédula — o anclado a la nota firmada.</small>
+      <span class="donde">pendientes.html</span></div>
+  </div>
+</div>
+
+<div class="tira">
+  <div class="titulo">11:30 — Llegadas y ausencias (la cola fantasma)</div>
+  <div class="cad">
+    <div class="paso fis"><span class="num">1</span><b class="tit">«¿Todavía hay lugar?»</b>
+      <small>La que no estaba agendada.</small></div>
+    <div class="flecha">→</div>
+    <div class="paso dig"><span class="num">2</span><b class="tit">Registro rápido al día</b>
+      <small>Nace su tarjeta con reloj.</small><span class="donde">llegada.html</span></div>
+    <div class="flecha">→</div>
+    <div class="paso evento"><span class="num">3</span><b class="tit">Y las ausentes, apagadas</b>
+      <small>No llegó → reagendar.</small><span class="donde">agenda.html</span>
+      <span class="estado">FL-04</span></div>
+  </div>
+</div>
+
+<div class="tira">
+  <div class="titulo">12:15 — Avisos con dueño sobre el día encima</div>
+  <div class="cad">
+    <div class="paso dig"><span class="num">1</span><b class="tit">Todo aviso nace con dueño</b>
+      <small>Tamizaje ⇒ quien captura · chequeo ⇒ quien captura · banda roja ⇒ la médica.</small>
+      <span class="donde">pendientes.html</span></div>
+    <div class="flecha">→</div>
+    <div class="paso evento"><span class="num">2</span><b class="tit">Al vencer: sube al tablero</b>
+      <small>Sin dueño, los avisos son papel tirado.</small>
+      <span class="estado">FL-13 · O3</span></div>
+    <div class="flecha">→</div>
+    <div class="paso dig"><span class="num">3</span><b class="tit">Cierre con firma</b>
+      <small>Nombre + cédula, o nota que lo resuelve.</small>
+      <span class="donde">pendientes.html</span></div>
+  </div>
+</div>
+
+<div class="tira">
+  <div class="titulo">13:50 — El cierre, que antes no existía</div>
+  <div class="nota">El día tiene final: traspaso imprimible a la tarde.</div>
+  <div class="cad">
+    <div class="paso dig"><span class="num">1</span><b class="tit">El día como pliegue</b>
+      <small>Quienes quedaron · plazos vencidos · fichas incompletas · agenda de mañana.</small></div>
+    <div class="flecha">→</div>
+    <div class="paso dig"><span class="num">2</span><b class="tit">Imprimir traspaso</b>
+      <small>Una página para la mano de la tarde.</small><span class="donde">cierre.html</span></div>
+    <div class="flecha">→</div>
+    <div class="paso evento"><span class="num">3</span><b class="tit">Respaldo de la tarde</b>
+      <small>Jamás toca el parque vivo.</small>
+      <span class="estado">FL-15 · O5</span></div>
+  </div>
+</div>
+
+<h2>B · La consulta de la médica</h2>
+
+<div class="tira">
+  <div class="cad">
+    <div class="paso dig"><span class="num">1</span><b class="tit">Elegir desde Hoy</b>
+      <small>Cambio de paciente solo desde el tablero; la prioridad la marca el equipo (B6) — el software nunca ordena.</small><span class="donde">hoy.html</span></div>
+    <div class="flecha">→</div>
+    <div class="paso dig"><span class="num">2</span><b class="tit">Cinta con permanentes</b>
+      <small>Alergia, sangre, medicación; lo capturado ya está.</small><span class="donde">consulta.html</span></div>
+    <div class="flecha">→</div>
+    <div class="paso evento"><span class="num">3</span><b class="tit">Cálculos corrieron solos</b>
+      <small>Con lo de la enfermera — sin re-teclear.</small>
+      <span class="estado">FL-09 · E1</span></div>
+    <div class="flecha">→</div>
+    <div class="paso dig"><span class="num">4</span><b class="tit">Nota firmada cierra</b>
+      <small>Autor y cédula; inmutable.</small><span class="donde">consulta.html</span></div>
+    <div class="flecha">→</div>
+    <div class="paso fis corte"><span class="num">5</span><b class="tit">La urgencia se resuelve en voz</b>
+      <small>Con el equipo, en la sala.</small></div>
+    <div class="flecha">→</div>
+    <div class="paso evento"><span class="num">6</span><b class="tit">Si va a sala: equipo fuera</b>
+      <small>La espera se explica sola.</small>
+      <span class="estado">FL-10 · r2: solo texto</span></div>
+  </div>
+</div>
+
+<h2>C · Una verdad, muchos equipos (H-041/042)</h2>
+
+<div class="tira">
+  <div class="cad">
+    <div class="paso dig"><span class="num">1</span><b class="tit">Un solo sistema</b>
+      <small>El rol decide el uso frecuente, no qué existe.</small></div>
+    <div class="flecha">→</div>
+    <div class="paso dig"><span class="num">2</span><b class="tit">La misma verdad en todo equipo</b>
+      <small>Lista priorizada que se estrecha sola en la pantalla chica.</small></div>
+    <div class="flecha">→</div>
+    <div class="paso evento"><span class="num">3</span><b class="tit">Alerta en paralelo</b>
+      <small>PC y celular al mismo tiempo; sin señal, recupera al volver.</small>
+      <span class="donde ausente">FL-16 — costo técnico por confirmar</span>
+      <span class="estado">H-042 · G3</span></div>
+    <div class="flecha">→</div>
+    <div class="paso fis"><span class="num">4</span><b class="tit">La comunicación es de voz</b>
+      <small>Ella lo ve en el pasillo y se lo dice a la médica.</small></div>
+  </div>
+</div>
+
+<footer class="pie">Fuente canónica: <code>02-LOGICA-DE-DISENO/FLUJOS-TRABAJO.md</code> capa D
+(con su marca de hipótesis informada) · pantalla citada = enlace real ·
+<a href="INDICE.html">volver al índice comparativo</a></footer>
+
+</div></body></html>

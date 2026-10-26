@@ -1,0 +1,134 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=1024">
+<title>Cierre de día y traspaso — prueba de piso</title>
+<link rel="stylesheet" href="estilo.css"></head><body>
+<div class="barra"><span class="marca">Maternidad</span>
+<span class="pantalla">Cierre de día y traspaso</span>
+<span class="propuesta">PRUEBA REAL · ENFERMERÍA</span>
+<span class="reloj-dia"></span></div>
+<div class="cuerpo"><div class="lateral"></div>
+<div class="zona">
+<h1>Cierre de día y traspaso</h1>
+<p class="subtitulo">Un día sin cierre es un día sin final. Lo que quedó, lo vencido, las fichas sin completar, el respaldo de la tarde — en una hoja imprimible para la tarde.</p>
+<div class="panel sombra" id="cuentas"></div>
+<div class="grilla2">
+<div class="panel sombra"><h3>Lo que queda abierto</h3><div id="abiertos"></div></div>
+<div class="panel sombra"><h3>Lo que ya se cerró</h3><div id="cerrados"></div></div>
+</div>
+<div class="panel sombra">
+<h3>Recordatorios preparados para mañana (el software prepara; usted entrega)</h3>
+<div id="recordatorios"></div>
+<div class="linea" style="color:#667;margin-top:6px">Ningún mensaje sale solo ni lleva cifras — usted los copia y los entrega por el canal que use su consultorio.</div>
+</div>
+<div class="panel sombra">
+<h3>El respaldo de la tarde</h3>
+<button class="btn" id="btn-drill">Probar respaldo de la tarde</button>
+<div id="drill-out"></div>
+</div>
+<div style="margin:12px 0">
+<button class="btn pri2" id="btn-imprimir">Imprimir traspaso</button>
+<a class="btn sec" href="01-TABLERO.html">Volver al tablero</a>
+</div>
+<div class="hoja-print" id="hoja">
+<h1>TRASPASO DE TURNO — Maternidad</h1>
+<div class="linea">Jueves 23 de octubre · impreso a las <span id="p-hora"></span></div>
+<div id="p-cuerpo"></div>
+<div class="linea" style="margin-top:24px">Entrega: ______________________ · Recibe: ______________________</div>
+</div>
+<div id="veredicto-host"></div>
+</div></div>
+<script src="config.js"></script><script src="motor.js"></script>
+<script>
+Jornada.nav("06-CIERRE.html");
+var S = Jornada.estado();
+function pinta() {
+  var d = Jornada.cierreData();
+  document.getElementById("cuentas").innerHTML = "<h3>El día en una cuenta</h3>" +
+    "<div class='linea'><b>" + d.atendidas.length + " atendidas</b> · " + d.enCurso.length + " en curso · " + d.esperan.length + " aún esperan · <b>" +
+    d.noLlegaron.length + " no llegaron</b> · " + d.mitad.length + " estación a mitad · " + d.incompletas.length + " ficha por completar · " +
+    d.vencidas.length + " aviso sin atender</div>" +
+    (S.equipoFuera ? "<div class='linea'><span class='chip ambar'>EQUIPO FUERA al cierre — anote a qué hora volvió la médica</span></div>" : "");
+  var ab = document.getElementById("abiertos");
+  var h = "";
+  d.esperan.forEach(function (p) { h += Jornada.tarjetaHTML(p, " <span class='chip ambar'>quedó esperando — decida si se atiende o se reagenda</span>"); });
+  d.enCurso.forEach(function (p) { h += Jornada.tarjetaHTML(p, " <span class='chip rojo'>atención abierta — cierre o pase a mañana</span>"); });
+  d.mitad.forEach(function (p) { h += Jornada.tarjetaHTML(p, " <span class='chip ambar'>estación a mitad</span>"); });
+  d.incompletas.forEach(function (p) { h += Jornada.tarjetaHTML(p, " <span class='chip rojo'>falta completar su ficha</span>"); });
+  d.vencidas.forEach(function (a) {
+    h += "<div class='aviso " + (Jornada.vencida(a) ? "rojo" : "ambar") + "'><b>Aviso sin atender:</b> " + Jornada.nombrePac(a.pid) + " — " + a.texto +
+      "<span class='accion'>Acción: " + a.accion + "</span><span class='duenio'>Dueño: " + a.duenio + "</span></div>";
+  });
+  ab.innerHTML = h || "<div class='vacio'>Nada quedó abierto. El día cerró limpio.</div>";
+  var ce = document.getElementById("cerrados");
+  var h2 = "<div class='linea'><span class='chip verde'>" + d.atendidas.length + " atendidas hoy</span></div>";
+  d.atendidas.forEach(function (p) { h2 += Jornada.tarjetaHTML(p, ""); });
+  d.noLlegaron.forEach(function (p) { h2 += Jornada.tarjetaHTML(p, " <a style='display:block;margin-top:4px' href='02-LLEGADA.html?p=" + p.id + "'><b>Reagendar →</b></a>"); });
+  var manana = S.agenda.filter(function (a) { return a.min > Jornada.ahoraMin(); });
+  if (manana.length) {
+    h2 += "<h3 style='margin-top:10px'>Próximas citas</h3>" + manana.map(function (a) {
+      return "<div class='linea'>" + Jornada.hm(a.min) + " — <b>" + Jornada.nombrePac(a.pid) + "</b> · " + a.motivo + "</div>";
+    }).join("");
+  }
+  ce.innerHTML = h2;
+  var rec = Jornada.recordatorios();
+  var host = document.getElementById("recordatorios");
+  if (!rec.length) { host.innerHTML = "<div class='vacio'>Sin recordatorios pendientes.</div>"; }
+  else {
+    host.innerHTML = rec.map(function (r) {
+      return "<div class='aviso " + (r.entregado ? "verde" : "ambar") + "'><b>" + Jornada.nombrePac(r.pid) + "</b> — " + r.situacion +
+        "<div class='linea' style='margin-top:4px'>«" + r.plantilla + "»</div>" +
+        "<span class='duenio'>Fecha derivada: " + Jornada.fechaLarga(r.fecha) + " · " + (r.entregado ? "entregado" : "listo para copiar") + "</span>" +
+        (r.entregado
+          ? " <button class='btn sec chico' data-anular='" + r.rid + "'>Anular entrega</button>"
+          : " <button class='btn chico' data-entregar='" + r.rid + "'>Copiar / entregar</button>") +
+        "</div>";
+    }).join("");
+    host.querySelectorAll("button[data-entregar]").forEach(function (b) {
+      b.onclick = function () { Jornada.entregarRecordatorio(b.getAttribute("data-entregar")); Jornada.toast("Entrega registrada — para cualquiera que abra la lista ya no está disponible."); pinta(); };
+    });
+    host.querySelectorAll("button[data-anular]").forEach(function (b) {
+      b.onclick = function () { Jornada.anularRecordatorio(b.getAttribute("data-anular")); Jornada.toast("Entrega anulada — vuelve a estar disponible."); pinta(); };
+    });
+  }
+}
+document.getElementById("btn-drill").onclick = function () {
+  S.respaldoTarde = true;
+  Jornada.guardar();
+  document.getElementById("drill-out").innerHTML = "<div class='aviso verde'><b>Respaldo ensayado con éxito.</b> Se verificó que la copia se puede abrir — sin tocar los datos vivos.<span class='duenio'>Último guardado verificado a las " + Jornada.hm(Jornada.ahoraMin()) + ".</span></div>";
+  Jornada.toast("Respaldo de la tarde ensayado. El parque vivo quedó intacto.");
+};
+document.getElementById("btn-imprimir").onclick = function () {
+  var d = Jornada.cierreData();
+  document.getElementById("p-hora").textContent = Jornada.hm(Jornada.ahoraMin());
+  var h = "";
+  function bloque(titulo, lista, extra) {
+    if (!lista.length) return;
+    h += "<h3>" + titulo + " (" + lista.length + ")</h3>";
+    lista.forEach(function (p) { h += "<div>· <b>" + p.nombre + "</b> — " + p.caso + (extra ? " — " + extra(p) : "") + "</div>"; });
+  }
+  bloque("Atendidas", d.atendidas);
+  bloque("Quedaron esperando", d.esperan, function () { return "decidir: atender o reagendar"; });
+  bloque("En atención al cierre", d.enCurso);
+  bloque("Estación a mitad", d.mitad);
+  bloque("Falta completar ficha", d.incompletas, function () { return "dueño: enfermería"; });
+  bloque("No llegaron", d.noLlegaron, function () { return "reagendar mañana"; });
+  if (d.vencidas.length) {
+    h += "<h3>Avisos sin atender (" + d.vencidas.length + ")</h3>";
+    d.vencidas.forEach(function (a) { h += "<div>· " + Jornada.nombrePac(a.pid) + " — " + a.texto + " (dueño: " + a.duenio + ")</div>"; });
+  }
+  var rec = Jornada.recordatorios().filter(function (r) { return !r.entregado; });
+  if (rec.length) {
+    h += "<h3>Recordatorios sin entregar (" + rec.length + ")</h3>";
+    rec.forEach(function (r) { h += "<div>· " + Jornada.nombrePac(r.pid) + " — " + r.situacion + " — fecha: " + r.fecha + "</div>"; });
+  }
+  h += "<h3>Respaldo de la tarde</h3><div>· " + (S.respaldoTarde ? "Ensayado y verificado" : "PENDIENTE — ensayar antes de apagar") + "</div>";
+  document.getElementById("p-cuerpo").innerHTML = h;
+  S.traspasoImpreso = true;
+  Jornada.agregarEvento("traspaso", null, {});
+  Jornada.guardar();
+  window.print();
+};
+pinta();
+Jornada.bandaVeredicto("cierre", "¿Así entrega su turno? ¿Qué le falta anotar para que la tarde no pregunte? ¿El recordatorio listo para copiar le sirve así?");
+</script>
+</body></html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8">
+<title>PROPUESTA — Nueva paciente y su visita — identidad + datos de la llegada</title>
+<link rel="stylesheet" href="estilo.css"></head><body>
+<div class="barra"><span class="marca">Maternidad</span>
+<span class="pantalla">Nueva paciente y su visita — identidad + llegada</span>
+<span class="propuesta">PROPUESTA DE DISEÑO</span>
+<button class="ayuda">Ayuda</button></div>
+<div class="cuerpo"><div class="zona" style="max-width:990px;margin:0 auto">
+<div class="pregunta" style="margin-top:0;max-width:none">
+<span class="rotulo">PROPUESTA · ALCANCE COMPLETO · alta de identidad y de la visita</span>
+Dos cosas en un solo lugar: <b>quién es</b> (se guarda una vez y no cambia) y <b>qué pasó
+hoy</b> (llegó a tal hora, desde tan lejos, sin desayunar, y por esto y no por aquello).
+Lo segundo se borra solo mañana; lo primero, no.</div>
+<h1>Nueva paciente y su visita</h1>
+<div class="subtitulo">El registro anterior solo pedía identidad y contacto. Aquí va lo
+que la puerta necesita saber — y la razón de la visita, que puede cambiar a mitad del día.</div>
+
+<div class="panel" style="border-left:5px solid #2e9e4f">
+  <h3>Qué prometía entregar — el valor que se defiende</h3>
+  <div class="linea">Que la identidad se escriba una sola vez, correcta, completa y sin
+    duplicados — y que además se sepa <b>de dónde viene y por qué vino hoy</b>, para
+    agendarla bien y para no perder la razón si durante la consulta cambia.</div>
+</div>
+
+<div class="panel" style="border-left:5px solid #c0392b">
+  <h3>Por qué hoy no lo entrega (aceptado como diagnóstico, sin discutirlo)</h3>
+  <div class="linea">El menú dice «Registro», que no le dice nada a quien entra por primera
+    vez; no está declarado qué es obligatorio; el campo «médico» se escribe a mano; y —lo
+    que acabo de ver— <b>no pregunta nada de la llegada</b>: ni a qué hora llegó, ni de
+    dónde viene, ni si desayunó, ni cómo llegó, ni por qué vino. Y la razón de la visita se
+    daba por fija, cuando en la práctica cambia a mitad de la consulta.</div>
+  <div class="linea" style="color:#922b21"><b>Crítica registrada:</b> H-009 ·
+    <b>Hallazgo nuevo:</b> H-039</div>
+</div>
+
+<div class="panel" style="border-left:5px solid #1b6ca8">
+  <h3>Cómo se propone, en la nueva lógica — tres bloques, en el orden de la puerta</h3>
+  <div class="linea"><b>FLUJO —</b> Segunda acción de recepción, para la paciente con cita
+    o derivada; de aquí se sale a su ficha.</div>
+  <div class="linea"><b>BLOQUE 1 · Quién es (obligatorio, se guarda una vez).</b> Apellidos
+    (paterno y materno), nombres y fecha de nacimiento —con calendario—. CURP, teléfono,
+    correo y notas opcionales. «Médico» como <b>lista</b> de los derivadores del centro
+    (15 o 20 nombres guardados una vez, elegidos con un clic, con «+ añadir uno nuevo»).</div>
+  <div class="linea"><b>BLOQUE 2 · La llegada de hoy (del día, se borra mañana).</b> Hora
+    de llegada —<b>la pone el reloj solo</b>, es la que manda para el reloj de espera, no
+    la de la cita— · procedencia (población o centro de donde viene; hay foráneas que
+    tardan horas en volver) · si ya desayunó (sí / no / no sé) · cómo llegó (caminando ·
+    transporte · derivada · camilla) · quién la acompaña.</div>
+  <div class="linea"><b>BLOQUE 3 · La razón de la visita (dos capas, la original no se
+    borra).</b> Al entrar se elige la <b>declarada</b> de una lista firmada: control
+    programado · recoger estudio · entregar laboratorio · una molestia nueva · derivada de
+    otro centro · urgencia declarada. Si durante la consulta cambia, se anota la
+    <b>resultante</b> debajo y la declarada queda visible — las dos cuentan cómo se
+    llegó al diagnóstico.</div>
+  <div class="linea"><b>EXPERIENCIA —</b> Enter va avanzando; lo opcional no estorba a quien
+    tiene prisa; al final, si hay parecidas, aparece la pregunta anteduplicados.</div>
+</div>
+
+<div class="panel" style="border-left:5px solid #e67e22">
+  <h3>Ejemplo real de uso — dos pacientes, la misma puerta</h3>
+  <div class="linea"><b>Yolanda (sin cita, foránea):</b> llega 12:03 en camión desde
+    Tepic, sin desayunar, para «entregar laboratorio». Le toma 1 minuto. Su hora de
+    llegada 12:03 es la que corre en el tablero —no la de una cita que no tenía.</div>
+  <div class="linea"><b>María (con cita):</b> llega 11:15, declara «control programado».
+    Durante la consulta refiere cefalea: la razón <b>resultante</b> pasa a ser
+    «molestia nueva — evaluar preeclampsia», y su declaración original «control
+    programado» <b>sigue visible debajo</b>. Esa es la pista de cómo se la detectó.</div>
+</div>
+
+<div class="pregunta"><span class="rotulo">PREGUNTA PARA EL EQUIPO — responda con la plantilla de revisión</span>
+<b>¿Estos cinco datos de llegada son los que ustedes necesitan en la puerta?</b> ¿Falta
+alguno que siempre pregunten? ¿El ayuno se pregunta a todas o solo antes de ciertos
+estudios? ¿La lista de razones de visita cubre lo que ven cada semana —o sobra alguna,
+como «recoger estudio» si nunca ocurre? ¿La razón que cambia debe poder cambiar más de una
+vez en el día, o con dos basta?
+<div class="veredicto"><b>Veredicto:</b> ☐ Así está bien, lo apruebo ·
+☐ Así está bien, pero con cambios · ☐ Esto no sirve así, hay que rediseñarlo</div></div>
+<footer>Propuesta de alcance completo · contraste: <code>../../ANALISIS-PANTALLAS.md</code> ·
+estructura lógica: <code>../FLUJOS-TRABAJO.md</code> (Capa D, la visita) ·
+<a href="INDICE.html">índice de todas las propuestas</a> · <a href="TABLERO.html">volver al tablero</a></footer>
+</div></div></body></html>

@@ -1,0 +1,7 @@
+# dependencias de pruebas (se reinstalan con npm install en pruebas/)
+node_modules/
+# artefactos del sistema
+__pycache__/
+*.pyc
+*.log
+.DS_Store

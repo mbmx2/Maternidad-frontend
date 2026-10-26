@@ -1,0 +1,73 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8">
+<meta name="sintesis" content="S1">
+<meta name="viewport" content="width=1024">
+<title>Documentos</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="front.css"></head><body>
+<div class="barra"><span class="marca">Maternidad</span>
+<span class="pantalla">Documentos — plantillas con paciente en contexto</span>
+<span id="contexto-gatillo" class="vacio"></span>
+<span class="propuesta">V4 · S1 · PAPEL CON MOTOR</span>
+<span class="reloj-dia"></span></div>
+<div class="cuerpo"><div class="lateral"></div>
+<div class="zona">
+<h1>Documentos</h1>
+<p class="subtitulo">Con la paciente en contexto, la plantilla sale <b>rellena con lo que ya existe</b> — sin volver a teclear. El aviso de privacidad se genera una vez por expediente y jamás se reescribe; compartir sin identidad revisa el documento entero antes de dejar salir un solo dato personal.</p>
+<div id="cinta"></div>
+<div class="panel sombra">
+<h3>Plantillas</h3>
+<div id="lista-plantillas"></div>
+</div>
+<div class="panel sombra">
+<h3>Papeles sensibles</h3>
+<div class="linea">· <b>Aviso de privacidad</b> — se genera una vez por expediente; reescribirlo es un error, no una actualización.</div>
+<div class="linea">· <b>Consentimiento</b> — cuerpo sellado primero, pie con la huella después.</div>
+<div class="linea">· <b>Compartir sin identidad</b> — la puerta revisa el documento entero; si encuentra un dato personal, no se escribe el archivo.</div>
+<div class="acciones">
+<button class="btn sec" id="btn-aviso">Generar aviso de privacidad</button>
+<button class="btn sec" id="btn-compartir">Compartir sin identidad (simular revisión)</button>
+</div>
+<div id="doc-aviso"></div>
+</div>
+<div id="veredicto-host"></div>
+</div></div>
+<script src="config.js"></script><script src="motor.js"></script>
+<script>
+Jornada.nav("Documentos");
+var S = Jornada.estado();
+var pid = Jornada.leerContexto();
+document.getElementById("cinta").innerHTML = Jornada.cintaHTML(pid);
+var plantillas = [
+  { nombre: "Consentimiento de ecografía", tipo: "docx" },
+  { nombre: "Consentimiento de cesárea", tipo: "docx" },
+  { nombre: "Control prenatal (formato del consultorio)", tipo: "docx" },
+  { nombre: "Interconsulta", tipo: "docx" },
+  { nombre: "Hoja de traslado", tipo: "txt" },
+  { nombre: "Aviso de privacidad", tipo: "txt" }
+];
+document.getElementById("lista-plantillas").innerHTML = plantillas.map(function (pl) {
+  return "<div class='linea'><b>" + pl.nombre + "</b> <span class='chip gris'>." + pl.tipo + "</span> " +
+    "<button class='btn sec chico' data-gen='" + pl.nombre + "'>Generar con lo que ya existe</button></div>";
+}).join("");
+document.getElementById("lista-plantillas").addEventListener("click", function (ev) {
+  var b = ev.target.closest("[data-gen]");
+  if (!b) return;
+  var p = Jornada.paciente(pid);
+  var host = document.getElementById("doc-aviso");
+  if (!p) { Jornada.toast("Sin paciente en contexto: el documento no se llena a ciegas."); return; }
+  var ctrl = Jornada.controlMasReciente(pid);
+  host.innerHTML = "<div class='aviso verde'><b>" + Jornada.esc(b.getAttribute("data-gen")) + " de " + Jornada.esc(p.nombre) + " — lista para abrir.</b>" +
+    "<span class='accion'>En el producto real: se abre en Word, rellena con lo que ya existe (nombre, fecha de nacimiento, EG" + (ctrl ? ", peso " + ctrl.peso + " kg del control del " + ctrl.fecha : "") + "), usted revisa y guarda.</span>" +
+    "<span class='duenio'>Cero captura doble: lo que el expediente ya sabe no se vuelve a pedir.</span></div>";
+  Jornada.agregarEvento("documento_generado", pid, { plantilla: b.getAttribute("data-gen") });
+});
+document.getElementById("btn-aviso").onclick = function () {
+  document.getElementById("doc-aviso").innerHTML = "<div class='aviso verde'><b>Aviso de privacidad</b> — generado para el expediente completo.<span class='accion'>Se genera una vez por expediente y jamás se reescribe: una segunda generación sería un error, no una actualización.</span></div>";
+};
+document.getElementById("btn-compartir").onclick = function () {
+  document.getElementById("doc-aviso").innerHTML = "<div class='aviso ambar'><b>Revisión de identidad en curso…</b><span class='accion'>Simulación: en el producto, la puerta revisa el documento entero; si encuentra un dato personal (nombre, CURP, teléfono), <b>no se escribe el archivo</b> y se le dice cuál es el dato que sobra.</span></div>";
+};
+Jornada.pintarContexto();
+Jornada.bandaVeredicto("documentos", "¿Cuántas plantillas usan de verdad? ¿Alguna que falte? ¿La regla «el aviso se genera una vez» es la correcta?");
+</script>
+</body></html>

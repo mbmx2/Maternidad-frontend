@@ -1,0 +1,199 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8">
+<title>PROPUESTA — Sistema de alertas (el corazón del valor)</title>
+<link rel="stylesheet" href="estilo.css"></head><body>
+
+<div class="barra">
+  <span class="marca">Maternidad</span>
+  <span class="pantalla">Sistema de alertas — demostración completa</span>
+  <span class="propuesta">PROPUESTA DE DISEÑO</span>
+  <button class="ayuda">Ayuda</button>
+</div>
+
+<div class="cuerpo">
+  <div class="lateral">
+    <a href="TABLERO.html">Inicio (tablero)</a>
+    <a href="CONSULTA.html">Consulta</a>
+    <a href="CONTROL.html">Control prenatal</a>
+    <a href="ALERTAS.html" class="activo">Alertas (demo)</a>
+    <a href="CALCULADORES.html">Calculadoras</a>
+    <a href="FICHA.html">Ficha</a>
+    <a href="PROTOCOLOS.html">Seguimiento</a>
+    <a href="INDICE.html">Todas las propuestas</a>
+  </div>
+
+  <div class="zona">
+    <div class="pregunta" style="margin-top:0;margin-bottom:16px;max-width:none">
+      <span class="rotulo">PROPUESTA · EL CORAZÓN DEL VALOR · del signo al aviso, con su acción</span>
+      Su tesis hecha pantalla: los avisos sobre los estados de salud son la mayor propuesta
+      de valor, y las calculadoras su activo más valioso. Esta página recorre todo el
+      circuito con una paciente real de muestra — Peña Sandoval, Gabriela, 34 semanas —
+      desde lo que se teclea hasta el aviso, su plazo y su seguimiento.
+    </div>
+
+    <!-- CONTEXTO PERMANENTE: siempre presente, no hace ruido -->
+    <div class="cinta rojo" style="background:#8e2b22">
+      <span class="fuerte">PEÑA SANDOVAL, Gabriela</span>
+      <span class="datos">04/06/1993 · 33 años · expediente 000161 · 34 SEMANAS</span>
+      <span class="homónima">🩸 A negativo (RH−)</span>
+      <span class="homónima">⚠ ALERGIA: penicilina</span>
+      <span class="homónima">💊 labetalol 100 mg 12/12 h · hierro 1/día</span>
+      <span class="homónima">◆ crónica: hipertensión</span>
+    </div>
+    <div class="subtitulo" style="margin-top:-6px">
+      <b>Los 5 permanentes viajan en la cinta</b> —alergia, tipo de sangre, medicación,
+      condición— en <b>toda pantalla donde se escribe</b>. No «avisan»: están, siempre,
+      como el brazalete de alergia de una paciente. Son el colchón que evita el error
+      antes de que alguien calcule algo.
+    </div>
+
+    <div class="rejilla">
+      <div class="col1">
+
+        <div class="panel">
+          <h3>1 · Lo que entró (la enfermera teclea — 3 minutos)</h3>
+          <div class="linea">peso 78,4 kg (↑ 2,1 en 2 semanas) · tensión 148/94 ·
+            proteinuria + · sin contracciones · movimiento fetal presente</div>
+          <div class="linea" style="color:#566"><i>Y los cálculos corrieron SOLOS, sin que
+            nadie fuera a la pantalla de calculadoras:</i></div>
+          <div class="linea">
+            <span class="chip ambar">IMC 27,4 — arriba de su rango</span>
+            <span class="chip rojo">148/94 — por arriba del rango de su semana</span>
+            <span class="chip ambar">peso +2,1 kg / 2 sem</span>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>2 · Al guardar: el panel de avisos de la visita (los 6 tipos en vivo, cada uno con acción y dueño)</h3>
+          <div class="resultado ok"><b>✓ VERDE — está bien:</b> «movimiento fetal presente ·
+            sin contracciones». Lo normal también se dice, primero.
+            <br><span style="color:#566">Dueño: quien atiende — se revisa al cerrar la
+            consulta. No pide acción: valida lo bueno.</span></div>
+          <div class="resultado" style="border-left-color:#e67e22;background:#fdf7ec">
+            <b>⏳ PLAZO — chequear con fecha:</b> «repetir proteinuria en 7 días si
+            persiste». <b>Acción:</b> repetir prueba · <b>plazo:</b> 30 oct ·
+            <b>Dueño:</b> quien toma las constantes (enfermería).
+            <br><i>Al confirmarlo, el sistema crea SOLO el pendiente con fecha — nada de
+            plazos huérfanos.</i></div>
+          <div class="resultado alerta"><b>⚠ PROBLEMA — banderas de su control:</b>
+            «cefalea intensa + visión borrosa + tensión 148/94 — evaluar preeclampsia
+            hoy». <b>Acción:</b> revisar tensión y orina ahora · <b>Dueño:</b> la médica.</div>
+          <div class="resultado alerta" style="border-left-width:7px">
+            <b>🚨 URGENCIA — y mueve al equipo:</b> la tarjeta de Gabriela <b>sube al
+            frente del tablero en rojo</b> para toda la clínica. <b>Dueño:</b> la médica,
+            de voz — el software ordena, pero la llamada al equipo es una palabra dicha en
+            alto. Y no se cierra hasta <b>resolverse</b>: atendida hoy, referida con nota,
+            o cerrada con un motivo que nombre qué se descartó. Una urgencia que solo ve
+            quien la marcó no es urgencia.</div>
+          <div class="linea" style="color:#566"><i>Regla: la misma alerta sin cambios no
+            se repite en la próxima visita — se repite cuando vence su plazo.</i></div>
+        </div>
+
+        <div class="panel">
+          <h3>3 · La interacción, al prescribir (el único aviso que puede detener)</h3>
+          <div class="linea">El médico escribe una receta y guarda:</div>
+          <button class="btn rojo" onclick="probar()">Probar: prescribir AMOXICILINA</button>
+          <div id="zona-interaccion"></div>
+          <div class="linea" style="color:#566;margin-top:8px">La tabla de interacciones y
+            alergias cruzadas es un <b>catálogo que firma el médico</b> —vive en datos, no
+            en el código—, y por eso cada consultorio ajusta sus reglas sin programador.
+            <b>Dueño:</b> quien prescribe — es el único aviso que puede detener el guardado.</div>
+        </div>
+      </div>
+
+      <div class="col2">
+        <div class="panel">
+          <h3>4 · Los plazos viven en la agenda</h3>
+          <div class="linea"><span class="chip ambar">30 oct</span> repetir proteinuria —
+            Peña Sandoval (creado por el aviso de plazo, solo)</div>
+          <div class="linea"><span class="chip ambar">26 oct</span> urocultivo — Solís Vega</div>
+          <div class="linea"><span class="chip rojo">VENCIDO 21 oct</span> tamizaje de
+            diabetes — Díaz Paredes · <b>entra al tablero con chip ámbar</b></div>
+          <div class="linea" style="color:#566">Cada plazo del sistema termina aquí, con
+            fecha y nombre — y el vencido sube al frente del día.</div>
+        </div>
+
+        <div class="panel">
+          <h3>5 · En el tablero del día</h3>
+          <div class="tarjeta rojo" style="cursor:default">
+            <span class="reloj min45">urgente</span>
+            <div class="nombre">Peña Sandoval, Gabriela</div>
+            <div class="caso">34 semanas · preeclampsia por evaluar — desde su control</div>
+            <div class="fila-extra"><span class="chip rojo">resuelta: atendida 12:40</span>
+              dueño: la médica</div>
+          </div>
+          <div class="tarjeta" style="border-left-color:#e67e22;cursor:default">
+            <div class="nombre">Díaz Paredes, Carolina</div>
+            <div class="caso"><span class="chip ambar">chequeo vencido</span> tamizaje de diabetes</div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>6 · La fatiga se mide (para que el sistema no se vuelva ruido)</h3>
+          <div class="linea"><b>Meta a la vista: menos de 2 avisos por visita.</b> Más que
+            eso, y el umbral se ajusta con firma del médico — no con programador.</div>
+          <div class="linea">Bitácora de avisos en administración: <b>47 disparados esta
+            semana</b> · 12 de problema · 6 de urgencia · 29 de plazo · <b>41 atendidos</b>
+            · 6 vencidos sin atender · <b>promedio 1,7 por visita</b> (meta cumplida).</div>
+          <div class="linea" style="color:#566">Si un tipo dispara de más, se ajusta su
+            umbral —firmado, no por código—. Si nadie atiende los de plazo, el sistema lo
+            dice con número.</div>
+        </div>
+
+        <div class="panel">
+          <h3>Los 6 tipos, para recordar — cada uno con su dueño</h3>
+          <div class="linea"><span class="chip verde">1 verde</span> está bien — también se
+            dice · dueño: quien atiende</div>
+          <div class="linea"><span class="chip ambar">2 plazo</span> repetir algo, con fecha —
+            crea su pendiente · dueño: quien toma constantes o captura</div>
+          <div class="linea"><span class="chip rojo">3 problema</span> fuera de lo esperado —
+            con acción, después de guardar · dueño: la médica</div>
+          <div class="linea"><span class="chip rojo">4 urgencia</span> además, mueve al equipo
+            y no se cierra sin resolver · dueño: la médica (la cierra la voz del equipo)</div>
+          <div class="linea"><span class="chip mono">5 contexto</span> alergia, sangre,
+            medicación — permanentes en la cinta · dueño: quien los escribe</div>
+          <div class="linea"><span class="chip rojo">6 interacción</span> al prescribir — el
+            único que puede detener, por seguridad · dueño: quien prescribe</div>
+          <div class="linea" style="color:#566;margin-top:6px">Un aviso sin dueño es el
+            papel tirado: por eso todo aviso nace con su responsable por rol.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pregunta">
+      <span class="rotulo">PREGUNTA PARA EL EQUIPO — responda con la plantilla de revisión</span>
+      <b>¿Así quieren que les avise el programa?</b> · ¿Falta algún tipo de aviso que usen
+      hoy (por ejemplo: recordar peso de control, avisar de un resultado de otro centro,
+      avisar de consentimiento por vencer)? · ¿Los textos de estos avisos están escritos
+      como ustedes los dirían? · ¿Están de acuerdo en que solo la interacción con alergia
+      detenga el guardado, y todo lo demás avise sin detener? · ¿Los rangos y umbrales
+      deben poder ajustarlos ustedes con firma, sin programador?
+      <div class="veredicto"><b>Veredicto:</b> ☐ Así está bien, lo apruebo ·
+        ☐ Así está bien, pero con cambios · ☐ Esto no sirve así, hay que rediseñarlo</div>
+    </div>
+
+    <footer>Propuesta · corazón del valor (H-021) · doctrina:
+      <code>../../LOGICAS/SISTEMA-DE-ALERTAS.md</code> · pilares 3, 5, 10 ·
+      <a href="INDICE.html">índice de las 30</a> ·
+      <a href="TABLERO.html">volver al tablero</a></footer>
+  </div>
+</div>
+
+<div id="aviso"></div>
+<script>
+function probar() {
+  document.getElementById("zona-interaccion").innerHTML =
+    '<div class="resultado alerta" style="border-left-width:7px;margin-top:10px">' +
+    '<b>⛔ GUARDADO DETENIDO — alergia conocida</b><br>' +
+    '«Amoxicilina pertenece a la familia de la <b>penicilina</b>, y Gabriela es alérgica. ' +
+    'No se guardó la receta.»<br><b>Sus salidas:</b> elegir otro antibiótico · ' +
+    'o «conozco el riesgo y lo asumo» — que exige confirmación que nombra el peligro y ' +
+    'queda registrado en la bitácora.<br>' +
+    '<span style="color:#566">La única casilla donde el programa detiene: seguridad. ' +
+    'Todo lo demás, avisa sin detener.</span></div>';
+  const a = document.getElementById("aviso");
+  a.style.display = "block";
+  a.textContent = "Interacción verificada contra el catálogo firmado — receta no guardada";
+  setTimeout(() => a.style.display = "none", 4000);
+}
+</script>
+</body></html>

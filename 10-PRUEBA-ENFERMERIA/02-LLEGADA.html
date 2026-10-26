@@ -1,0 +1,146 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=1024">
+<title>La puerta — registro y visita</title>
+<link rel="stylesheet" href="estilo.css"></head><body>
+<div class="barra"><span class="marca">Maternidad</span>
+<span class="pantalla">La puerta — registro rápido y visita de hoy</span>
+<span class="propuesta">PRUEBA REAL · ENFERMERÍA</span>
+<span class="reloj-dia"></span></div>
+<div class="cuerpo"><div class="lateral"></div>
+<div class="zona">
+<h1>Registrar a quien cruza la puerta</h1>
+<p class="subtitulo">Lo de la paciente se guarda una vez; <b>lo de la visita es solo de hoy</b> — a qué hora llegó, de dónde viene, si desayunó, cómo llegó y por qué vino.</p>
+<div id="panel-completar" style="display:none"></div>
+<div class="panel sombra">
+<h3>Lo de la paciente — una sola vez</h3>
+<div class="fila-form">
+<div class="campo"><label>Apellidos y nombres *</label><input type="text" id="f-nombre" placeholder="Ej. Ruiz Castro, Ana">
+<div class="ayuda">Si se parece a otra, un aviso le pregunta antes de seguir — nunca se fusiona sola.</div></div>
+<div class="campo"><label>Fecha de nacimiento *</label><input type="date" id="f-nac"></div>
+</div>
+<div id="homónima"></div>
+</div>
+<div class="panel sombra">
+<h3>Lo de la visita — solo de hoy</h3>
+<div class="fila-form">
+<div class="campo"><label>Hora de llegada</label><input type="text" id="f-hora" readonly>
+<div class="ayuda">El reloj de espera nace aquí.</div></div>
+<div class="campo"><label>¿De dónde viene?</label><input type="text" id="f-proc" placeholder="Ej. Tlaxiaco, Pinotepa"></div>
+<div class="campo"><label>¿Ya desayunó?</label><select id="f-ayuno"><option value="si">Sí</option><option value="no">No</option><option value="ns">No sé</option></select></div>
+<div class="campo"><label>¿Cómo llegó?</label><select id="f-como"><option>Caminando</option><option>En camión</option><option>En carro</option><option>Derivada en camilla</option><option>Otra</option></select></div>
+<div class="campo"><label>¿Quién la acompaña?</label><input type="text" id="f-acomp"></div>
+<div class="campo"><label>¿Por qué vino hoy? (razón declarada)</label><select id="f-razon">
+<option>Control programado</option><option>Recoger estudio</option><option>Entregar laboratorio</option>
+<option>Una molestia nueva</option><option>Derivada de otro centro</option><option>Urgencia declarada</option>
+<option>Vino sin cita</option></select></div>
+</div>
+</div>
+<div style="margin:12px 0">
+<button class="btn pri2" id="btn-guardar">Guardar visita y meterla al tablero</button>
+<button class="btn sec" id="btn-cancelar">Cancelar</button>
+</div>
+<div class="panel" id="lista-hoy" style="max-width:900px"></div>
+<div id="veredicto-host"></div>
+</div></div>
+<script src="config.js"></script><script src="motor.js"></script>
+<script>
+Jornada.nav("02-LLEGADA.html");
+var S = Jornada.estado();
+var pidCtx = Jornada.contextoPaciente();
+document.getElementById("f-hora").value = Jornada.hm(Jornada.ahoraMin());
+
+function pintaCompletar() {
+  var host = document.getElementById("panel-completar");
+  if (!pidCtx) { host.style.display = "none"; return; }
+  var p = Jornada.paciente(pidCtx);
+  if (!p) { host.style.display = "none"; return; }
+  var d = Jornada.estadoDe(pidCtx).estado;
+  if (d === "falta_completar") {
+    host.style.display = "block";
+    host.innerHTML = "<div class='panel sombra' style='border-left:5px solid #c0392b'><h3>" + p.nombre + " — falta completar su ficha</h3>" +
+      "<div class='linea'>Atendida de urgencia sin expediente completo. Dueño: <b>enfermería</b>. Complete lo mínimo — nunca duplica lo que ya existe.</div>" +
+      "<div class='fila-form'><div class='campo'><label>CURP o documento</label><input type='text' id='c-curp' placeholder='Si no trae papel, escriba «sin documento»'></div>" +
+      "<div class='campo'><label>Dirección</label><input type='text' id='c-dir'></div></div>" +
+      "<button class='btn pri2' id='btn-completa'>Completar su ficha</button></div>";
+    document.getElementById("btn-completa").onclick = function () {
+      Jornada.agregarEvento("ficha_completa", pidCtx, {});
+      Jornada.toast("Ficha completa. " + p.nombre + " ya no queda en «falta completar».");
+      location.href = "01-TABLERO.html";
+    };
+  } else if (d === "no_llego") {
+    host.style.display = "block";
+    host.innerHTML = "<div class='panel sombra' style='border-left:5px solid #8a97a3'><h3>" + p.nombre + " — no llegó a su cita</h3>" +
+      "<div class='linea'>El estado cambió solo al pasar su horario. Reagendarla deja rastro y no borra nada.</div>" +
+      "<button class='btn' id='btn-reagenda'>Reagendar con su próximo control</button></div>";
+    document.getElementById("btn-reagenda").onclick = function () {
+      var min = Jornada.ahoraMin() + 30;
+      S.agenda.push({ min: min, pid: pidCtx, motivo: "reagendada desde no llegó" });
+      p.cita = min;
+      Jornada.agregarEvento("reagendada", pidCtx, { min: min });
+      Jornada.toast("Reagendada a las " + Jornada.hm(min) + " — sale de «no llegó» y entra en «con cita».");
+      location.href = "01-TABLERO.html";
+    };
+  } else { host.style.display = "none"; }
+}
+document.getElementById("f-nombre").oninput = function () {
+  var v = this.value.trim().toLowerCase();
+  var host = document.getElementById("homónima");
+  if (v.length < 5) { host.innerHTML = ""; return; }
+  var parecidas = S.pacientes.filter(function (p) { return p.nombre.toLowerCase().indexOf(v.split(",")[0]) >= 0 || v.indexOf(p.nombre.toLowerCase().split(",")[0]) >= 0; });
+  host.innerHTML = (parecidas.length && !pidCtx) ? "<div class='aviso ambar'><b>Se parece a:</b> " + parecidas.map(function (p) { return p.nombre + " (nacida " + p.nacimiento + ")"; }).join(" · ") + "<span class='accion'>¿Es la misma? Si sí, no registre de nuevo — busque su ficha.</span></div>" : "";
+};
+function completaVisita(p) {
+  p.visita = {
+    hora: Jornada.hm(Jornada.ahoraMin()), procedencia: document.getElementById("f-proc").value,
+    ayuno: document.getElementById("f-ayuno").value, como: document.getElementById("f-como").value,
+    acompanante: document.getElementById("f-acomp").value, razonDeclarada: document.getElementById("f-razon").value
+  };
+  Jornada.guardar();
+  Jornada.toast("Visita registrada. " + p.nombre + " ya está en el tablero.");
+  location.href = "01-TABLERO.html?p=" + p.id;
+}
+document.getElementById("btn-guardar").onclick = function () {
+  var nom = document.getElementById("f-nombre").value.trim();
+  var nac = document.getElementById("f-nac").value;
+  if (!nom || !nac) { Jornada.toast("Faltan el nombre y la fecha de nacimiento — son lo mínimo para existir."); return; }
+  var existente = Jornada.porNombre(nom.split(",")[0]);
+  if (existente && !pidCtx) {
+    Jornada.modal("Se parece a una paciente ya registrada",
+      "Hay una ficha que empieza igual: <b>" + existente.nombre + "</b> (nacida " + existente.nacimiento + "). Confirme antes de seguir. Si es la misma, solo se registra su llegada — <b>nunca se duplica</b>.",
+      [
+        { txt: "No es la misma — volver", cls: "sec" },
+        { txt: "Sí, es la misma — registrar llegada", cls: "pri2", fn: function () {
+          Jornada.agregarEvento("llego", existente.id, {});
+          if (!existente.cita) existente.sinCita = true;
+          completaVisita(existente);
+        } }
+      ]);
+    return;
+  }
+  var p;
+  if (pidCtx) {
+    p = Jornada.paciente(pidCtx);
+    p.nombre = nom; p.nacimiento = nac;
+    Jornada.agregarEvento("llego", p.id, {});
+    completaVisita(p);
+  } else {
+    p = { id: Jornada.uid(), nombre: nom, nacimiento: nac, caso: "Primera visita — " + document.getElementById("f-razon").value, alergias: [], sangre: "sin dato", medicacion: "sin dato", cronica: "sin dato", sinCita: true };
+    S.pacientes.push(p);
+    Jornada.agregarEvento("creado", p.id);
+    Jornada.agregarEvento("llego", p.id, {});
+    completaVisita(p);
+  }
+};
+document.getElementById("btn-cancelar").onclick = function () { location.href = "01-TABLERO.html"; };
+function pintaHoy() {
+  var host = document.getElementById("lista-hoy");
+  var recientes = S.pacientes.filter(function (p) { var e = Jornada.estadoDe(p.id).estado; return e === "por_registrar" || e === "falta_completar" || e === "no_llego"; });
+  if (!recientes.length) { host.innerHTML = "<div class='vacio'>No hay llegadas pendientes de registrar ahora.<div><a class='btn chico' href='01-TABLERO.html'>Volver al tablero</a></div></div>"; return; }
+  host.innerHTML = "<h3>Pendientes de la puerta</h3>" + recientes.map(function (p) { return Jornada.tarjetaHTML(p, ""); }).join("");
+  host.querySelectorAll(".tarjeta").forEach(function (c) { c.onclick = function () { location.href = "02-LLEGADA.html?p=" + c.getAttribute("data-pid"); }; });
+}
+pintaCompletar();
+pintaHoy();
+Jornada.bandaVeredicto("llegada", "¿Qué dato mínimo exigen ANTES de atender? ¿El ayuno se pregunta siempre o solo antes de ciertos estudios? ¿Falta algún dato de llegada en su centro?");
+</script>
+</body></html>

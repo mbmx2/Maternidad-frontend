@@ -1,0 +1,181 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8">
+<title>PROPUESTA — Control prenatal con cinta de identidad</title>
+<link rel="stylesheet" href="estilo.css"></head><body>
+
+<div class="barra">
+  <span class="marca">Maternidad</span>
+  <span class="pantalla">Control prenatal — García Luna, María</span>
+  <span class="propuesta">PROPUESTA DE DISEÑO</span>
+  <button class="ayuda">Ayuda</button>
+</div>
+
+<div class="cuerpo">
+  <div class="lateral">
+    <a href="TABLERO.html">Inicio (tablero)</a>
+    <a href="EMERGENCIA.html">Nueva paciente</a>
+    <a href="PROTOCOLOS.html">Ficha</a>
+    <a href="CONTROL.html" class="activo">Control prenatal</a>
+    <a href="INDICE.html">Embarazo</a>
+    <a href="INDICE.html">Calculadoras</a>
+    <a href="INDICE.html">Apoyo clínico</a>
+    <a href="INDICE.html">Historia</a>
+    <a href="CONSULTA.html">Estado de salud</a>
+    <a href="INDICE.html">Ultrasonido</a>
+    <a href="INDICE.html">Agenda</a>
+    <a href="INDICE.html">Respaldo</a>
+  </div>
+
+  <div class="zona">
+    <div class="pregunta" style="margin-top:0;margin-bottom:16px;max-width:none">
+      <span class="rotulo">PROPUESTA · dibujo 3 de 6 · la pantalla donde se ESCRIBE, protegida</span>
+      La cinta de identidad no se esconde: está arriba de todo, el nombre entra dentro del
+      botón de guardar, y si hay otra paciente parecida, el aviso acompaña. Diseñada para
+      que escribir en la ficha equivocada sea casi imposible.
+    </div>
+
+    <!-- CINTA DE IDENTIDAD — presente en toda pantalla de escritura, con los datos que salvan -->
+    <div class="cinta azul">
+      <span class="fuerte">GARCÍA LUNA, María</span>
+      <span class="datos">19/03/1990 · 36 años · expediente 000184</span>
+      <span class="homónima">⚠ revise: GALA LUNA, Marisela (1992) también tiene control hoy</span>
+      <span class="homónima" style="background:#fdecea;color:#8a1c1c">⚠ ALERGIA: penicilina</span>
+      <span class="homónima" style="background:#eaf3fa;color:#1b4f72">🩸 A negativo (RH−)</span>
+      <span class="homónima" style="background:#fdf7ec;color:#8a6d1a">💊 labetalol 100 mg 12/12 h · hierro 1/día</span>
+      <span style="margin-left:auto"><span class="chip azul">28 SEMANAS</span>
+        <span class="chip verde">EMBARAZO — protocolo al día</span></span>
+    </div>
+    <div class="subtitulo" style="margin-top:-6px">
+      <b>Los datos que salvan viajan en la cinta</b> —alergia, tipo de sangre, medicación—
+      en toda pantalla donde se escribe, como el brazalete de alergia de una paciente.
+      Son el colchón que evita el error antes de que nadie calcule algo.
+    </div>
+
+    <h1>Control prenatal — 23 de octubre</h1>
+    <div class="subtitulo">
+      Signos de la visita de hoy. El programa no lo regaña: si algo queda fuera de lo
+      esperado, lo confirma y recién entonces guarda — y las alertas aparecen después de
+      guardar, nunca antes de que usted decida.
+    </div>
+
+    <div class="rejilla">
+      <div class="col1">
+        <div class="panel">
+          <h3>Signos del día</h3>
+          <label class="campo">Fecha del control <span class="req">(obligatorio)</span>
+            <span class="pista">📅 con calendario · nunca ofrece días futuros</span></label>
+          <input class="f" value="23/10/2026" disabled>
+          <div style="display:flex;gap:12px;flex-wrap:wrap">
+            <div style="flex:1;min-width:130px">
+              <label class="campo">Peso (kg)</label>
+              <input class="f" placeholder="73,1">
+            </div>
+            <div style="flex:1;min-width:130px">
+              <label class="campo">Tensión sistólica</label>
+              <input class="f" placeholder="112">
+            </div>
+            <div style="flex:1;min-width:130px">
+              <label class="campo">Tensión diastólica</label>
+              <input class="f" placeholder="70">
+            </div>
+            <div style="flex:1;min-width:130px">
+              <label class="campo">Altura uterina (cm)</label>
+              <input class="f" placeholder="27">
+            </div>
+            <div style="flex:1;min-width:130px">
+              <label class="campo">Frecuencia cardiaca fetal</label>
+              <input class="f" placeholder="148">
+            </div>
+            <div style="flex:1;min-width:170px">
+              <label class="campo">Presentación (lista firmada)</label>
+              <select class="f"><option>— elegir de la lista —</option>
+                <option>Cefálica</option><option>Pélvica</option><option>Transversa</option>
+              </select>
+            </div>
+          </div>
+
+          <h3 style="margin-top:16px">Señales de alarma — lo que la paciente refiere hoy</h3>
+          <div class="banderas">
+            <label><input type="checkbox"> Cefalea intensa</label>
+            <label><input type="checkbox"> Epigastralgia</label>
+            <label><input type="checkbox"> Visión borrosa</label>
+            <label><input type="checkbox"> Hinchazón súbita</label>
+            <label><input type="checkbox"> Sangrado genital</label>
+            <label><input type="checkbox"> Contracciones</label>
+            <label><input type="checkbox"> Movimiento fetal disminuido</label>
+            <label><input type="checkbox"> Fiebre</label>
+          </div>
+
+          <!-- El botón lleva el nombre de la paciente dentro: imposible guardar sin leerlo -->
+          <div style="margin-top:18px">
+            <button class="btn grande" id="btn-guardar"
+              style="background:#1b6ca8;font-size:15px"
+              onclick="guardar()">Guardar los signos de
+              <u>MARÍA GARCÍA LUNA (19/03/1990)</u></button>
+            <p class="pista">Si cambia a otra paciente desde el tablero, este botón cambia
+              de nombre — y si no lo lee, no lo pulsa.</p>
+          </div>
+        </div>
+
+        <div id="zona-resultado"></div>
+      </div>
+
+      <div class="col2">
+        <div class="panel">
+          <h3>Lo que traía del último control</h3>
+          <div class="linea">16 oct · peso 72,4 kg · 110/68 · altura 25 cm · 152 lpm</div>
+          <div class="linea">Sin banderas · sin alertas</div>
+          <div class="linea"><span class="chip ambar">de la última vez:</span>
+            peso subió 2,1 kg en 2 semanas</div>
+        </div>
+        <div class="panel">
+          <h3>Después de guardar</h3>
+          <div class="linea">1. El control queda en su historial con hora y autor.</div>
+          <div class="linea">2. Si las banderas se encendieron, <b>las alertas se muestran
+            aquí</b> y la tarjeta de María se marca en el tablero.</div>
+          <div class="linea">3. Las gráficas y el estado de salud se actualizan solos.</div>
+        </div>
+        <div class="panel">
+          <h3>Si esto no es María…</h3>
+          <div class="linea">Cierre esta pantalla y elija a la paciente correcta
+            <b>desde el tablero</b> — dentro de un formulario no se cambia de paciente.</div>
+          <a href="TABLERO.html"><button class="btn sec" style="width:100%">
+            ↩ Volver al tablero</button></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="pregunta">
+      <span class="rotulo">PREGUNTA PARA EL EQUIPO — responda con la plantilla de revisión</span>
+      <b>¿Esto los protegería de escribir en la ficha de otra paciente?</b> ¿El nombre
+      dentro del botón ayuda o estorba? ¿La cinta de identidad con color es demasiado o
+      justa? ¿Falta algún dato que ustedes siempre toman en un control?
+      <div class="veredicto"><b>Veredicto:</b> ☐ Así está bien, lo apruebo ·
+        ☐ Así está bien, pero con cambios · ☐ Esto no sirve así, hay que rediseñarlo</div>
+    </div>
+
+    <footer>Propuesta 3 de 6 · lógica: pilar 3 (cinta de identidad), pilar 1 (alertas al
+      guardar) · flujo 4 · <a href="TABLERO.html">← volver al tablero</a></footer>
+  </div>
+</div>
+
+<div id="aviso"></div>
+<script>
+function guardar() {
+  document.getElementById("zona-resultado").innerHTML =
+    '<div class="resultado ok"><b>✓ Control guardado a las 12:07 — de MARÍA GARCÍA LUNA</b>' +
+    '<br>Su historial, sus gráficas y su estado de salud ya se actualizaron.</div>' +
+    '<div class="resultado alerta"><b>⚠ Alertas de esta visita (ejemplo con banderas encendidas)</b>' +
+    '<br>Si hubiera marcado «cefalea intensa + visión borrosa», aquí aparecería: ' +
+    '<b>evaluar preeclampsia — revisar tensión y orina ahora</b> (dueño: la médica), y la ' +
+    'tarjeta de María pasaría a URGENTE en el tablero, al frente, visible para todo el ' +
+    'equipo. La urgencia no se cierra hasta resolverse — la cierra la voz del equipo, no ' +
+    'solo la pantalla.' +
+    '<br><span style="color:#566">Cada aviso lleva su acción y su dueño: sin dueño, el ' +
+    'aviso sería papel tirado.</span></div>';
+  const a = document.getElementById("aviso");
+  a.style.display = "block";
+  a.textContent = "Guardado en la ficha de MARÍA GARCÍA LUNA — alertas y gráficas al día";
+  setTimeout(() => a.style.display = "none", 3500);
+}
+</script>
+</body></html>

@@ -1,0 +1,160 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8">
+<meta name="sintesis" content="S1">
+<meta name="viewport" content="width=1024">
+<title>Calculadoras</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="front.css"></head><body>
+<div class="barra"><span class="marca">Maternidad</span>
+<span class="pantalla">Calculadoras — 18 exactas, con prefill</span>
+<span id="contexto-gatillo" class="vacio"></span>
+<span class="propuesta">V4 · S1 · PAPEL CON MOTOR</span>
+<span class="reloj-dia"></span></div>
+<div class="cuerpo"><div class="lateral"></div>
+<div class="zona">
+<h1>Calculadoras</h1>
+<p class="subtitulo">La lista es cerrada: <b>exactamente 18</b> (Anexo E — una decimonoveta exige enmienda). Abren con lo que el expediente ya tiene: <b>cero captura doble</b>. Resultado = número + rango + qué significa + acción. En esta sesión, HOMA-IR e IMC pregestacional están activas; las demás esperan su tabla firmada.</p>
+<div class="panel sombra">
+<h3>HOMA-IR — con prefill desde su laboratorio (0 tecleos)</h3>
+<div class="fila-form">
+<div class="campo" style="max-width:380px"><label>Paciente</label><select id="homa-pac"></select></div>
+</div>
+<div class="grilla3">
+<div class="campo"><label>Glucosa en ayuno (mg/dL)</label><input type="number" id="homa-g" readonly></div>
+<div class="campo"><label>Insulina en ayuno (µU/mL)</label><input type="number" id="homa-i" readonly></div>
+<div class="campo"><label>Resultado</label><input type="text" id="homa-r" readonly></div>
+</div>
+<div class="linea nota" id="homa-fuente"></div>
+<div class="acciones">
+<button class="btn" id="homa-calcular">Calcular y guardar en su expediente</button>
+<button class="btn sec" id="homa-manual">Cambiar entradas a mano</button>
+</div>
+<div id="homa-aviso"></div>
+</div>
+<div class="panel sombra">
+<h3>IMC pregestacional — con prefill del último control</h3>
+<div class="grilla3">
+<div class="campo"><label>Peso (kg)</label><input type="number" step="0.1" id="imc-peso" readonly></div>
+<div class="campo"><label>Talla (m)</label><input type="number" step="0.01" id="imc-talla"></div>
+<div class="campo"><label>Resultado</label><input type="text" id="imc-r" readonly></div>
+</div>
+<div class="acciones"><button class="btn" id="imc-calcular">Calcular</button></div>
+<div id="imc-aviso"></div>
+</div>
+<div class="panel sombra">
+<h3>Las 18 del catálogo cerrado</h3>
+<div class="chips-fila" id="lista18"></div>
+<div class="linea nota">La prioridad por motivo de consulta vive en el catálogo firmado <b>MOTIVO→CÁLCULO</b>: si ella viene por cefalea, las de preeclampsia se ponen al frente solas.</div>
+</div>
+<div class="panel sombra">
+<h3>Cálculos guardados de esta paciente</h3>
+<div id="historial"></div>
+</div>
+<div id="veredicto-host"></div>
+</div></div>
+<script src="config.js"></script><script src="motor.js"></script>
+<script>
+Jornada.nav("Calculadoras");
+var S = Jornada.estado();
+var ctx = Jornada.leerContexto();
+function labsDe(pid) {
+  var v = {};
+  Jornada.labDe(pid).forEach(function (l) { v[l.analito] = l; });
+  return v;
+}
+function pintaSel() {
+  var sel = document.getElementById("homa-pac");
+  sel.innerHTML = "";
+  S.pacientes.forEach(function (p) {
+    var o = document.createElement("option");
+    o.value = p.id; o.textContent = p.nombre;
+    sel.appendChild(o);
+  });
+  if (ctx) sel.value = ctx;
+  else {
+    var conLab = S.pacientes.filter(function (p) {
+      var l = labsDe(p.id);
+      return l.glucosa && l.insulina;
+    });
+    if (conLab.length) sel.value = conLab[0].id;
+  }
+  pintaHoma(); pintaImc();
+}
+function pintaHoma() {
+  var pid = document.getElementById("homa-pac").value;
+  var p = Jornada.paciente(pid);
+  if (!p) return;
+  var l = labsDe(pid);
+  var g = document.getElementById("homa-g"), i = document.getElementById("homa-i"), r = document.getElementById("homa-r");
+  g.value = l.glucosa ? l.glucosa.valor : "";
+  i.value = l.insulina ? l.insulina.valor : "";
+  var fuente = [];
+  if (l.glucosa) fuente.push("glucosa del " + l.glucosa.fecha);
+  if (l.insulina) fuente.push("insulina del " + l.insulina.fecha);
+  var ctrl = Jornada.controlMasReciente(pid);
+  if (ctrl) fuente.push("último control del " + ctrl.fecha + " (peso " + ctrl.peso + " kg)");
+  document.getElementById("homa-fuente").textContent = fuente.length
+    ? "Prefill: " + fuente.join(" · ") + " — leído del expediente, nunca se vuelve a pedir."
+    : "Esta paciente no tiene glucosa e insulina capturadas — páselas por laboratorio o teclee con «cambiar entradas a mano».";
+  if (g.value && i.value) {
+    var h = Jornada.homa(parseFloat(g.value), parseFloat(i.value));
+    r.value = h.valor + " — " + h.texto;
+  } else r.value = "";
+  var calc = S.calculos.filter(function (x) { return x.pid === pid; });
+  document.getElementById("historial").innerHTML = calc.length
+    ? calc.map(function (x) {
+        return "<div class='aviso " + (x.nivel === "normal" ? "verde" : x.nivel === "critica" ? "rojo" : "ambar") + "'><b>HOMA-IR " + x.homa + "</b> — " + Jornada.esc(x.texto) +
+          "<span class='duenio'>origen: " + Jornada.esc(x.origen) + " · guardado a las " + Jornada.hm(x.min) + " · aparece en el panel de estado de salud con su banda</span></div>";
+      }).join("")
+    : "<div class='vacio'>Sin cálculos guardados todavía.</div>";
+}
+function pintaImc() {
+  var pid = document.getElementById("homa-pac").value;
+  var ctrl = Jornada.controlMasReciente(pid);
+  document.getElementById("imc-peso").value = (ctrl && ctrl.peso) ? ctrl.peso : "";
+}
+document.getElementById("homa-pac").onchange = function () { ctx = this.value; pintaHoma(); pintaImc(); };
+document.getElementById("homa-manual").onclick = function () {
+  var g = document.getElementById("homa-g"), i = document.getElementById("homa-i");
+  var ed = g.readOnly;
+  g.readOnly = !ed; i.readOnly = !ed;
+  if (ed) { g.focus(); Jornada.toast("Entradas editables — el expediente no tenía estos dos datos."); }
+  else pintaHoma();
+};
+document.getElementById("homa-calcular").onclick = function () {
+  var pid = document.getElementById("homa-pac").value;
+  var gEl = document.getElementById("homa-g"), iEl = document.getElementById("homa-i");
+  var g = parseFloat(gEl.value), i = parseFloat(iEl.value);
+  if (!pid || isNaN(g) || isNaN(i)) { Jornada.toast("Faltan glucosa e insulina — no se calcula con huecos (falta de dato ≠ valor normal)."); return; }
+  var h = Jornada.homa(g, i);
+  var origen = gEl.readOnly ? "capturado (prefill del expediente)" : "calculado (entradas a mano)";
+  S.calculos.push({ pid: pid, homa: h.valor, nivel: h.nivel, texto: h.texto, origen: origen, min: Jornada.ahoraMin(), fecha: Jornada.hoyISO() });
+  if (h.nivel === "alerta" || h.nivel === "critica")
+    Jornada.nacerAlerta(pid, 3, "HOMA-IR " + h.valor + " — " + h.texto, "integrar en la nota y comparar con el próximo control", "la médica");
+  Jornada.guardar();
+  document.getElementById("homa-aviso").innerHTML = "<div class='aviso " + (h.nivel === "normal" ? "verde" : h.nivel === "critica" ? "rojo" : "ambar") + "'>" +
+    "<b>" + h.valor + "</b> — " + Jornada.esc(h.texto) + "<span class='accion'>Acción: " + (h.nivel === "normal" ? "ninguna, todo en rango" : "anotar en la nota y comparar con el próximo control") + "</span>" +
+    "<span class='duenio'>Guardado con origen «" + (gEl.readOnly ? "capturado" : "calculado") + "» — el panel lo grafica como un resultado más.</span></div>";
+  Jornada.toast("Cálculo guardado en el expediente de " + Jornada.nombrePac(pid).split(",")[0] + ".");
+  pintaHoma();
+};
+document.getElementById("imc-calcular").onclick = function () {
+  var pid = document.getElementById("homa-pac").value;
+  var peso = parseFloat(document.getElementById("imc-peso").value);
+  var talla = parseFloat(document.getElementById("imc-talla").value);
+  if (isNaN(peso) || isNaN(talla) || !talla) { Jornada.toast("Faltan peso o talla — no se inventa el número."); return; }
+  var imc = peso / (talla * talla);
+  var nivel = imc >= 30 ? "alerta" : "normal";
+  S.calculos.push({ pid: pid, imc: Math.round(imc * 10) / 10, nivel: nivel, texto: imc >= 30 ? "sobre peso — valorarlo con la paciente" : "en rango", origen: "calculado (IMC pregestacional)", min: Jornada.ahoraMin(), fecha: Jornada.hoyISO() });
+  Jornada.guardar();
+  document.getElementById("imc-r").value = imc.toFixed(1);
+  document.getElementById("imc-aviso").innerHTML = "<div class='aviso " + (nivel === "normal" ? "verde" : "ambar") + "'><b>IMC " + imc.toFixed(1) + "</b> — " + (nivel === "normal" ? "en rango" : "sobre peso — valorarlo con la paciente") + "</div>";
+};
+document.getElementById("lista18").innerHTML = Jornada.CATALOGO.CALCULADORAS_18.map(function (c, i) {
+  var activa = c.indexOf("HOMA") >= 0 || c.indexOf("IMC") >= 0;
+  return "<span class='chip " + (activa ? "verde" : "gris") + "'>" + (i + 1) + " · " + Jornada.esc(c) + (activa ? " — activa en esta prueba" : "") + "</span>";
+}).join("");
+pintaSel();
+Jornada.pintarContexto();
+Jornada.bandaVeredicto("calculadoras", "¿Qué cuentan a mano que debería salir solo? ¿El prefill les ahorra de verdad? ¿La lista de 18 está completa para su práctica o falta alguna (se pide por enmienda)?");
+</script>
+</body></html>

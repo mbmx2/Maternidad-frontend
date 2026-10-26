@@ -1,0 +1,71 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8">
+<meta name="sintesis" content="S1">
+<meta name="viewport" content="width=1024">
+<title>Fallas — cómo se ve una falla</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="front.css"></head><body>
+<div class="barra"><span class="marca">Maternidad</span>
+<span class="pantalla">Fallas — los guiones en humano</span>
+<span id="contexto-gatillo" class="vacio"></span>
+<span class="propuesta">V4 · S1 · PAPEL CON MOTOR</span>
+<span class="reloj-dia"></span></div>
+<div class="cuerpo"><div class="lateral"></div>
+<div class="zona">
+<h1>Cómo se ve una falla</h1>
+<p class="subtitulo">La regla es simple: <b>en una falla, el papel manda</b>. El software nunca pierde lo que usted ya escribió, nunca le habla con jerga, y lo que se recuperó se transcribe con la hora del hecho. Estos son los guiones — en lenguaje de sala, no de manual.</p>
+<div class="panel sombra">
+<h2>1 · Se va la luz</h2>
+<div class="linea">El último guardado está seguro: lo que escribió antes del corte ya está escrito. Siga en papel con la hoja de traspaso impresa de la mañana.</div>
+<div class="linea">Al volver la luz: abra el software y compare — lo que falte, transcríbalo <b>con la hora real del hecho</b>, no con la hora en que lo transcribe.</div>
+<div class="linea nota">El respaldo de la tarde jamás toca los datos vivos: primero se ensaya, luego se cierra.</div>
+</div>
+<div class="panel sombra">
+<h2>2 · La pantalla se congela o el disco se llena</h2>
+<div class="linea">No apague la computadora de golpe. Anote en papel a quién le toca, y cuál era la última pantalla que se veía.</div>
+<div class="linea">Al recuperarse: lo escrito congelado en la pantalla <b>se recupera si estaba guardado</b>; lo que solo estaba en la pantalla, se vuelve a teclear — el software nunca finja que eso se guardó.</div>
+</div>
+<div class="panel sombra">
+<h2>3 · Cae la red (o no la hay)</h2>
+<div class="linea">Aquí nada depende de la red: esta versión trabaja sin ella. Si en el futuro hay servidor y cae, la regla es la misma: <b>el papel sigue y el software se pone al corriente después</b>.</div>
+</div>
+<div class="panel sombra">
+<h2>4 · Falla el ecógrafo o la memoria del estudio</h2>
+<div class="linea">El estudio queda <b>pendiente de verificación</b> en el tablero — nunca «verificado a medias». Se reintenta, o se anota en el traspaso con su dueño.</div>
+</div>
+<div class="panel sombra">
+<h2>5 · Se pierde un papel del laboratorio</h2>
+<div class="linea">Sin el papel no hay resultado: el semáforo se queda en <b>SIN DATO</b>, que es la única respuesta honesta. Nunca se pone verde «para que no se vea gris».</div>
+</div>
+<div class="panel sombra">
+<h2>6 · Alguien va a cerrar y falta el respaldo</h2>
+<div class='linea'>El cierre lo dice en su hoja: <b>RESPALDO PENDIENTE — ensayar antes de apagar</b>. Ensáyelo aquí y la hoja lo marcará como verificado.</div>
+</div>
+<div class="panel sombra">
+<h3>Ensayo del respaldo de la tarde (drill)</h3>
+<div class="acciones"><button class="btn" id="btn-drill">Probar respaldo de la tarde</button></div>
+<div id="drill-out"></div>
+</div>
+<div id="veredicto-host"></div>
+</div></div>
+<script src="config.js"></script><script src="motor.js"></script>
+<script>
+Jornada.nav("Fallas");
+var S = Jornada.estado();
+document.getElementById("btn-drill").onclick = function () {
+  var out = document.getElementById("drill-out");
+  var pasos = ["Copiando…", "Verificando huellas… coinciden", "La copia se puede abrir — probado", "Parque vivo intacto"];
+  out.innerHTML = "";
+  pasos.forEach(function (txt, i) {
+    setTimeout(function () {
+      out.innerHTML += "<div class='linea'><span class='chip " + (i === pasos.length - 1 ? "verde" : "azul") + "'>" + (i + 1) + "/" + pasos.length + "</span> " + txt + "</div>";
+      if (i === pasos.length - 1) {
+        Jornada.marcarRespaldo();
+        Jornada.toast("Respaldo de la tarde ensayado. El parque vivo quedó intacto — el cierre ya lo marca verificado.");
+      }
+    }, i * 700);
+  });
+};
+Jornada.pintarContexto();
+Jornada.bandaVeredicto("falla", "¿Estos guiones cubren las fallas que de verdad les pasan? ¿Algo les pasó que no está aquí? ¿La frase «el papel manda» es la regla correcta?");
+</script>
+</body></html>

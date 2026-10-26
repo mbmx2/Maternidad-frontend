@@ -1,0 +1,6 @@
+{
+  "name": "pruebas-agenda-mensajes",
+  "private": true,
+  "description": "Suites de verificación de 12-AGENDA-Y-MENSAJES. Las e2e necesitan jsdom (npm install) y un servidor: python3 -m http.server 8124 en la carpeta madre.",
+  "devDependencies": { "jsdom": "^24.0.0" }
+}

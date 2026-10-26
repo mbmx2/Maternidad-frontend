@@ -1,0 +1,189 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8">
+<meta name="sintesis" content="S1">
+<meta name="viewport" content="width=1024">
+<title>Consulta — con la paciente enfrente</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="front.css"></head><body>
+<div class="barra"><span class="marca">Maternidad</span>
+<span class="pantalla">Consulta — con la paciente enfrente</span>
+<span id="contexto-gatillo" class="vacio"></span>
+<span class="propuesta">V4 · S1 · PAPEL CON MOTOR</span>
+<span class="reloj-dia"></span></div>
+<div class="cuerpo"><div class="lateral"></div>
+<div class="zona">
+<h1>Modo consulta</h1>
+<p class="subtitulo">Identidad a la vista, datos que salvan en la cinta, cálculos que ya corrieron, avisos al guardar. Con la paciente enfrente, el detalle clínico está <b>a un clic</b> — la superficie se lee tranquila.</p>
+<div id="cinta"></div>
+<div class="acciones no-imprimir" id="accion-atencion"></div>
+<div class="grilla2">
+<div class="panel sombra">
+<h3>Lo que ya corrió solo</h3>
+<div class="chips-fila" id="chips"></div>
+<div class="linea nota">Nadie fue a la pantalla de calculadoras: el cálculo ocurre cuando los datos existen.</div>
+</div>
+<div class="panel sombra">
+<h3>Semáforo de la paciente</h3>
+<div class="semaforo" id="sema"></div>
+<div class="linea nota" style="margin-top:6px">Informativo: informa, nunca dictamina (DEC-27).</div>
+</div>
+</div>
+<div class="panel sombra">
+<h3>Prescripción — se verifica ANTES de completar el guardado (y nunca se bloquea: se informa)</h3>
+<div class="fila-form">
+<div class="campo"><label>Medicamento</label><input type="text" id="rx-droga" placeholder="Ej. amoxicilina"></div>
+<div class="campo"><label>Vía y dosis (informativo)</label><input type="text" id="rx-dosis" placeholder="Ej. oral 500 mg cada 8 h"></div>
+</div>
+<div class="acciones"><button class="btn" id="rx-guardar">Guardar prescripción</button></div>
+<div id="rx-avisos"></div>
+</div>
+<div class="panel sombra">
+<h3>La nota — cierre natural de la consulta</h3>
+<div class="fila-form">
+<div class="campo"><label>Tipo de nota</label><select id="n-tipo"><option>Control prenatal</option><option>Consulta general</option><option>Interconsulta</option><option>Cierre de urgencia</option></select></div>
+<div class="campo"><label>Quién firma (nombre)</label><input type="text" id="n-autor" placeholder="Dra. / Enf."></div>
+<div class="campo"><label>Cédula</label><input type="text" id="n-cedula" inputmode="numeric" placeholder="solo dígitos"></div>
+</div>
+<div class="campo" style="max-width:640px;margin-top:8px"><label>Evolución</label><textarea id="n-texto" rows="4" placeholder="Sus palabras de consulta…"></textarea></div>
+<div id="cierre-avisos"></div>
+<div class="acciones"><button class="btn" id="n-guardar">Cerrar la consulta con la nota firmada</button></div>
+</div>
+<div id="panel-avisos"></div>
+<div id="veredicto-host"></div>
+</div></div>
+<script src="config.js"></script><script src="motor.js"></script>
+<script>
+Jornada.nav("Consulta");
+var S = Jornada.estado();
+var pid = Jornada.leerContexto();
+
+function pintaCierre() {
+  var host = document.getElementById("cierre-avisos");
+  if (!pid) { host.innerHTML = ""; return; }
+  var pend = Jornada.alertasDe(pid).filter(function (a) { return a.estado === "pendiente" && a.tipo !== 4; });
+  if (!pend.length) { host.innerHTML = "<div class='linea nota'>Sin avisos pendientes: la nota cierra la consulta directo. Las urgencias (tipo 4) se cierran en su pantalla — con nombre y cédula.</div>"; return; }
+  host.innerHTML = "<div class='linea'><b>¿La nota resolvió estos avisos? (el cierre se ancla a su firma — sin doble texto)</b></div><div class='checks'>" +
+    pend.map(function (a) {
+      return "<label><input type='checkbox' class='chk-cierre' value='" + a.id + "'> " + Jornada.esc(a.texto) + " — <span class='nota'>" + Jornada.esc(a.accion) + "</span></label>";
+    }).join("") + "</div><div class='linea nota'>Ninguno viene marcado: marcar es un gesto afirmativo, no un default.</div>";
+}
+function pintaTodo() {
+  document.getElementById("cinta").innerHTML = Jornada.cintaHTML(pid);
+  var p = Jornada.paciente(pid);
+  if (!p) return;
+  var chips = Jornada.resolverChips(pid);
+  document.getElementById("chips").innerHTML = chips.length
+    ? chips.map(function (c) {
+        var cls = c.nivel === "critica" ? "rojo" : c.nivel === "alerta" ? "ambar" : c.nivel === "normal" ? "verde" : "gris";
+        return "<span class='chip " + cls + "'>" + Jornada.esc(c.texto) + "</span>";
+      }).join("")
+    : "<span class='ayuda'>Sin datos capturados todavía — la estación y el laboratorio los alimentan.</span>";
+  var vistos = {};
+  Jornada.labDe(pid).forEach(function (l) { vistos[l.analito] = l; });
+  var sh = "";
+  Object.keys(Jornada.LAB_RANGOS).forEach(function (k) {
+    var r = Jornada.LAB_RANGOS[k];
+    if (vistos[k]) {
+      var b = Jornada.evaluarBandaLab(k, vistos[k].valor);
+      sh += "<div class='sema-item " + b.nivel + "'><b>" + r.nombre + "</b>" + vistos[k].valor + "<div class='nivel'>" + Jornada.esc(b.texto) + "</div></div>";
+    } else sh += "<div class='sema-item sin_dato'><b>" + r.nombre + "</b>sin resultado<div class='nivel'>SIN DATO</div></div>";
+  });
+  S.calculos.forEach(function (x) {
+    if (x.pid === pid && x.homa != null) {
+      var bb = Jornada.evaluarBandaHoma(x.homa);
+      sh += "<div class='sema-item " + bb.nivel + "'><b>HOMA-IR (calculado)</b>" + x.homa + "<div class='nivel'>" + Jornada.esc(bb.texto) + "</div></div>";
+    }
+  });
+  document.getElementById("sema").innerHTML = sh;
+  var als = Jornada.alertasDe(pid).filter(function (a) { return a.estado === "pendiente"; });
+  document.getElementById("panel-avisos").innerHTML = als.length
+    ? "<div class='panel sombra'><h3>Panel de avisos de esta consulta — primero lo rojo (urgencias), después lo demás</h3>" + als.map(function (a) { return Jornada.avisoHTML(a, true); }).join("") + "</div>"
+    : "";
+  /* Borrador de la pausa: la nota escrita antes de pausar regresa sola */
+  var d = Jornada.estadoDe(pid).estado;
+  if (d === "pausada") {
+    var ev = null;
+    S.eventos.forEach(function (e) { if (e.pid === pid && e.tipo === "pausada" && e.borrador) ev = e; });
+    var ta = document.getElementById("n-texto");
+    if (ev && ev.borrador && !ta.value) {
+      ta.value = ev.borrador;
+      Jornada.toast("Retomó la consulta donde la dejó: su borrador de nota regresó solo.");
+    }
+  }
+  pintaCierre();
+}
+document.getElementById("rx-guardar").onclick = function () {
+  if (!pid) { Jornada.toast("Primero elija a la paciente desde Hoy."); return; }
+  var droga = document.getElementById("rx-droga").value;
+  var v = Jornada.verificarPrescripcion(pid, droga);
+  if (!v.ok) { Jornada.toast(v.mensaje); return; }
+  var host = document.getElementById("rx-avisos");
+  if (v.choques.length) {
+    Jornada.modal("Aviso de interacción — lea el riesgo antes de seguir",
+      "Choca con: <b>" + Jornada.esc(v.choques.join(" · ")) + "</b>. El aviso informa y nombra el riesgo — <b>nunca bloquea solo</b> (ley R-37); lo que se guarda queda registrado con su riesgo.",
+      [
+        { txt: "Cambiar el medicamento", cls: "sec" },
+        { txt: "Lo leí, mantengo (queda registrado el riesgo)", cls: "peligro", fn: function () {
+          Jornada.registrarPrescripcion(pid, droga, true);
+          host.innerHTML = "<div class='aviso rojo'>Mantenida pese al riesgo: " + Jornada.esc(v.choques.join(" · ")) + ".<span class='duenio'>Quedó en la bitácora con el riesgo nombrado y un aviso de interacción abierto para revisar antes de surtir.</span></div>";
+          pintaTodo();
+        } }
+      ]);
+    return;
+  }
+  Jornada.registrarPrescripcion(pid, droga, false);
+  host.innerHTML = "<div class='aviso verde'>Sin interacción conocida. Prescripción registrada como informativa — el software no prescribe dosis.</div>";
+};
+document.getElementById("n-guardar").onclick = function () {
+  if (!pid) { Jornada.toast("Primero elija a la paciente desde Hoy."); return; }
+  var cerrarIds = [];
+  document.querySelectorAll(".chk-cierre:checked").forEach(function (i) { cerrarIds.push(i.value); });
+  var r = Jornada.cerrarConsulta(pid, {
+    tipo: document.getElementById("n-tipo").value,
+    texto: document.getElementById("n-texto").value,
+    autor: document.getElementById("n-autor").value,
+    cedula: document.getElementById("n-cedula").value,
+    cerrarIds: cerrarIds
+  });
+  if (!r.ok) { Jornada.toast(r.mensaje); return; }
+  var p = Jornada.paciente(pid);
+  var msg = "<div class='panel sombra'><h3>Consulta cerrada</h3>" +
+    "<div class='aviso verde'><b>Nota firmada y guardada.</b> " +
+    (r.cerradas.length ? "Se cerraron " + r.cerradas.length + " aviso(s) anclados a esta nota — sin escribir el mismo texto dos veces." : "Los avisos que la nota no resuelve siguen pendientes con su dueño.") +
+    "<span class='accion'>Próximo control derivado del protocolo: " + Jornada.fechaLarga(r.proxima.fecha) + " — la agenda ya lo tiene listo.</span></div>";
+  if (r.estadoPendiente) {
+    msg += "<div class='aviso ambar'><b>Quedan " + r.quedanUrgencias + " urgencia(s) abierta(s).</b> La urgencia no se cierra desde aquí: se cierra en La urgencia, con nombre y cédula — o de VOZ en la sala.<span class='accion'>La paciente sigue al frente del tablero hasta que se resuelva.</span></div>";
+  }
+  msg += "<div class='acciones'><a class='btn chico' href='hoy.html'>Volver al tablero →</a> <a class='btn sec chico' href='agenda.html'>Ver agenda y recordatorios →</a></div></div>";
+  document.getElementById("panel-avisos").innerHTML = msg;
+  Jornada.toast("Consulta de " + (p ? p.nombre.split(",")[0] : "") + " cerrada.");
+};
+if (pid) {
+  var hostAcc = document.getElementById("accion-atencion");
+  var d0 = Jornada.estadoDe(pid).estado;
+  var a0 = Jornada.atencionAbiertaDe(pid);
+  if (a0 && a0.tipo === "consulta" && a0.pausada) {
+    hostAcc.innerHTML = "<span class='chip ambar'>Consulta pausada por " + Jornada.esc(a0.duenio) + "</span> <button class='btn chico' id='btn-retomar'>▶ Retomar donde quedó</button>";
+    document.getElementById("btn-retomar").onclick = function () {
+      Jornada.retomarAtencion(a0.id);
+      Jornada.toast("Consulta retomada — su borrador de nota regresó solo.");
+      pintaTodo();
+      hostAcc.innerHTML = "<span class='chip verde'>Consulta en uso de la médica</span>";
+    };
+  } else if (!a0 && (d0 === "espera" || d0 === "llego" || d0 === "estacion_hecha")) {
+    hostAcc.innerHTML = "<span class='chip azul'>Lista para consulta — aún no abierta</span> <button class='btn chico' id='btn-abrir-cons'>Empezar la atención</button>";
+    document.getElementById("btn-abrir-cons").onclick = function () {
+      var r = Jornada.empezarConsulta(pid);
+      if (!r.ok) { Jornada.toast(r.mensaje); return; }
+      Jornada.toast("Atención abierta — su cinta y lo capturado ya están en pantalla.");
+      pintaTodo();
+      hostAcc.innerHTML = "<span class='chip verde'>Consulta en uso de la médica</span>";
+    };
+  } else if (a0 && a0.tipo === "consulta" && !a0.pausada) {
+    hostAcc.innerHTML = "<span class='chip verde'>Consulta en uso de " + Jornada.esc(a0.duenio) + "</span>";
+  }
+}
+pintaTodo();
+Jornada.pintarContexto();
+Jornada.bandaVeredicto("consulta", "¿Es todo lo que necesita ver con ella enfrente? ¿El cierre de avisos anclado a la nota hace lo que usted haría a mano? ¿La prescripción que avisa el riesgo lo dice como usted lo diría?");
+</script>
+</body></html>

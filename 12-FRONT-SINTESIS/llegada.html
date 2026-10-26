@@ -1,0 +1,199 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8">
+<meta name="sintesis" content="S1">
+<meta name="viewport" content="width=1024">
+<title>Llegadas — la puerta</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="front.css"></head><body>
+<div class="barra"><span class="marca">Maternidad</span>
+<span class="pantalla">Llegadas — registro rápido y visita de hoy</span>
+<span id="contexto-gatillo" class="vacio"></span>
+<span class="propuesta">V4 · S1 · PAPEL CON MOTOR</span>
+<span class="reloj-dia"></span></div>
+<div class="cuerpo"><div class="lateral"></div>
+<div class="zona">
+<h1>La puerta</h1>
+<p class="subtitulo">Lo de la paciente se guarda una vez; <b>lo de la visita es solo de hoy</b> — a qué hora llegó, de dónde viene, si desayunó, cómo llegó y por qué vino. Si un nombre se parece a otro, se pregunta antes: nunca se fusiona sola.</p>
+<div id="panel-completar" style="display:none"></div>
+<div class="panel sombra">
+<h3>Buscar a quien ya existe</h3>
+<div class="fila-form">
+<div class="campo"><label>Nombre o apellido</label><input type="text" id="f-buscar" placeholder="Ej. García"></div>
+</div>
+<div id="resultados" style="margin-top:8px"></div>
+</div>
+<div class="panel sombra">
+<h3>Registrar a quien cruza la puerta sin cita</h3>
+<div class="fila-form">
+<div class="campo"><label>Apellidos y nombres *</label><input type="text" id="f-nombre" placeholder="Ej. Ruiz Castro, Ana">
+<div class="ayuda">Si se parece a otra, un aviso le pregunta antes de seguir — nunca se fusiona sola.</div></div>
+<div class="campo"><label>Fecha de nacimiento *</label><input type="date" id="f-nac"></div>
+</div>
+<div id="homónima"></div>
+</div>
+<div class="panel sombra">
+<h3>Lo de la visita — solo de hoy</h3>
+<div class="fila-form">
+<div class="campo"><label>Hora de llegada</label><input type="text" id="f-hora" readonly>
+<div class="ayuda">El reloj de espera nace aquí.</div></div>
+<div class="campo"><label>¿De dónde viene?</label><input type="text" id="f-proc" placeholder="Ej. Tlaxiaco, Pinotepa"></div>
+<div class="campo"><label>¿Ya desayunó?</label><select id="f-ayuno"><option value="si">Sí</option><option value="no">No</option><option value="ns">No sé</option></select></div>
+<div class="campo"><label>¿Cómo llegó?</label><select id="f-como"><option>Caminando</option><option>En camión</option><option>En carro</option><option>Derivada en camilla</option><option>Otra</option></select></div>
+<div class="campo"><label>¿Quién la acompaña?</label><input type="text" id="f-acomp"></div>
+<div class="campo"><label>¿Por qué vino hoy? (razón declarada)</label><select id="f-razon">
+<option>Control programado</option><option>Recoger estudio</option><option>Entregar laboratorio</option>
+<option>Una molestia nueva</option><option>Derivada de otro centro</option><option>Urgencia declarada</option>
+<option>Vino sin cita</option></select></div>
+</div>
+</div>
+<div class="acciones">
+<button class="btn" id="btn-guardar">Guardar visita y meterla al tablero</button>
+<a class="btn sec" href="hoy.html">Cancelar</a>
+</div>
+<div class="panel" id="lista-hoy" style="max-width:900px"></div>
+<div id="veredicto-host"></div>
+</div></div>
+<script src="config.js"></script><script src="motor.js"></script>
+<script>
+Jornada.nav("Llegadas");
+var S = Jornada.estado();
+var pidCtx = Jornada.leerContexto();
+document.getElementById("f-hora").value = Jornada.hm(Jornada.ahoraMin());
+
+function pintaCompletar() {
+  var host = document.getElementById("panel-completar");
+  if (!pidCtx) { host.style.display = "none"; return; }
+  var p = Jornada.paciente(pidCtx);
+  if (!p) { host.style.display = "none"; return; }
+  var d = Jornada.estadoDe(pidCtx).estado;
+  if (d === "falta_completar") {
+    host.style.display = "block";
+    host.innerHTML = "<div class='panel sombra' style='border-left:5px solid #c0392b'><h3>" + Jornada.esc(p.nombre) + " — falta completar su ficha</h3>" +
+      "<div class='linea'>Atendida de urgencia sin expediente completo. Dueño: <b>quien captura (enfermería)</b> · plazo: antes de apagar. Complete lo mínimo — nunca duplica lo que ya existe.</div>" +
+      "<div class='fila-form'><div class='campo'><label>CURP o documento</label><input type='text' id='c-curp' placeholder='Si no trae papel, escriba «sin documento»'></div>" +
+      "<div class='campo'><label>Dirección</label><input type='text' id='c-dir'></div>" +
+      "<div class='campo'><label>Teléfono</label><input type='text' id='c-tel'></div></div>" +
+      "<div class='acciones'><button class='btn' id='btn-completa'>Completar su ficha</button></div></div>";
+    document.getElementById("btn-completa").onclick = function () {
+      p.cronica = document.getElementById("c-dir").value || p.cronica;
+      Jornada.agregarEvento("ficha_completa", pidCtx, {});
+      Jornada.toast("Ficha completa. " + p.nombre + " ya no queda en «falta completar».");
+      Jornada.irA("hoy.html");
+    };
+  } else if (d === "no_llego") {
+    host.style.display = "block";
+    host.innerHTML = "<div class='panel sombra' style='border-left:5px solid #8a97a3'><h3>" + Jornada.esc(p.nombre) + " — no llegó a su cita</h3>" +
+      "<div class='linea'>El estado cambió solo al pasar su hora. Reagendarla deja rastro y no borra nada.</div>" +
+      "<div class='acciones'><button class='btn' id='btn-reagenda'>Reagendar con su próximo control</button></div></div>";
+    document.getElementById("btn-reagenda").onclick = function () {
+      var r = Jornada.reagendar(pidCtx);
+      if (!r.ok) { Jornada.toast(r.mensaje); return; }
+      Jornada.toast("Reagendada a las " + Jornada.hm(r.min) + " — sale de «no llegó» y entra en «con cita».");
+      Jornada.irA("hoy.html");
+    };
+  } else if (d === "por_registrar") {
+    host.style.display = "block";
+    host.innerHTML = "<div class='panel sombra' style='border-left:5px solid #d97706'><h3>" + Jornada.esc(p.nombre) + " — falta completar su visita de hoy</h3>" +
+      "<div class='linea'>Llegó sin cita. Complete los datos de la visita de abajo y guarde: queda en espera con su reloj corriendo.</div></div>";
+  } else { host.style.display = "none"; }
+}
+
+/* Búsqueda de existentes con aviso de parecidas (R-02) */
+var entrada = document.getElementById("f-buscar");
+function pintarBusqueda() {
+  var sal = document.getElementById("resultados");
+  var lista = Jornada.porAparecidas(entrada.value);
+  if (!entrada.value.trim()) { sal.innerHTML = ""; return; }
+  if (!lista.length) {
+    sal.innerHTML = "<div class='vacio'>No aparece. Regístrela abajo en tres campos — o, si llegó sin expediente por urgencia, la ficha se completa después.</div>";
+    return;
+  }
+  var apellidos = {};
+  lista.forEach(function (p) { var a = Jornada.esc(p.nombre.split(",")[0].toLowerCase()); apellidos[a] = (apellidos[a] || 0) + 1; });
+  var hay = Object.keys(apellidos).some(function (a) { return apellidos[a] >= 2 && a.length > 4; });
+  var avisoP = hay ? "<div class='aviso rojo'><b>⚠ Parecidas:</b> hay nombres iguales o muy cercanos — confirme con <b>fecha de nacimiento</b> antes de elegir.</div>" : "";
+  sal.innerHTML = avisoP + lista.map(function (p) {
+    var e = Jornada.estadoDe(p.id).estado;
+    return "<div class='linea'><a href='estacion.html?p=" + p.id + "'><b>" + Jornada.esc(p.nombre) + "</b></a> — nacida " + Jornada.esc(p.nacimiento) +
+      " · <span class='chip gris'>" + Jornada.esc(e.replace(/_/g, " ")) + "</span>" +
+      (e === "no_llego" || e === "por_registrar" || e === "con_cita" ? " <button class='btn sec chico' data-llegar='" + p.id + "'>✓ Registrar llegada</button>" : "") +
+      " <a class='btn sec chico' href='llegada.html?p=" + p.id + "'>Abrir en la puerta</a></div>";
+  }).join("");
+}
+entrada.addEventListener("input", pintarBusqueda);
+document.getElementById("resultados").addEventListener("click", function (ev) {
+  var b = ev.target.closest("[data-llegar]");
+  if (!b) return;
+  var pid = b.getAttribute("data-llegar");
+  Jornada.agregarEvento("llego", pid, {});
+  var p = Jornada.paciente(pid);
+  if (p && !p.cita) p.sinCita = false;
+  Jornada.guardar();
+  Jornada.toast("Llegada registrada — su reloj ya corre desde ahora.");
+  Jornada.irA("hoy.html", pid);
+});
+
+/* Homónimas mientras se escribe el nombre */
+document.getElementById("f-nombre").oninput = function () {
+  var host = document.getElementById("homónima");
+  var parecidas = Jornada.porAparecidas(this.value);
+  host.innerHTML = (!pidCtx && parecidas.length)
+    ? "<div class='aviso ambar'><b>Se parece a:</b> " + parecidas.map(function (p) { return Jornada.esc(p.nombre) + " (nacida " + Jornada.esc(p.nacimiento) + ")"; }).join(" · ") +
+      "<span class='accion'>¿Es la misma? Si sí, no registre de nuevo — busque su ficha arriba.</span></div>"
+    : "";
+};
+
+function completaVisita(p, yaLlego) {
+  if (!yaLlego) Jornada.agregarEvento("llego", p.id, {});
+  p.visita = {
+    hora: Jornada.hm(Jornada.ahoraMin()), procedencia: document.getElementById("f-proc").value,
+    ayuno: document.getElementById("f-ayuno").value, como: document.getElementById("f-como").value,
+    acompanante: document.getElementById("f-acomp").value, razonDeclarada: document.getElementById("f-razon").value
+  };
+  Jornada.agregarEvento("visita_completa", p.id, {});
+  Jornada.guardar();
+  Jornada.toast("Visita registrada. " + p.nombre + " ya está en el tablero, en espera con su reloj.");
+  Jornada.irA("hoy.html", p.id);
+}
+
+document.getElementById("btn-guardar").onclick = function () {
+  var nom = document.getElementById("f-nombre").value.trim();
+  var nac = document.getElementById("f-nac").value;
+  if (!nom || !nac) { Jornada.toast("Faltan el nombre y la fecha de nacimiento — son lo mínimo para existir."); return; }
+  if (pidCtx) {
+    var p = Jornada.paciente(pidCtx);
+    completaVisita(p, Jornada.estadoDe(pidCtx).estado === "por_registrar");
+    return;
+  }
+  var existente = Jornada.porNombre(nom.split(",")[0]);
+  if (existente) {
+    Jornada.modal("Se parece a una paciente ya registrada",
+      "Hay una ficha que empieza igual: <b>" + Jornada.esc(existente.nombre) + "</b> (nacida " + Jornada.esc(existente.nacimiento) + "). Confirme antes de seguir. Si es la misma, solo se registra su llegada — <b>nunca se duplica</b>.",
+      [
+        { txt: "No es la misma — volver", cls: "sec" },
+        { txt: "Sí, es la misma — registrar llegada", cls: "peligro", fn: function () {
+          if (!existente.cita) existente.sinCita = false;
+          completaVisita(existente, false);
+        } }
+      ]);
+    return;
+  }
+  var nuevo = { id: Jornada.uid(), nombre: nom, nacimiento: nac, caso: "Primera visita — " + document.getElementById("f-razon").value, alergias: [], sangre: "sin dato", medicacion: "sin dato", cronica: "sin dato", sinCita: true };
+  S.pacientes.push(nuevo);
+  Jornada.agregarEvento("creado", nuevo.id);
+  Jornada.guardar();
+  completaVisita(nuevo, false);
+};
+
+function pintaHoy() {
+  var host = document.getElementById("lista-hoy");
+  var recientes = S.pacientes.filter(function (p) { var e = Jornada.estadoDe(p.id).estado; return e === "por_registrar" || e === "falta_completar" || e === "no_llego"; });
+  if (!recientes.length) { host.innerHTML = "<div class='vacio'>No hay llegadas pendientes de registrar ahora.<div><a class='btn chico' href='hoy.html'>Volver al tablero</a></div></div>"; return; }
+  host.innerHTML = "<h3>Pendientes de la puerta</h3>" + recientes.map(function (p) { return Jornada.tarjetaHTML(p, ""); }).join("");
+  host.querySelectorAll(".tarjeta").forEach(function (c) { c.onclick = function () { Jornada.irA("llegada.html", c.getAttribute("data-pid")); }; });
+}
+pintaCompletar();
+pintaHoy();
+Jornada.pintarContexto();
+Jornada.bandaVeredicto("llegada", "¿Qué dato mínimo exigen ANTES de atender? ¿El ayuno se pregunta siempre o solo antes de ciertos estudios? ¿Falta algún dato de llegada en su centro?");
+</script>
+</body></html>

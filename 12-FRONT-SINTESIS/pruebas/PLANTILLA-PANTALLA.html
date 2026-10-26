@@ -1,0 +1,47 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8">
+<meta name="sintesis" content="S1">
+<!-- ═══ MOLDE DE PANTALLA (AGENTS.md · R13) ═══
+     COPIA ESTE ARCHIVO a 12-FRONT-SINTESIS/<nueva>.html y sigue:
+     ① Cambia <title>, h1, subtítulo y el id de Jornada.nav / bandaVeredicto.
+     ② Regístrala en SINTESIS-REGISTRO.json con su huella:
+        cd 12-FRONT-SINTESIS && sha256sum <nueva>.html   (pega el hash en la fila,
+        estado "aplicado", sintesis S1, pruebas[], checks>0, evidencia)
+     ③ ./autoauditoria.sh --pantalla <nueva>.html   → debe decir PANTALLA OK
+     ④ ./autoauditoria.sh   (T1) → en verde antes de seguir
+     ⑤ Auditoría de la pantalla vs los 35 patrones (S1 §2) con sus 4 planos de pruebas.
+     Obligatorio en toda pantalla: meta de síntesis (arriba), chip de versión en la barra,
+     riel con grupos, banda de veredicto persistente, fecha real en el reloj,
+     sin prompt/alert, sin enlaces rotos. La suite del libro exige lo anterior. -->
+<meta name="viewport" content="width=1024">
+<link rel="icon" href="data:,">
+<title>NUEVA — maternidad</title>
+<link rel="stylesheet" href="front.css"></head><body>
+<div class="barra"><span class="marca">Maternidad</span>
+<span class="pantalla">Título de la pantalla</span>
+<span id="contexto-gatillo" class="vacio"></span>
+<span class="propuesta">S1 · PAPEL CON MOTOR</span>
+<span class="reloj-dia"></span></div>
+<div class="cuerpo"><div class="lateral"></div>
+<div class="zona">
+<h1>Encabezado (un solo h1)</h1>
+<p class="subtitulo">Qué hace esta pantalla en una frase, con sus reglas visibles
+(algo siempre se lee tranquila; el detalle clínico a un clic). Sin tecnicismos en la voz
+del sistema.</p>
+<div class="panel sombra">
+<h3>Contenido</h3>
+<div class="linea">Todo dato se pinta desde el motor (Jornada.*): la pantalla no calcula
+ni muta estado directo (MT-01/MT-02).</div>
+</div>
+<div id="panel-avisos"></div>
+<div id="veredicto-host"></div>
+<p class="pie-pag">Papel usable (DEC-19) · motor con catálogos declarados ·
+obra propia: FRONTEND/12-FRONT-SINTESIS.</p>
+</div></div>
+<script src="config.js"></script><script src="motor.js"></script>
+<script>
+Jornada.nav("Título de la pantalla");
+pintarContextoSeguro();
+function pintarContextoSeguro() { try { Jornada.pintarContexto(); } catch (e) {} }
+Jornada.bandaVeredicto("nueva", "¿Esta pantalla hace lo que dice su título? ¿Qué falta para que el oficio la veredicto?");
+</script>
+</body></html>
